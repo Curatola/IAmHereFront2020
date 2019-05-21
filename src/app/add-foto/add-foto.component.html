@@ -1,0 +1,13 @@
+<ion-fab bottom right>
+  <button ion-fab>
+    <ion-icon name="add"></ion-icon>
+  </button>
+  <ion-fab-list side="top">
+    <button ion-fab (click)="takePicture()">
+      <ion-icon name="camera"></ion-icon>
+    </button>
+    <button ion-fab (click)="getFromGallery()">
+      <ion-icon name="folder"></ion-icon>
+    </button>
+  </ion-fab-list>
+</ion-fab>

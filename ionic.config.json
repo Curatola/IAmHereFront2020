@@ -1,0 +1,7 @@
+{
+  "name": "IAmHereI4-FrontEnd",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

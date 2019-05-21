@@ -1,0 +1,61 @@
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div padding>
+    <img style="margin-left:auto; margin-right:auto; display:block;" height="auto" width="25%" alt="your image"
+      src="../../assets/imgs/LEDS-Logo.jpeg">
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.email">
+        <div class="error-message"
+          *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label floating>Senha</ion-label>
+      <ion-input type="password" formControlName="senha"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.senha">
+        <div class="error-message"
+          *ngIf="form.get('senha').hasError(validation.type) && (form.get('senha').dirty || form.get('senha').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label>Manter conectado</ion-label>
+      <ion-checkbox formControlName="remember"></ion-checkbox>
+    </ion-item>
+
+    <div padding>
+      <ion-button type="submit" [disabled]="!form.valid"  expand="full">Entrar</ion-button>
+    </div>
+
+  </form>
+<!--
+  <p><a href="#" (click)="goPageEsqueciSenha()">Esqueci minha senha</a></p>
+  <p><a href="#" (click)="goPageNewConfirm()">Gerar email de confirmação</a></p>
+  <p><a href="#" (click)="goPageProfCadastro()">Cadastrar-se como Professor</a></p>
+  <p><a href="#" (click)="goPageAlunoCadastro()">Cadastrar-se como Aluno</a></p>
+  -->
+</ion-content>
