@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Http, Headers } from '@angular/http';
-import { ToastController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 
 @Injectable({
@@ -107,12 +107,11 @@ export class RequestService {
     }
   }
 
-  async requestErrorPageHandler(error: any, toast: ToastController, loginPage){
+  async requestErrorPageHandler(error: any, toast: ToastController, navCtrl: NavController){
     if (error.message === "401"){
       await this.auth.deslogarOnlyOnApp();
 
-      //await navCtrl.setRoot(loginPage, {}, {animate:true})
-      //await navCtrl.popToRoot();
+      await navCtrl.navigateRoot("/login");
 
       let t = await toast.create({
         message: "Você foi deslogado. Faça login novamente!",
