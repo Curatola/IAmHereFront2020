@@ -1,12 +1,12 @@
 export class Chamada {
-    id: number
-    dateHour: number
-    dateStr: string
-    dateShort: string
-    timeStr: string
-    conteudo: string
-    
-    constructor (id: number, dateHour: number, conteudo: string){
+    id: number;
+    dateHour: number;
+    dateStr: string;
+    dateShort: string;
+    timeStr: string;
+    conteudo: string;
+
+    constructor(id: number, dateHour: number, conteudo: string) {
         this.id = id;
         this.dateHour = dateHour * 1000;
         this.dateStr = this.getDateStr();
@@ -15,18 +15,18 @@ export class Chamada {
         this.conteudo = conteudo;
     }
 
-    getDateStr(){
-        let options={month:'long',day:'2-digit'}
-        return new Date(this.dateHour).toLocaleDateString('pt-BR',options);
+    getDateStr() {
+        const options = {month: 'long', day: '2-digit'};
+        return new Date(this.dateHour).toLocaleDateString('pt-BR', options);
     }
 
-    getDateShort(){
-        let options={month:'2-digit',day:'2-digit'}
-        return new Date(this.dateHour).toLocaleDateString('pt-BR',options);
+    getDateShort() {
+        const options = {month: '2-digit', day: '2-digit'};
+        return new Date(this.dateHour).toLocaleDateString('pt-BR', options);
     }
 
-    getTimeStr(){
-        let options={hour:'2-digit',minute:'2-digit'}
-        return new Date(this.dateHour).toLocaleTimeString('pt-BR',options);
+    getTimeStr() {
+        const options = {hour: '2-digit', minute: '2-digit'};
+        return new Date(this.dateHour).toLocaleTimeString('pt-BR', options);
     }
 }

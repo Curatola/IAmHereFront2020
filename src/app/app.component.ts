@@ -1,21 +1,21 @@
-import { AuthService } from "./auth.service";
-import { Component } from "@angular/core";
+import { AuthService } from './auth.service';
+import { Component } from '@angular/core';
 
-import { Platform, ToastController } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { RequestService } from "./request.service";
+import { Platform, ToastController } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { RequestService } from './request.service';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "app.component.html"
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
 })
 export class AppComponent {
   constructor(
     platform: Platform,
-    //private imgLoaderConfig: ImageLoaderConfig,
+    // private imgLoaderConfig: ImageLoaderConfig,
     private toast: ToastController,
-    //public deep: Deeplinks,
+    // public deep: Deeplinks,
     private requests: RequestService,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
@@ -30,10 +30,10 @@ export class AppComponent {
 
       let logged: boolean = this.auth.userIsLogged();
 
-      //if (logged) this.rootPage = TurmasPage;
-      //else this.rootPage = LoginPage;
+      // if (logged) this.rootPage = TurmasPage;
+      // else this.rootPage = LoginPage;
 
-      //this.imgLoaderConfig.setImageReturnType("base64");
+      // this.imgLoaderConfig.setImageReturnType("base64");
 
       /*this.deep
         .route({
