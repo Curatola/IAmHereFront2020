@@ -140,11 +140,11 @@ export class RequestService {
     }
   }
 
-  async requestErrorPageHandler(error: any, toast: ToastController, navCtrl: NavController){
-    if (error.message === "401"){
+  async requestErrorPageHandler(error: any, toast: ToastController, navCtrl: NavController) {
+    if (error.message === '401') {
       await this.auth.deslogarOnlyOnApp();
 
-      await navCtrl.navigateRoot("/login");
+      await navCtrl.navigateRoot('/login');
 
       const t = await toast.create({
         message: 'Você foi deslogado. Faça login novamente!',

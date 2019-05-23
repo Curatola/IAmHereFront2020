@@ -1,9 +1,44 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>presenca</ion-title>
+    <ion-title>Aula {{chamada.dateShort}} ({{qtdPessoasReconhecidas}})</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="getConteudo()">
+        <ion-icon name="document"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="showImages()">
+        <ion-icon name="images"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="done()">
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
-</ion-header>
 
-<ion-content>
+   <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="comparecimento">
+      <ion-segment-button value="areAusentes">
+        Ausentes ({{ausentes.length}})
+      </ion-segment-button>
+      <ion-segment-button value="arePresentes">
+        Presentes ({{presentes.length}})
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 
+<ion-content padding>
+  <div [ngSwitch]="comparecimento">
+    <ion-list *ngSwitchCase="'areAusentes'">
+      <ion-item *ngFor="let presenca of ausentes" ion-item>
+        <ion-label>{{presenca.aluno.nome}}</ion-label>
+        <ion-checkbox [(ngModel)]="presenca.isPresent" (ionChange)="teste(presenca)"></ion-checkbox>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngSwitchCase="'arePresentes'">
+      <ion-item *ngFor="let presenca of presentes" ion-item>
+        <ion-label>{{presenca.aluno.nome}}</ion-label>
+        <ion-checkbox [(ngModel)]="presenca.isPresent" (ionChange)="teste(presenca)" style="--background-checked: red"></ion-checkbox>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
