@@ -1,5 +1,5 @@
-import { CameraService } from './../camera.service';
 import { Component, Input } from '@angular/core';
+import { CameraService } from '../camera.service';
 
 
 

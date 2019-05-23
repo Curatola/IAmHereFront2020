@@ -1,7 +1,4 @@
-import { NavParamsService } from './../nav-params.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { LoginPage } from '../login/login.page';
-import { File } from '@ionic-native/file/ngx';
 import {
   NavController,
   LoadingController,
@@ -14,8 +11,8 @@ import { RequestService } from '../request.service';
 import { CameraService } from '../camera.service';
 import { Chamada } from 'src/models/chamada';
 import { Turma } from 'src/models/turma';
-import { ConfirmaPage } from '../confirma/confirma.page';
-import { PresencaPage } from '../presenca/presenca.page';
+import { File } from '@ionic-native/file/ngx';
+import { NavParamsService } from '../nav-params.service';
 
 @Component({
   selector: 'app-chamadas',
@@ -23,6 +20,8 @@ import { PresencaPage } from '../presenca/presenca.page';
   styleUrls: ['./chamadas.page.scss']
 })
 export class ChamadasPage implements OnInit {
+  ngOnInit(): void {
+  }
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   chamadas: Array<Chamada>;
   page = 1;
@@ -205,11 +204,8 @@ export class ChamadasPage implements OnInit {
   }
 
   details(chamada: Chamada): void {
-    this.navParams.setParams({
-      chamada: this.chamadas,
-      turma: this.turma
-    });
-    this.navCtrl.navigateForward('/chamadas');
+    this.navParams.setParams( { chamada: chamada, turma: this.turma })
+    this.navCtrl.navigateForward('/presenca');
   }
 
   async uploadFile(filePath: string) {
@@ -231,7 +227,7 @@ export class ChamadasPage implements OnInit {
         turma: this.turma,
         chamadas: this.chamadas
       });
-      this.navCtrl.navigateForward('/confirma');
+      this.navCtrl.navigateForward("/confirma");
     } catch (error) {
       await this.requests.requestErrorPageHandler(
         error,
@@ -242,5 +238,4 @@ export class ChamadasPage implements OnInit {
       await loadingDialog.dismiss();
     }
   }
-  ngOnInit() {}
 }

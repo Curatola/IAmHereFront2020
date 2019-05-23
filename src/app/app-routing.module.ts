@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'presenca-turma', loadChildren: './presenca-turma/presenca-turma.module#PresencaTurmaPageModule' },
   { path: 'prof-cadastro', loadChildren: './prof-cadastro/prof-cadastro.module#ProfCadastroPageModule' },
   { path: 'request-email', loadChildren: './request-email/request-email.module#RequestEmailPageModule' },
-  { path: 'termos-uso', loadChildren: './termos-uso/termos-uso.module#TermosUsoPageModule' },
+  { path: 'termos', loadChildren: './termos-uso/termos-uso.module#TermosUsoPageModule' },
   { path: 'turmas', loadChildren: './turmas/turmas.module#TurmasPageModule' },
   { path: 'aluno-cadastro', loadChildren: './aluno-cadastro/aluno-cadastro.module#AlunoCadastroPageModule' },
 ];
