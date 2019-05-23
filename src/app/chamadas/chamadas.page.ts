@@ -97,16 +97,15 @@ export class ChamadasPage implements OnInit {
 
   async optionsClick(event, chamada: Chamada) {
     const actionSheet = await this.actionSheetCtrl.create({
-      title: 'Chamada ' + chamada.dateStr + ' ' + chamada.timeStr
-    });
-
-    actionSheet.addButton({
-      text: 'Apagar',
-      icon: 'trash',
-      cssClass: 'trash-icon',
-      handler: () => {
-        this.apagarChamada(chamada);
-      }
+      header: 'Chamada ' + chamada.dateStr + ' ' + chamada.timeStr,
+      buttons: [{
+        text: 'Apagar',
+        icon: 'trash',
+        cssClass: 'trash-icon',
+        handler: () => {
+          this.apagarChamada(chamada);
+        }
+      }]
     });
 
     actionSheet.present();
