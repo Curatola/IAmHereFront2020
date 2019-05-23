@@ -1,9 +1,36 @@
 <ion-header>
+
   <ion-toolbar>
-    <ion-title>request-email</ion-title>
+    <ion-title *ngIf="requestNewPassword">Redefinir Senha</ion-title>
+    <ion-title *ngIf="!requestNewPassword">Confirmação de Email</ion-title>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
 
+<ion-content padding>
+  <div padding>
+    <img style="margin-left:auto; margin-right:auto; display:block;" height="auto" width="25%" alt="your image"
+      src="../../assets/imgs/LEDS-Logo.jpeg">
+  </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="requestEmail()">
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.email">
+        <div class="error-message"
+          *ngIf="formulario.get('email').hasError(validation.type) && (formulario.get('email').dirty || formulario.get('email').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <div padding>
+      <ion-button type="submit" [disabled]="!formulario.valid" expand="full">Confirmar</ion-button>
+    </div>
+  </form>
 </ion-content>

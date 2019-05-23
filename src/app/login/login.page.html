@@ -15,7 +15,7 @@
 
   <form [formGroup]="form" (ngSubmit)="login()">
     <ion-item>
-      <ion-label floating>Email</ion-label>
+      <ion-label position="floating">Email</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
     </ion-item>
 
@@ -29,7 +29,7 @@
     </div>
 
     <ion-item>
-      <ion-label floating>Senha</ion-label>
+      <ion-label position="floating">Senha</ion-label>
       <ion-input type="password" formControlName="senha"></ion-input>
     </ion-item>
 
@@ -52,10 +52,10 @@
     </div>
 
   </form>
-<!--
-  <p><a href="#" (click)="goPageEsqueciSenha()">Esqueci minha senha</a></p>
-  <p><a href="#" (click)="goPageNewConfirm()">Gerar email de confirmação</a></p>
-  <p><a href="#" (click)="goPageProfCadastro()">Cadastrar-se como Professor</a></p>
-  <p><a href="#" (click)="goPageAlunoCadastro()">Cadastrar-se como Aluno</a></p>
-  -->
+
+  <p><a href="#" (click)="goPageEsqueciSenha($event)">Esqueci minha senha</a></p>
+  <p><a href="#" (click)="goPageNewConfirm($event)">Gerar email de confirmação</a></p>
+  <p><a href="#" (click)="goPageProfCadastro($event)">Cadastrar-se como Professor</a></p>
+  <p><a href="#" (click)="goPageAlunoCadastro($event)">Cadastrar-se como Aluno</a></p>
+  
 </ion-content>

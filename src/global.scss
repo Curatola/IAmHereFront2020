@@ -9,3 +9,18 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+ion-item{
+    ion-button{
+        padding: 0px;
+        margin: 0px;
+        ion-icon{
+            color: black;
+        }   
+    }
+    h3 {
+        margin: 0px;
+        padding-right: 8px;
+        font-size: 14px;
+    }
+}

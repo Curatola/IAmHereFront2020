@@ -5,7 +5,7 @@ export class ConfirmSenhaValidator{
         let senha = control.get("senha").value;
         let confirm = control.get("confirm");
         let erros = confirm.errors ? confirm.errors : {};
-        if (senha != confirm.value){
+        if (senha !== confirm.value){
             erros.mismatch = true;
             confirm.setErrors(erros);
             return erros;

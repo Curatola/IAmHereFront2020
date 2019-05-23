@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { LoginPage } from '../login/login.page';
 import {
   NavController,
-  NavParams,
   LoadingController,
   ToastController,
   ActionSheetController,
@@ -13,9 +11,8 @@ import { RequestService } from '../request.service';
 import { CameraService } from '../camera.service';
 import { Chamada } from 'src/models/chamada';
 import { Turma } from 'src/models/turma';
-import { ConfirmaPage } from '../confirma/confirma.page';
-import { PresencaPage } from '../presenca/presenca.page';
-
+import { File } from '@ionic-native/file/ngx';
+import { NavParamsService } from '../nav-params.service';
 
 @Component({
   selector: 'app-chamadas',
@@ -30,7 +27,7 @@ export class ChamadasPage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
+    public navParams: NavParamsService,
     public requests: RequestService,
     private loader: LoadingController,
     public toast: ToastController,
@@ -134,8 +131,7 @@ export class ChamadasPage implements OnInit {
       await this.requests.requestErrorPageHandler(
         error,
         this.toast,
-        this.navCtrl,
-        LoginPage
+        this.navCtrl
       );
     }
 
@@ -190,8 +186,7 @@ export class ChamadasPage implements OnInit {
       await this.requests.requestErrorPageHandler(
         error,
         this.toast,
-        this.navCtrl,
-        LoginPage
+        this.navCtrl
       );
     } finally {
       await loadingDialog.dismiss();
@@ -207,7 +202,8 @@ export class ChamadasPage implements OnInit {
   }
 
   details(chamada: Chamada): void {
-    this.navCtrl.push(PresencaPage, { chamada, turma: this.turma });
+    this.navParams.setParams( { chamada: chamada, turma: this.turma })
+    this.navCtrl.navigateForward('/presenca');
   }
 
   async uploadFile(filePath: string) {
@@ -222,19 +218,20 @@ export class ChamadasPage implements OnInit {
         'turma/' + this.turma.id + '/chamada',
         { previousPresentes: [] }
       );
-      this.navCtrl.push(ConfirmaPage, {
+
+      this.navParams.setParams({
         presencas: resp.presencas,
         timestampFoto: resp.timestampFoto,
         qtdPessoasReconhecidas: resp.total,
         turma: this.turma,
         chamadas: this.chamadas
       });
+      this.navCtrl.navigateForward("/confirma");
     } catch (error) {
       await this.requests.requestErrorPageHandler(
         error,
         this.toast,
-        this.navCtrl,
-        LoginPage
+        this.navCtrl
       );
     } finally {
       await loadingDialog.dismiss();
