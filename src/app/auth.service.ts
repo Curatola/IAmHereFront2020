@@ -6,14 +6,18 @@ import { Headers, Http, Response } from "@angular/http";
   providedIn: "root"
 })
 export class AuthService {
-  public static API_URL = "http://192.168.42.60:5000/";
+  public static API_URL = "http://172.17.104.31:5000/";
   public static readonly PROFESSOR = "Professor";
   public static readonly ALUNO = "Aluno";
 
-  constructor(public http:Http) {}
+  constructor(public http: Http) {}
 
   userIsLogged(): boolean {
-    if (this.getToken()) { return true; } else { return false; }
+    if (this.getToken()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   getToken(): string {
