@@ -1,9 +1,104 @@
+<!--
+  Generated template for the PerfilUsuarioPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
+
   <ion-toolbar>
-    <ion-title>perfil-usuario</ion-title>
+    <ion-title>Perfil</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button *ngIf="userType === 'Aluno'" (click)="addNewPhoto()">
+        <ion-icon name="person-add"></ion-icon>
+      </ion-button>
+      <ion-button [disabled]="!form.valid" (click)="editar()">
+        Salvar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+
 </ion-header>
 
+
 <ion-content>
+
+  <div [ngSwitch]="userType" >
+    <div style="height:250px;" *ngSwitchCase="'Aluno'">
+      <ion-slides pager>
+        <ion-slide *ngFor="let filename of filenames" style="position:relative;">
+          <img-loader [imgAttributes]="imageAtrr" [src]="url+'img/aluno/'+filename" #img useImg (click)="onImgClick(img)" (load)="onImageLoad()">
+          </img-loader>
+        </ion-slide>
+      </ion-slides>
+      <ion-fab-button horizontal="end" class="button-over-img" margin-right color="danger" (click)="apagarFoto()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </div>
+  </div>
+
+  <div margin-top *ngIf="userType === 'Professor'"></div>
+
+  <div padding-horizontal padding-bottom>
+    <ion-item>
+      <ion-label fixed>Email</ion-label>
+      <ion-label>{{email}}</ion-label>
+    </ion-item>
+
+    <form [formGroup]="form">
+
+      <ion-item>
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input type="text" formControlName="nome"></ion-input>
+      </ion-item>
+
+      <div>
+        <ng-container *ngFor="let validation of msgs.nome">
+          <div class="error-message"
+            *ngIf="form.get('nome').hasError(validation.type) && (form.get('nome').dirty || form.get('nome').touched)">
+            {{ validation.msg }}
+          </div>
+        </ng-container>
+      </div>
+
+      <div *ngIf="userType === 'Aluno'">
+        <ion-item>
+          <ion-label position="floating">Matricula</ion-label>
+          <ion-input type="text" formControlName="matricula"></ion-input>
+        </ion-item>
+
+        <div>
+          <ng-container *ngFor="let validation of msgs.matricula">
+            <div class="error-message"
+              *ngIf="form.get('matricula').hasError(validation.type) && (form.get('matricula').dirty || form.get('matricula').touched)">
+              {{ validation.msg }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <ion-item>
+        <ion-label>Alterar senha?</ion-label>
+        <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}">
+        </ion-checkbox>
+      </ion-item>
+
+      <ion-item *ngIf="enableSenha">
+        <ion-label position="floating">Senha</ion-label>
+        <ion-input type="password" formControlName="senha"></ion-input>
+      </ion-item>
+
+      <div>
+        <ng-container *ngFor="let validation of msgs.senha">
+          <div class="error-message"
+            *ngIf="form.get('senha').hasError(validation.type) && (form.get('senha').dirty || form.get('senha').touched)">
+            {{ validation.msg }}
+          </div>
+        </ng-container>
+      </div>
+
+    </form>
+  </div>
 
 </ion-content>
