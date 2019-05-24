@@ -6,6 +6,7 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { RequestService } from "./request.service";
 import { Router } from '@angular/router';
+import { ImageLoaderConfigService } from 'ionic-image-loader';
 
 @Component({
   selector: "app-root",
@@ -14,7 +15,7 @@ import { Router } from '@angular/router';
 export class AppComponent {
   constructor(
     platform: Platform,
-    //private imgLoaderConfig: ImageLoaderConfig,
+    private imgLoaderConfig: ImageLoaderConfigService,
     private toast: ToastController,
     //public deep: Deeplinks,
     private requests: RequestService,
@@ -35,7 +36,7 @@ export class AppComponent {
       if (logged) this.router.navigate(["turmas"])
       else this.router.navigate(["login"])
 
-      //this.imgLoaderConfig.setImageReturnType("base64");
+      this.imgLoaderConfig.setImageReturnType("base64");
 
       /*this.deep
         .route({

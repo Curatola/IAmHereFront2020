@@ -93,6 +93,9 @@ export class ChamadasPage implements OnInit {
   }
 
   async optionsClick(event, chamada: Chamada) {
+    event.stopPropagation();
+    event.preventDefault();
+    
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Chamada ' + chamada.dateStr + ' ' + chamada.timeStr,
       buttons: [{
@@ -106,7 +109,6 @@ export class ChamadasPage implements OnInit {
     });
 
     actionSheet.present();
-    event.stopPropagation();
   }
 
   async doInfinit(infiniteScroll: IonInfiniteScroll) {

@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../request.service';
 import { Events, NavController, LoadingController, ToastController, PopoverController, AlertController, ActionSheetController, Platform } from '@ionic/angular';
 import { NavParamsService } from '../nav-params.service';
+import { ImageLoaderConfigService } from 'ionic-image-loader';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-turmas',
@@ -28,7 +30,7 @@ export class TurmasPage implements OnInit {
     public events: Events,
     private alertCtrl: AlertController,
     private actionSheetCtrl: ActionSheetController,
-    //public imageLoaderConfig: ImageLoaderConfig,
+    public imageLoaderConfig: ImageLoaderConfigService,
     public plt: Platform,
     //private fcm: FCM,
     //public localNotifications: LocalNotifications,
@@ -67,10 +69,8 @@ export class TurmasPage implements OnInit {
     this.events.unsubscribe("refresh turmas")
     this.events.subscribe("refresh turmas", () => { this.load() });
 
-    /*
     const headers = new HttpHeaders().set("Authorization", "Bearer " + authProvider.getToken());
     this.imageLoaderConfig.setHttpHeaders(headers);
-    */
 
     this.load();
   }
@@ -81,6 +81,9 @@ export class TurmasPage implements OnInit {
   }
 
   async optionsClick(event, turma: Turma){
+    event.stopPropagation();
+    event.preventDefault();
+    
     let actionSheet;
     
     if (this.userType == "Professor"){
@@ -96,6 +99,12 @@ export class TurmasPage implements OnInit {
             text: "Alunos",
             icon: "people",
             //handler: () => this.getAlunos(turma)
+          },
+          {
+            text: "Apagar",
+            icon: "trash",
+            cssClass: "trash-icon",
+            //handler: () => this.apagar(turma)
           }
         ]
       });
@@ -115,8 +124,7 @@ export class TurmasPage implements OnInit {
     }
     
     actionSheet.present();
-    event.stopPropagation();
-    event.preventDefault();
+    
   }
 
   /*goPerfil(){

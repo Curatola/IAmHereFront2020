@@ -24,3 +24,23 @@ ion-item{
         font-size: 14px;
     }
 }
+
+.swiper-pagination-bullet {
+    background: white;
+    opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+    background: #007aff;
+    opacity: 1;
+}
+
+.trash-icon {
+    ion-icon{
+        color: red !important;
+        fill: red;
+    }
+    span {
+        color: red !important;
+    }
+}

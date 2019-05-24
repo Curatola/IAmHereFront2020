@@ -9,13 +9,13 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AddFotoComponent } from './add-foto/add-foto.component';
-import { CameraService } from './camera.service';
-import { Camera } from '@ionic-native/camera/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { ComponetsModule } from './componets/componets.module';
+import { IonicImageLoader } from 'ionic-image-loader';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
 
 @NgModule({
-  declarations: [AppComponent, AddFotoComponent],
-
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -23,17 +23,18 @@ import { Camera } from '@ionic-native/camera/ngx';
     AppRoutingModule,
     HttpModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponetsModule,
+    IonicImageLoader.forRoot()
   ],
   providers: [
     StatusBar,
     SplashScreen,
     FileTransfer,
-    CameraService,
-    Camera,
+    File,
+    WebView,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
-  exports: [AddFotoComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

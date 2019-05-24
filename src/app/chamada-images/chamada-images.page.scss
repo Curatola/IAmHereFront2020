@@ -1,0 +1,29 @@
+
+ion-slides {
+    height: 100%;
+
+    pinch-zoom {
+        width: 100%;
+    }
+}
+
+ion-toolbar {
+    color: white;
+}
+
+ion-toolbar {
+    --background: transparent;
+    --ion-color-base: transparent !important;
+}
+
+img {
+    max-height: 100vh !important;
+}
+
+ion-content{
+    --ion-background-color:black;
+}
+
+.slide-zoom {
+    height: 100%;
+}

@@ -1,6 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title *ngIf="requestNewPassword">Redefinir Senha</ion-title>
     <ion-title *ngIf="!requestNewPassword">Confirmação de Email</ion-title>
   </ion-toolbar>
