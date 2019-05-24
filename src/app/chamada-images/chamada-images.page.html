@@ -8,14 +8,14 @@
 
   <ion-toolbar transparent>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button (click)="showStatusBar()"></ion-back-button>
     </ion-buttons>
     <ion-title>Fotos</ion-title>
   </ion-toolbar>
 
 </ion-header>
-
-<ion-content fullscreen class="black" appHeaderOnclick [header]="header">
+<div class="full">
+<ion-content fullscreen appHeaderOnclick [header]="header">
   <ion-slides pager>
     <ion-slide *ngFor="let filename of filenames">
       <pinch-zoom (events)="event($event)" height="100%">
@@ -24,3 +24,4 @@
     </ion-slide>
   </ion-slides>
 </ion-content>
+</div>

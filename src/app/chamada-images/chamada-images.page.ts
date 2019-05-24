@@ -5,6 +5,7 @@ import { Turma } from 'src/models/turma';
 import { Chamada } from 'src/models/chamada';
 import { NavController, ToastController, IonSlides } from '@ionic/angular';
 import { AuthService } from '../auth.service';
+import { StatusBar } from "@ionic-native/status-bar/ngx";
 
 @Component({
   selector: 'app-chamada-images',
@@ -28,10 +29,13 @@ export class ChamadaImagesPage implements OnInit {
     public navParams: NavParamsService,
     private requests: RequestService,
     private toast: ToastController,
+    private statusBar: StatusBar
     ) {
     this.turma = navParams.get("turma");
     this.chamada = navParams.get("chamada");
     this.filenames = Array();
+
+    this.statusBar.hide();
 
     this.getFilenamesImg();
   }
@@ -42,6 +46,10 @@ export class ChamadaImagesPage implements OnInit {
     } else if (data.type === "touchend") {
       this.slides.lockSwipes(false);
     }
+  }
+
+  showStatusBar(){
+    this.statusBar.show();
   }
 
   async getFilenamesImg() {

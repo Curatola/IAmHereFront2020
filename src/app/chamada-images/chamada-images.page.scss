@@ -1,4 +1,3 @@
-
 ion-slides {
     height: 100%;
 
@@ -9,9 +8,6 @@ ion-slides {
 
 ion-toolbar {
     color: white;
-}
-
-ion-toolbar {
     --background: transparent;
     --ion-color-base: transparent !important;
 }
@@ -22,8 +18,15 @@ img {
 
 ion-content{
     --ion-background-color:black;
+    height: 100%;
 }
 
 .slide-zoom {
     height: 100%;
+}
+
+.full {
+    position: absolute; 
+    height: 100%;
+    width: 100%;
 }
