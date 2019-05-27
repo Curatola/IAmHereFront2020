@@ -1,21 +1,31 @@
+<!--
+  Generated template for the PresencaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
     <ion-title>Aula {{chamada.dateShort}} ({{qtdPessoasReconhecidas}})</ion-title>
 
-    <ion-buttons end>
-      <button ion-button icon-only (click)="getConteudo()">
+    <ion-buttons slot="end">
+      <ion-button ion-button icon-only (click)="getConteudo()">
         <ion-icon name="document"></ion-icon>
-      </button>
-      <button ion-button icon-only (click)="showImages()">
+      </ion-button>
+      <ion-button ion-button icon-only (click)="showImages()">
         <ion-icon name="images"></ion-icon>
-      </button>
-      <button ion-button icon-only (click)="done()">
+      </ion-button>
+      <ion-button ion-button icon-only (click)="done()">
         <ion-icon name="checkmark"></ion-icon>
-      </button>
+      </ion-button>
     </ion-buttons>
-  </ion-toolbar>
 
-   <ion-toolbar no-border-top>
+  </ion-toolbar>
+  <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="comparecimento">
       <ion-segment-button value="areAusentes">
         Ausentes ({{ausentes.length}})
@@ -26,18 +36,25 @@
     </ion-segment>
   </ion-toolbar>
 
+
+</ion-header>
+
 <ion-content padding>
   <div [ngSwitch]="comparecimento">
     <ion-list *ngSwitchCase="'areAusentes'">
       <ion-item *ngFor="let presenca of ausentes" ion-item>
+        <span presente="true" *ngIf="presenca.isPresent === true">P</span>
+        <span presente="false" *ngIf="presenca.isPresent === false">F</span>
+        <ion-toggle color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
         <ion-label>{{presenca.aluno.nome}}</ion-label>
-        <ion-checkbox [(ngModel)]="presenca.isPresent" (ionChange)="teste(presenca)"></ion-checkbox>
       </ion-item>
     </ion-list>
     <ion-list *ngSwitchCase="'arePresentes'">
       <ion-item *ngFor="let presenca of presentes" ion-item>
+        <span presente="true" *ngIf="presenca.isPresent === true">P</span>
+        <span presente="false" *ngIf="presenca.isPresent === false">F</span>
+        <ion-toggle color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
         <ion-label>{{presenca.aluno.nome}}</ion-label>
-        <ion-checkbox [(ngModel)]="presenca.isPresent" (ionChange)="teste(presenca)" style="--background-checked: red"></ion-checkbox>
       </ion-item>
     </ion-list>
   </div>

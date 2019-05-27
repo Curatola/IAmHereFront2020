@@ -1,33 +1,40 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
     <ion-title>{{turma.nome}} - Aulas</ion-title>
 
-    <ion-buttons end>
-      <button ion-button icon-only (click)="export()">
+    <ion-buttons slot="end">
+      <ion-button (click)="export()">
         <ion-icon name="download"></ion-icon>
-      </button>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding-vertical padding-left>
   <ion-list>
-    <button *ngFor="let chamada of chamadas" (click)="details(chamada)" ion-item>
-      <h2>{{chamada.dateStr}} - {{chamada.timeStr}}</h2>
-      <h3>{{chamada.conteudo}}</h3>
-      <button padding-horizontal color="dark" default (click)="optionsClick($event, chamada)" ion-button icon-only item-end clear>
-        <ion-icon name="more"></ion-icon>
-      </button>
-    </button>
+    <ion-item detail *ngFor="let chamada of chamadas" (click)="details(chamada)">
+      <ion-label>
+        <h2>{{chamada.dateStr}} - {{chamada.timeStr}}</h2>
+        <h3>{{chamada.conteudo}}</h3>
+      </ion-label>
+      <ion-button color="black" default (click)="optionsClick($event, turma)" fill="clear" slot="end">
+        <ion-icon class="black" slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+    </ion-item>
+
     <ion-item *ngIf="chamadas && chamadas.length <= 0">
       Nenhuma chamada foi registrada.
     </ion-item>
   </ion-list>
+
+  <app-add-foto [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>
 
   <ion-infinite-scroll (ionInfinite)="doInfinit($event)">
     <ion-infinite-scroll-content loadingText="Carregando..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
 </ion-content>
-
-<app-add-foto></app-add-foto>
