@@ -7,6 +7,11 @@
 <ion-header>
 
   <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
     <ion-title>Perfil</ion-title>
 
     <ion-buttons slot="end">
@@ -24,15 +29,16 @@
 
 <ion-content>
 
-  <div [ngSwitch]="userType" >
-    <div style="height:250px;" *ngSwitchCase="'Aluno'">
+  <div [ngSwitch]="userType">
+    <div class="wrapper" *ngSwitchCase="'Aluno'">
       <ion-slides pager>
-        <ion-slide *ngFor="let filename of filenames" style="position:relative;">
-          <img-loader [imgAttributes]="imageAtrr" [src]="url+'img/aluno/'+filename" #img useImg (click)="onImgClick(img)" (load)="onImageLoad()">
+        <ion-slide *ngFor="let filename of filenames">
+          <img-loader [imgAttributes]="imageAtrr" [src]="url+'img/aluno/'+filename" #img useImg
+            (click)="onImgClick(img)" (load)="onImageLoad()">
           </img-loader>
         </ion-slide>
       </ion-slides>
-      <ion-fab-button horizontal="end" class="button-over-img" margin-right color="danger" (click)="apagarFoto()">
+      <ion-fab-button horizontal="end" margin-right color="danger" (click)="apagarFoto()">
         <ion-icon name="trash"></ion-icon>
       </ion-fab-button>
     </div>
@@ -42,7 +48,7 @@
 
   <div padding-horizontal padding-bottom>
     <ion-item>
-      <ion-label fixed>Email</ion-label>
+      <ion-label position="fixed">Email</ion-label>
       <ion-label>{{email}}</ion-label>
     </ion-item>
 

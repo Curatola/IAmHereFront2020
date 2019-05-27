@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'nova-senha', loadChildren: './nova-senha/nova-senha.module#NovaSenhaPageModule' },
   { path: 'perfil-usuario', loadChildren: './perfil-usuario/perfil-usuario.module#PerfilUsuarioPageModule' },
-  { path: 'popover-nav', loadChildren: './popover-nav/popover-nav.module#PopoverNavPageModule' },
   { path: 'presenca', loadChildren: './presenca/presenca.module#PresencaPageModule' },
   { path: 'presenca-turma', loadChildren: './presenca-turma/presenca-turma.module#PresencaTurmaPageModule' },
   { path: 'prof-cadastro', loadChildren: './prof-cadastro/prof-cadastro.module#ProfCadastroPageModule' },

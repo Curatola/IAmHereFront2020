@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>740993404150-9p9apecfuh97vo56p742tlrbu1odqhjg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.740993404150-9p9apecfuh97vo56p742tlrbu1odqhjg</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>740993404150-ptomuebgso4hjnhatdjl1lmujqmrl1d6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA_AR8ppJCdcMn29rWd78zySRQNzvHs_mw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>740993404150</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>leds.iamhere</string>
+	<key>PROJECT_ID</key>
+	<string>leds-iamhere-4cc2b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>leds-iamhere-4cc2b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:740993404150:ios:51bb450a46621ca8</string>
+	<key>DATABASE_URL</key>
+	<string>https://leds-iamhere-4cc2b.firebaseio.com</string>
+</dict>
+</plist>

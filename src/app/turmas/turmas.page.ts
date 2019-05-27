@@ -6,6 +6,7 @@ import { Events, NavController, LoadingController, ToastController, PopoverContr
 import { NavParamsService } from '../nav-params.service';
 import { ImageLoaderConfigService } from 'ionic-image-loader';
 import { HttpHeaders } from '@angular/common/http';
+import { PopoverNavComponent } from '../componets/popover-nav/popover-nav.component';
 
 @Component({
   selector: 'app-turmas',
@@ -13,7 +14,7 @@ import { HttpHeaders } from '@angular/common/http';
   styleUrls: ['./turmas.page.scss'],
 })
 export class TurmasPage implements OnInit {
-  
+
   ngOnInit() {
   }
 
@@ -75,66 +76,71 @@ export class TurmasPage implements OnInit {
     this.load();
   }
 
-  goPresencasTurmaPage(turma: Turma){
-    this.navParams.setParams({"turmas": this.turmas});
+  goPresencasTurmaPage(turma: Turma) {
+    this.navParams.setParams({ "turma": turma });
     this.navCtrl.navigateForward("presenca-turma");
   }
 
-  async optionsClick(event, turma: Turma){
+  async optionsClick(event, turma: Turma) {
     event.stopPropagation();
     event.preventDefault();
-    
+
     let actionSheet;
-    
-    if (this.userType == "Professor"){
+
+    if (this.userType == "Professor") {
       actionSheet = await this.actionSheetCtrl.create({
-        header: turma.nome + " - " + turma.ano+"/"+turma.semestre,
+        header: turma.nome + " - " + turma.ano + "/" + turma.semestre,
         buttons: [
           {
             text: "Editar",
             icon: "create",
-            //handler: () => this.editar(turma)
+            handler: () => this.editar(turma)
           },
           {
             text: "Alunos",
             icon: "people",
-            //handler: () => this.getAlunos(turma)
+            handler: () => this.getAlunos(turma)
           },
           {
             text: "Apagar",
             icon: "trash",
             cssClass: "trash-icon",
-            //handler: () => this.apagar(turma)
+            handler: () => { this.apagar(turma) }
           }
         ]
       });
-      
+
     } else {
       actionSheet = await this.actionSheetCtrl.create({
-        header: turma.nome + " - " + turma.ano+"/"+turma.semestre,
+        header: turma.nome + " - " + turma.ano + "/" + turma.semestre,
         buttons: [
           {
             text: "Desinscrever-se",
             icon: "trash",
             cssClass: "trash-icon",
-            //handler: () => this.desinscrever(turma)
+            handler: () => { this.desinscrever(turma) }
           }
         ]
       });
     }
-    
+
     actionSheet.present();
-    
+
   }
 
-  /*goPerfil(){
-    this.navCtrl.push(PerfilUsuarioPage);
+  goPerfil() {
+    this.navCtrl.navigateForward('/perfil-usuario');
   }
 
-  popoverDeslogar(event) {
-    this.popoverCtrl.create(PopoverNavPage, {"is_logoff": true})
-      .present({ ev: event });
-  }*/
+  async popoverDeslogar(event) {
+    this.navParams.setParams({"is_logoff": true });
+    let popover = await this.popoverCtrl.create({
+      component: PopoverNavComponent,
+      event: event
+    });
+
+    popover.present();
+  }
 
   async load() {
     let loadingDialog = await this.loader.create({ message: 'Carregando Turmas...', spinner: 'crescent' });
@@ -145,9 +151,9 @@ export class TurmasPage implements OnInit {
 
       this.turmas = new Array();
       resp.forEach(elem => {
-        this.turmas.push(new Turma(elem.id,elem.nome,elem.ano,elem.semestre))
+        this.turmas.push(new Turma(elem.id, elem.nome, elem.ano, elem.semestre))
       })
-      
+
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     } finally {
@@ -160,26 +166,28 @@ export class TurmasPage implements OnInit {
     this.navCtrl.navigateForward("/chamadas");
   }
 
-  /*
-  add(){
-    if (this.userType === AuthProvider.PROFESSOR){
-      this.navCtrl.push(CriarTurmaPage, {"turmas": this.turmas, "turmasPage": this});
+  add() {
+    if (this.userType === AuthService.PROFESSOR) {
+      this.navParams.setParams({ "turmas": this.turmas, "turmasPage": this })
+      this.navCtrl.navigateForward('/criar-turma');
     } else {
-      this.navCtrl.push(InscricaoPage);
+      this.navCtrl.navigateForward('/inscricao');
     }
   }
 
-  getAlunos(turma: Turma){
-    this.navCtrl.push(AlunosTurmaPage, {"turma": turma});
+  getAlunos(turma: Turma) {
+    this.navParams.setParams({ "turma": turma });
+    this.navCtrl.navigateForward('/alunos-turma');
   }
 
-  editar(turma: Turma){
-    this.navCtrl.push(EditarTurmaPage, {"turma": turma, "turmasPage": this})
+  editar(turma: Turma) {
+    this.navParams.setParams({ "turma": turma, "turmasPage": this });
+    this.navCtrl.navigateForward('/editar-turma')
   }
 
-  apagar(turma: Turma){
-    let alert = this.alertCtrl.create({
-      title: 'Confirme',
+  async apagar(turma: Turma) {
+    let alert = await this.alertCtrl.create({
+      header: 'Confirme',
       message: 'Deseja mesmo apagar essa turma?',
       buttons: [
         {
@@ -197,8 +205,8 @@ export class TurmasPage implements OnInit {
     alert.present();
   }
 
-  ordenarTurmas(){
-    this.turmas.sort((t1: Turma, t2:Turma) => {
+  ordenarTurmas() {
+    this.turmas.sort((t1: Turma, t2: Turma) => {
       if (t1.ano > t2.ano) return -1;
       else if (t1.ano < t2.ano) return 1;
       else {
@@ -213,29 +221,31 @@ export class TurmasPage implements OnInit {
     });
   }
 
-  async commitApagar(turma: Turma){
-    let loadingDialog = this.loader.create({ content: 'Apagando turma...', spinner: 'crescent' });
+  async commitApagar(turma: Turma) {
+    let loadingDialog = await this.loader.create({ message: 'Apagando turma...', spinner: 'crescent' });
     await loadingDialog.present();
 
-    try{
+    try {
       let resp = await this.requests.delete("turma/" + turma.id)
       let indx = this.turmas.indexOf(turma);
-      this.turmas.splice(indx,1);
+      this.turmas.splice(indx, 1);
 
-      this.toast.create({
+      let t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
-      }).present();
-    } catch (error){
-      await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl, LoginPage);
-    }finally{
+      });
+
+      t.present();
+    } catch (error) {
+      await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
+    } finally {
       await loadingDialog.dismiss();
     }
   }
 
-  desinscrever(turma: Turma){
-    let alert = this.alertCtrl.create({
-      title: 'Confirme',
+  async desinscrever(turma: Turma) {
+    let alert = await this.alertCtrl.create({
+      header: 'Confirme',
       message: 'Deseja mesmo se desinscrever?',
       buttons: [
         {
@@ -253,26 +263,25 @@ export class TurmasPage implements OnInit {
     alert.present();
   }
 
-  async commitDesinscricao(turma: Turma){
-    let loadingDialog = this.loader.create({ content: 'Desinscrevendo-se...', spinner: 'crescent' });
+  async commitDesinscricao(turma: Turma) {
+    let loadingDialog = await this.loader.create({ message: 'Desinscrevendo-se...', spinner: 'crescent' });
     await loadingDialog.present();
 
-    try{
+    try {
       let resp = await this.requests.delete("inscricao/turma/" + turma.id)
       let indx = this.turmas.indexOf(turma);
-      this.turmas.splice(indx,1);
+      this.turmas.splice(indx, 1);
 
-      this.toast.create({
+      let t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
-      }).present();
-    } catch (error){
-      await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl, LoginPage);
-    }finally{
+      });
+
+      t.present();
+    } catch (error) {
+      await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
+    } finally {
       await loadingDialog.dismiss();
     }
   }
-*/
-
-
 }

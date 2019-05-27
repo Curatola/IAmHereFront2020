@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PopoverNavPage } from './popover-nav.page';
+import { PopoverNavComponent } from './popover-nav.component';
 
-describe('PopoverNavPage', () => {
-  let component: PopoverNavPage;
-  let fixture: ComponentFixture<PopoverNavPage>;
+describe('PopoverNavComponent', () => {
+  let component: PopoverNavComponent;
+  let fixture: ComponentFixture<PopoverNavComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PopoverNavPage ],
+      declarations: [ PopoverNavComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PopoverNavPage);
+    fixture = TestBed.createComponent(PopoverNavComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
