@@ -1,9 +1,92 @@
+<!--
+  Generated template for the EditarTurmaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
+
   <ion-toolbar>
-    <ion-title>editar-turma</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Editar Turma</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!form.valid" (click)="editar()">
+        Salvar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
 
+<ion-content padding>
+  <form [formGroup]="form">
+
+    <ion-item>
+      <ion-label position="floating">Nome</ion-label>
+      <ion-input type="text" formControlName="nome"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.nome">
+        <div class="error-message"
+          *ngIf="form.get('nome').hasError(validation.type) && (form.get('nome').dirty || form.get('nome').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Ano</ion-label>
+      <ion-input type="number" formControlName="ano"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.ano">
+        <div class="error-message"
+          *ngIf="form.get('ano').hasError(validation.type) && (form.get('ano').dirty || form.get('ano').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Semestre</ion-label>
+      <ion-input type="number" formControlName="semestre"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.semestre">
+        <div class="error-message"
+          *ngIf="form.get('semestre').hasError(validation.type) && (form.get('semestre').dirty || form.get('semestre').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label>Alterar senha?</ion-label>
+      <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}">
+      </ion-checkbox>
+    </ion-item>
+
+    <ion-item *ngIf="enableSenha">
+      <ion-label position="floating">Senha da Turma</ion-label>
+      <ion-input type="password" formControlName="senhaTurma"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.senhaTurma">
+        <div class="error-message"
+          *ngIf="form.get('senhaTurma').hasError(validation.type) && (form.get('senhaTurma').dirty || form.get('senhaTurma').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+  </form>
 </ion-content>

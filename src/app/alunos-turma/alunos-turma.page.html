@@ -1,9 +1,30 @@
+<!--
+  Generated template for the AlunosTurmaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
+
   <ion-toolbar>
-    <ion-title>alunos-turma</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Alunos Inscritos ({{inscritos}})</ion-title>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
-
+<ion-content padding-vertical padding-left>
+  <ion-list>
+    <ion-item *ngFor="let aluno of alunos">
+      {{aluno.nome}}
+      <ion-button color="black" default (click)="optionsClick($event, aluno)" fill="clear" slot="end">
+        <ion-icon class="black" slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+  <ion-item *ngIf="alunos && alunos.length <= 0">
+    Nenhum aluno se inscreveu nessa turma ainda.
+  </ion-item>
 </ion-content>

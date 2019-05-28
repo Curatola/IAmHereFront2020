@@ -1,9 +1,59 @@
+<!--
+  Generated template for the InscricaoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
+
   <ion-toolbar>
-    <ion-title>inscricao</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    
+    <ion-title>Inscrição</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!form.valid" (click)="confirmar()">
+        Confirmar
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
+
+<ion-content padding>
+
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-label position="floating">Código da turma</ion-label>
+      <ion-input type="number" formControlName="codTurma"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.codTurma">
+        <div class="error-message"
+          *ngIf="form.get('codTurma').hasError(validation.type) && (form.get('codTurma').dirty || form.get('codTurma').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Senha da Turma</ion-label>
+      <ion-input type="password" formControlName="senhaTurma"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.senhaTurma">
+        <div class="error-message"
+          *ngIf="form.get('senhaTurma').hasError(validation.type) && (form.get('senhaTurma').dirty || form.get('senhaTurma').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+  </form>
 
 </ion-content>

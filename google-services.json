@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "740993404150",
+    "firebase_url": "https://leds-iamhere-4cc2b.firebaseio.com",
+    "project_id": "leds-iamhere-4cc2b",
+    "storage_bucket": "leds-iamhere-4cc2b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740993404150:android:51bb450a46621ca8",
+        "android_client_info": {
+          "package_name": "leds.iamhere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740993404150-ptomuebgso4hjnhatdjl1lmujqmrl1d6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "leds.iamhere",
+            "certificate_hash": "e542a6e51b0073172abfbcdfbba31b2f3a4f0ec6"
+          }
+        },
+        {
+          "client_id": "740993404150-bd7h3va0jnvg6eusbd8actocf8g2ooq7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7YbSlsyJJs6VMMooDfYusqK_laiAHwAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740993404150-bd7h3va0jnvg6eusbd8actocf8g2ooq7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
