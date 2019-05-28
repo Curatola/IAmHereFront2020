@@ -73,11 +73,10 @@ export class ChamadasPage implements OnInit {
       });
       t.present();
     } catch (error) {
-      const t = await this.toast
-        .create({
-          message: error.message,
-          duration: 3000
-        });
+      const t = await this.toast.create({
+        message: error.message,
+        duration: 3000
+      });
       t.present();
     }
   }
@@ -95,17 +94,19 @@ export class ChamadasPage implements OnInit {
   async optionsClick(event, chamada: Chamada) {
     event.stopPropagation();
     event.preventDefault();
-    
+
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Chamada ' + chamada.dateStr + ' ' + chamada.timeStr,
-      buttons: [{
-        text: 'Apagar',
-        icon: 'trash',
-        cssClass: 'trash-icon',
-        handler: () => {
-          this.apagarChamada(chamada);
+      buttons: [
+        {
+          text: 'Apagar',
+          icon: 'trash',
+          cssClass: 'trash-icon',
+          handler: () => {
+            this.apagarChamada(chamada);
+          }
         }
-      }]
+      ]
     });
 
     actionSheet.present();
@@ -178,11 +179,10 @@ export class ChamadasPage implements OnInit {
       const indx = this.chamadas.indexOf(chamada);
       this.chamadas.splice(indx, 1);
 
-      const t = await this.toast
-        .create({
-          message: resp.sucesso,
-          duration: 3000
-        });
+      const t = await this.toast.create({
+        message: resp.sucesso,
+        duration: 3000
+      });
       t.present();
     } catch (error) {
       await this.requests.requestErrorPageHandler(
@@ -220,7 +220,6 @@ export class ChamadasPage implements OnInit {
         'turma/' + this.turma.id + '/chamada',
         { previousPresentes: [] }
       );
-
       this.navParams.setParams({
         presencas: resp.presencas,
         timestampFoto: resp.timestampFoto,
@@ -228,7 +227,7 @@ export class ChamadasPage implements OnInit {
         turma: this.turma,
         chamadas: this.chamadas
       });
-      this.navCtrl.navigateForward("/confirma");
+      this.navCtrl.navigateForward('/confirma');
     } catch (error) {
       await this.requests.requestErrorPageHandler(
         error,
@@ -239,6 +238,5 @@ export class ChamadasPage implements OnInit {
       await loadingDialog.dismiss();
     }
   }
-
-  ngOnInit() {}
+  ngOnInit(): void {}
 }
