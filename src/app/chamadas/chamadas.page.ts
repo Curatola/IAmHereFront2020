@@ -20,8 +20,6 @@ import { NavParamsService } from '../nav-params.service';
   styleUrls: ['./chamadas.page.scss']
 })
 export class ChamadasPage implements OnInit {
-  ngOnInit(): void {
-  }
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   chamadas: Array<Chamada>;
   page = 1;
@@ -96,7 +94,7 @@ export class ChamadasPage implements OnInit {
   async optionsClick(event, chamada: Chamada) {
     event.stopPropagation();
     event.preventDefault();
-    
+
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Chamada ' + chamada.dateStr + ' ' + chamada.timeStr,
       buttons: [
@@ -206,7 +204,7 @@ export class ChamadasPage implements OnInit {
   }
 
   details(chamada: Chamada): void {
-    this.navParams.setParams( { chamada: chamada, turma: this.turma })
+    this.navParams.setParams({ chamada: { chamada }, turma: this.turma });
     this.navCtrl.navigateForward('/presenca');
   }
 
@@ -229,7 +227,7 @@ export class ChamadasPage implements OnInit {
         turma: this.turma,
         chamadas: this.chamadas
       });
-      this.navCtrl.navigateForward("/confirma");
+      this.navCtrl.navigateForward('/confirma');
     } catch (error) {
       await this.requests.requestErrorPageHandler(
         error,
@@ -240,4 +238,5 @@ export class ChamadasPage implements OnInit {
       await loadingDialog.dismiss();
     }
   }
+  ngOnInit(): void {}
 }
