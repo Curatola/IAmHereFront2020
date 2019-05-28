@@ -204,7 +204,7 @@ export class ChamadasPage implements OnInit {
   }
 
   details(chamada: Chamada): void {
-    this.navParams.setParams( { chamada: chamada, turma: this.turma })
+    this.navParams.setParams( { chamada, turma: this.turma });
     this.navCtrl.navigateForward('/presenca');
   }
 
@@ -239,5 +239,6 @@ export class ChamadasPage implements OnInit {
       await loadingDialog.dismiss();
     }
   }
+
   ngOnInit() {}
 }

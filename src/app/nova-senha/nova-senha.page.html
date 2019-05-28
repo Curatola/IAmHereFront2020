@@ -1,9 +1,50 @@
+<!--
+  Generated template for the NovaSenhaPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
+
   <ion-toolbar>
-    <ion-title>nova-senha</ion-title>
+    <ion-title>Nova Senha</ion-title>
   </ion-toolbar>
+
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+  <form [formGroup]="resetform" (ngSubmit)="novasenha()">
+    <ion-item>
+      <ion-label position="floating">Nova Senha</ion-label>
+      <ion-input type="password" formControlName="senha"></ion-input>
+    </ion-item>
 
+    <div>
+      <ng-container *ngFor="let validation of msgs.senha">
+        <div class="error-message"
+          *ngIf="resetform.get('senha').hasError(validation.type) && (resetform.get('senha').dirty || resetform.get('senha').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Confirmação da Nova Senha</ion-label>
+      <ion-input type="password" formControlName="confirm"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.confirm">
+        <div class="error-message"
+          *ngIf="resetform.get('confirm').hasError(validation.type) && (resetform.get('confirm').dirty || resetform.get('confirm').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <div padding>
+      <ion-button type="submit" [disabled]="!resetform.valid" expand="full">Confirmar</ion-button>
+    </div>
+
+  </form>
 </ion-content>

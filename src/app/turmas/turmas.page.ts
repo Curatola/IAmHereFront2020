@@ -228,7 +228,7 @@ export class TurmasPage implements OnInit {
     try {
       let resp = await this.requests.delete("turma/" + turma.id)
       let indx = this.turmas.indexOf(turma);
-      this.turmas.splice(indx, 1);
+      this.turmas.splice(indx, 1)
 
       let t = await this.toast.create({
         message: resp.sucesso,

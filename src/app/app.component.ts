@@ -1,12 +1,14 @@
 import { AuthService } from "./auth.service";
 import { Component } from "@angular/core";
 
-import { Platform, ToastController } from "@ionic/angular";
+import { Platform, ToastController, NavController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { RequestService } from "./request.service";
 import { Router } from '@angular/router';
 import { ImageLoaderConfigService } from 'ionic-image-loader';
+import { Deeplinks, DeeplinkMatch } from '@ionic-native/deeplinks/ngx';
+import { NavParamsService } from './nav-params.service';
 
 @Component({
   selector: "app-root",
@@ -17,7 +19,9 @@ export class AppComponent {
     platform: Platform,
     private imgLoaderConfig: ImageLoaderConfigService,
     private toast: ToastController,
-    //public deep: Deeplinks,
+    private nav: NavController,
+    private navParams: NavParamsService,
+    public deep: Deeplinks,
     private requests: RequestService,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
@@ -38,32 +42,29 @@ export class AppComponent {
 
       this.imgLoaderConfig.setImageReturnType("base64");
 
-      /*this.deep
-        .route({
-          "/confirm_email/:token": LoginPage,
-          "/reset_senha/:token": NovaSenhaPage
-        })
-        .subscribe(
-          match => {
-            this.handle_deeplink(match);
-          },
-          nomatch => {
-            console.log("no match", nomatch);
-          }
-        );
-    });*/
+      this.deep.route({
+        "/confirm_email/:token":'/login',
+        "/reset_senha/:token":"/nova-senha",
+      }).subscribe(
+        match => {
+          this.handle_deeplink(match);
+        },
+        nomatch => {
+          console.log("no match", nomatch);
+        }
+      );
     });
   }
 
-  /*async handle_deeplink(match: DeeplinkMatch) {
+  async handle_deeplink(match: DeeplinkMatch) {
     try {
       if (this.auth.userIsLogged()) {
-        this.toast
-          .create({
-            message: "Faça logout primeiro!",
-            duration: 3000
-          })
-          .present();
+        let t = await this.toast.create({
+          message: "Faça logout primeiro!",
+          duration: 3000
+        });
+
+        t.present();
 
         return;
       }
@@ -78,22 +79,17 @@ export class AppComponent {
         if (resp.sucesso) msg = resp.sucesso;
         else if (resp.warning) msg = resp.warning;
 
-        this.toast
-          .create({
-            message: msg,
-            duration: 3000
-          })
-          .present();
+        let t = await this.toast.create({
+          message: msg,
+          duration: 3000
+        })
+        t.present();
       } else if (match.$link.path.split("/")[1] == "reset_senha") {
-        this.nav.push(NovaSenhaPage, { token: match.$args.token });
+        this.navParams.setParams({ token: match.$args.token })
+        this.nav.navigateForward('/nova-senha');
       }
     } catch (error) {
-      await this.requests.requestErrorPageHandler(
-        error,
-        this.toast,
-        this.nav,
-        LoginPage
-      );
+      await this.requests.requestErrorPageHandler(error,this.toast,this.nav);
     }
-  }*/
+  }
 }

@@ -33,8 +33,7 @@
     <div class="wrapper" *ngSwitchCase="'Aluno'">
       <ion-slides pager>
         <ion-slide *ngFor="let filename of filenames">
-          <img-loader [imgAttributes]="imageAtrr" [src]="url+'img/aluno/'+filename" #img useImg
-            (click)="onImgClick(img)" (load)="onImageLoad()">
+          <img-loader [src]="url+'img/aluno/'+filename" #img useImg (click)="onImgClick(img)" (load)="onImageLoad()">
           </img-loader>
         </ion-slide>
       </ion-slides>

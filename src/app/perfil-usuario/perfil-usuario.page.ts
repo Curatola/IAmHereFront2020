@@ -6,7 +6,7 @@ import { AuthService } from '../auth.service';
 import { CameraService } from '../camera.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ValidatorMessages } from '../validator-messages';
-import { ImageAttribute, IonicImageLoaderComponent } from 'ionic-image-loader';
+import { IonicImageLoaderComponent } from 'ionic-image-loader';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -28,7 +28,6 @@ export class PerfilUsuarioPage implements OnInit {
   enableSenha: boolean;
 
   url: string = AuthService.API_URL;
-  imageAtrr: ImageAttribute[] = [];
   email: string;
 
   imgsLoaded: boolean = false;
@@ -49,8 +48,6 @@ export class PerfilUsuarioPage implements OnInit {
         nome: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern("^[a-zA-Z\u00C0-\u024F ]+$")])),
         senha: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)]))
       });
-
-      this.imageAtrr.push({element: "class", value: "foto-perfil"});
 
       this.form.get("senha").disable();
       this.userType = authProvider.getUserType();

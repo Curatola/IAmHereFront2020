@@ -13,6 +13,7 @@ import { File } from '@ionic-native/file/ngx';
 import { ComponetsModule } from './componets/componets.module';
 import { IonicImageLoader } from 'ionic-image-loader';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,6 +34,7 @@ import { WebView } from '@ionic-native/ionic-webview/ngx';
     FileTransfer,
     File,
     WebView,
+    Deeplinks,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

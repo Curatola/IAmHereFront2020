@@ -25,6 +25,14 @@ ion-item{
     }
 }
 
+img-loader {
+    img {
+        min-width: 100%;
+        min-height: 250px !important;
+        object-fit: cover;
+    }
+}
+
 .swiper-pagination-bullet {
     background: white;
     opacity: 1;
