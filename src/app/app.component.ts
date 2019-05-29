@@ -1,14 +1,14 @@
-import { AuthService } from "./auth.service";
+import { AuthService } from "./service/auth.service";
 import { Component } from "@angular/core";
 
 import { Platform, ToastController, NavController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { RequestService } from "./request.service";
+import { RequestService } from "./service/request.service";
 import { Router } from '@angular/router';
 import { ImageLoaderConfigService } from 'ionic-image-loader';
 import { Deeplinks, DeeplinkMatch } from '@ionic-native/deeplinks/ngx';
-import { NavParamsService } from './nav-params.service';
+import { NavParamsService } from './service/nav-params.service';
 
 @Component({
   selector: "app-root",
