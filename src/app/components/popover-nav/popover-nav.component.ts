@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, LoadingController, ToastController, PopoverController } from '@ionic/angular';
+import { NavController, LoadingController, ToastController, PopoverController, AlertController } from '@ionic/angular';
 import { NavParamsService } from 'src/app/service/nav-params.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { RequestService } from 'src/app/service/request.service';
@@ -13,7 +13,8 @@ export class PopoverNavComponent implements OnInit {
 
   ngOnInit() {}
 
-  is_logoff: any;
+  isLogoff: any;
+  isGoPerfil: boolean;
   //turma: Turma;
   //chamada: Chamada;
 
@@ -25,14 +26,36 @@ export class PopoverNavComponent implements OnInit {
     private loader: LoadingController,
     public toast: ToastController,
     private requests: RequestService,
+    private alertCtrl: AlertController,
     //private imgLoader: ImageLoader,
     ) {
-      this.is_logoff = navParams.get("is_logoff");
+      this.isLogoff = navParams.get("is_logoff");
+      this.isGoPerfil = navParams.get("isGoPerfil");
       //this.turma = navParams.get("turma");
       //this.chamada = navParams.get("chamada");
   }
 
-  async logoff() {
+  async logoff(){
+    let alert = await this.alertCtrl.create({
+      header: 'Confirme!',
+      message: 'Deseja mesmo fazer logoff?',
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.commitLogoff();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  async commitLogoff() {
     let loadingDialog = await this.loader.create({ message: 'Fazendo logoff...', spinner: 'crescent' });
     await loadingDialog.present();
     try{
@@ -47,6 +70,12 @@ export class PopoverNavComponent implements OnInit {
       await loadingDialog.dismiss();
     }
   }
+
+  async goPerfil() {
+    this.popoverController.dismiss();
+    this.navCtrl.navigateForward('/perfil-usuario');
+  }
+
   /*
   private b64toBlob (b64Data, contentType='', sliceSize=512){
     b64Data = b64Data.split(',')[1]

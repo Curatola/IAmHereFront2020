@@ -10,9 +10,6 @@
     <ion-title>Turmas</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button (click)="goPerfil()">
-        <ion-icon name="person"></ion-icon>
-      </ion-button>
       <ion-button (click)="popoverDeslogar($event)">
         <ion-icon ios="ios-more" md="md-more"></ion-icon>
       </ion-button>
@@ -22,40 +19,64 @@
 </ion-header>
 
 
-<ion-content padding-vertical padding-left>
+<ion-content>
   <div [ngSwitch]="userType">
-    <ion-list *ngSwitchCase="'Professor'">
-      <ion-item detail *ngFor="let turma of turmas" (click)="showListasPresenca(turma)">
-        <ion-label>
-          <h2>{{turma.nome}}</h2>
-          <h3>{{turma.ano}}/{{turma.semestre}}</h3>
-        </ion-label>
-        <h3 slot="end" style="font-size: 14px">Cód. {{turma.id}}</h3>
-        <ion-button color="black" default (click)="optionsClick($event, turma)" fill="clear" slot="end">
-          <ion-icon class="black" slot="icon-only" name="more"></ion-icon>
-        </ion-button>
-      </ion-item>
+    <div *ngSwitchCase="'Professor'">
+      <ion-card *ngFor="let turma of turmas">
+        <ion-item>
+          <ion-card-header (click)="showListasPresenca(turma)">
+            <ion-card-title>{{turma.nome}}</ion-card-title>
+            <ion-card-subtitle>{{turma.ano}}/{{turma.semestre}}</ion-card-subtitle>
+          </ion-card-header>
 
-      <ion-item *ngIf="turmas && turmas.length <= 0">
-        Você ainda não criou nenhuma turma!
-      </ion-item>
-    </ion-list>
+          <h3 style="font-size: 14px">Cód. {{turma.id}}</h3>
+          <ion-button fill="clear" (click)="apagar($event, turma)">
+            <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+          </ion-button>
+        </ion-item>
 
-    <ion-list *ngSwitchCase="'Aluno'">
-      <ion-item detail *ngFor="let turma of turmas" (click)="goPresencasTurmaPage(turma)">
-        <ion-label>
-          <h2>{{turma.nome}}</h2>
-          <h3>{{turma.ano}}/{{turma.semestre}}</h3>
-        </ion-label>
-        <ion-button color="black" default (click)="optionsClick($event, turma)" fill="clear" slot="end">
-          <ion-icon class="black" slot="icon-only" name="more"></ion-icon>
-        </ion-button>
-      </ion-item>
+        <ion-card-content>
+          <ion-button fill="clear" (click)="getAlunos(turma)">
+            <ion-icon slot="start" name="people"></ion-icon>
+            Alunos
+          </ion-button>
+          <ion-button slot="end" fill="clear" (click)="editar(turma)" color="primary">
+            <ion-icon name="create"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" fill="clear" (click)="export(turma)">
+            <ion-icon name="download"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <div padding-top *ngIf="turmas && turmas.length <= 0">
+        <ion-item>
+          Você ainda não criou nenhuma turma!
+        </ion-item>
+        <ion-item>
+          Click no botão abaixo para criar uma turma
+        </ion-item>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'Aluno'">
+      <ion-card *ngFor="let turma of turmas">
+        <ion-item>
+          <ion-card-header (click)="goPresencasTurmaPage(turma)">
+            <ion-card-title>{{turma.nome}}</ion-card-title>
+            <ion-card-subtitle>{{turma.ano}}/{{turma.semestre}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-button fill="clear" (click)="desinscrever($event, turma)">
+            <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-card>
 
       <ion-item *ngIf="turmas && turmas.length <= 0">
         Inscreva-se em uma turma!
       </ion-item>
-    </ion-list>
+    </div>
 
   </div>
 

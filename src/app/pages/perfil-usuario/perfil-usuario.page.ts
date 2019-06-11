@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSlides, IonContent, NavController, LoadingController, ToastController, ActionSheetController } from '@ionic/angular';
+import { IonSlides, IonContent, IonInput, NavController, LoadingController, ToastController, ActionSheetController } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
 import { AuthService } from '../../service/auth.service';
 import { CameraService } from '../../service/camera.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { ConfirmSenhaValidator } from '../../confirm-senha-validator';
 import { ValidatorMessages } from '../../validator-messages';
 import { IonicImageLoaderComponent } from 'ionic-image-loader';
 
@@ -20,6 +21,7 @@ export class PerfilUsuarioPage implements OnInit {
 
   @ViewChild(IonContent) content: IonContent;
   @ViewChild(IonSlides) slides: IonSlides;
+  @ViewChild("senhaInput") senhaInput: IonInput;
 
   form: FormGroup;
   msgs = ValidatorMessages.msgs;
@@ -46,10 +48,12 @@ export class PerfilUsuarioPage implements OnInit {
     ) {
       this.form = this.formBuilder.group({
         nome: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern("^[a-zA-Z\u00C0-\u024F ]+$")])),
-        senha: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)]))
-      });
+        senha: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)])),
+        confirm: new FormControl("", Validators.compose([Validators.required, Validators.minLength(6)]))
+      }, { "validator": ConfirmSenhaValidator.isMatching });
 
       this.form.get("senha").disable();
+      this.form.get("confirm").disable();
       this.userType = authProvider.getUserType();
 
       if (this.userType === "Aluno") this.form.addControl("matricula", new FormControl("", Validators.compose([Validators.required, Validators.pattern("^[a-zA-Z0-9 ]+$")])),)
@@ -97,13 +101,20 @@ export class PerfilUsuarioPage implements OnInit {
     
   }
 
-  change(){
+  async change(){
     let senhaControl = this.form.get("senha");
+    let confirmControl = this.form.get("confirm");
     if (this.enableSenha) {
       senhaControl.enable();
-      setTimeout(() => this.content.scrollToBottom(),500);
+      confirmControl.enable();
+      setTimeout(() => {
+        this.senhaInput.setFocus();
+      }, 50);
     }
-    else senhaControl.disable();
+    else{
+      senhaControl.disable();
+      confirmControl.disable();
+    } 
   }
 
   async editar(){

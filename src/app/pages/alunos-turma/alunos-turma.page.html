@@ -15,16 +15,22 @@
 
 </ion-header>
 
-<ion-content padding-vertical padding-left>
-  <ion-list>
-    <ion-item *ngFor="let aluno of alunos">
-      {{aluno.nome}}
-      <ion-button color="black" default (click)="optionsClick($event, aluno)" fill="clear" slot="end">
-        <ion-icon class="black" slot="icon-only" name="more"></ion-icon>
+<ion-content>
+  <ion-card *ngFor="let aluno of alunos">
+    <ion-item>
+      <ion-card-header>
+        <ion-card-title>{{aluno.nome}}</ion-card-title>
+      </ion-card-header>
+      <ion-button fill="clear" (click)="desinscrever(aluno)">
+        <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
       </ion-button>
     </ion-item>
-  </ion-list>
-  <ion-item *ngIf="alunos && alunos.length <= 0">
-    Nenhum aluno se inscreveu nessa turma ainda.
-  </ion-item>
+  </ion-card>
+
+  <div padding-top *ngIf="alunos && alunos.length <= 0">
+    <ion-item>
+      Nenhum aluno se inscreveu nessa turma ainda.
+    </ion-item>
+  </div>
+
 </ion-content>

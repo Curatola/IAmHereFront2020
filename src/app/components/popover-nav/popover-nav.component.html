@@ -1,8 +1,11 @@
 <ion-list>
-    <ion-item *ngIf=is_logoff>
-        <ion-label (click)="logoff()">Logoff</ion-label>
-    </ion-item>
     <ion-item *ngIf=chamada>
         <ion-label (click)="download()">Foto</ion-label>
+    </ion-item>
+    <ion-item *ngIf=isGoPerfil (click)="goPerfil()">
+        Perfil
+    </ion-item>
+    <ion-item *ngIf=isLogoff>
+        <ion-label (click)="logoff()">Logoff</ion-label>
     </ion-item>
 </ion-list>

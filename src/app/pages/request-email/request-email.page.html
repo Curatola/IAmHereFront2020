@@ -17,7 +17,7 @@
       src="../../assets/imgs/LEDS-Logo.jpeg">
   </div>
 
-  <form [formGroup]="formulario" (ngSubmit)="requestEmail()">
+  <form [formGroup]="formulario">
     <ion-item>
       <ion-label position="floating">Email</ion-label>
       <ion-input type="email" formControlName="email"></ion-input>
@@ -31,9 +31,11 @@
         </div>
       </ng-container>
     </div>
-
-    <div padding>
-      <ion-button type="submit" [disabled]="!formulario.valid" expand="full">Confirmar</ion-button>
-    </div>
   </form>
 </ion-content>
+
+<div id="wrapper">
+  <ion-button (click)="requestEmail()" type="submit" [disabled]="!formulario.valid">
+    Confirmar
+  </ion-button>
+</div>

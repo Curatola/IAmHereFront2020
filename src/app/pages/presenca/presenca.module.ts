@@ -6,11 +6,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { PresencaPage } from './presenca.page';
+import { CanDeactivateGuard } from 'src/app/can-deactivate.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: PresencaPage
+    component: PresencaPage,
+    canDeactivate: [CanDeactivateGuard]
   }
 ];
 

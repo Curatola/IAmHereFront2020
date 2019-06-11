@@ -11,7 +11,6 @@ import { RequestService } from '../../service/request.service';
 import { CameraService } from '../../service/camera.service';
 import { Chamada } from 'src/models/chamada';
 import { Turma } from 'src/models/turma';
-import { File } from '@ionic-native/file/ngx';
 import { NavParamsService } from '../../service/nav-params.service';
 
 @Component({
@@ -24,6 +23,7 @@ export class ChamadasPage implements OnInit {
   chamadas: Array<Chamada>;
   page = 1;
   turma: Turma;
+  canMakeChamada: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -31,7 +31,6 @@ export class ChamadasPage implements OnInit {
     public requests: RequestService,
     private loader: LoadingController,
     public toast: ToastController,
-    public file: File,
     public camera: CameraService,
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController
@@ -39,46 +38,7 @@ export class ChamadasPage implements OnInit {
     this.turma = navParams.get('turma');
 
     this.load();
-  }
-
-  async export() {
-    try {
-      const resp = await this.requests.get(
-        'turma/' + this.turma.id + '/chamadas'
-      );
-      const fileName = 'chamada_' + resp.turma.replace(' ', '_') + '.csv';
-      try {
-        await this.file.checkDir(this.file.externalRootDirectory, 'IAmHere');
-      } catch (err) {
-        await this.file.createDir(
-          this.file.externalRootDirectory,
-          'IAmHere',
-          false
-        );
-      }
-
-      await this.file.writeFile(
-        this.file.externalRootDirectory,
-        'IAmHere/' + fileName,
-        resp.csv,
-        { replace: true }
-      );
-
-      const t = await this.toast.create({
-        message:
-          'Exportação feita com sucesso: IAmHere/chamada_' +
-          resp.turma +
-          '.csv',
-        duration: 6000
-      });
-      t.present();
-    } catch (error) {
-      const t = await this.toast.create({
-        message: error.message,
-        duration: 3000
-      });
-      t.present();
-    }
+    this.doRefresh(null);
   }
 
   async load() {
@@ -89,27 +49,6 @@ export class ChamadasPage implements OnInit {
     await loadingDialog.present();
     await this.doInfinit(this.infiniteScroll);
     await loadingDialog.dismiss();
-  }
-
-  async optionsClick(event, chamada: Chamada) {
-    event.stopPropagation();
-    event.preventDefault();
-
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Chamada ' + chamada.dateStr + ' ' + chamada.timeStr,
-      buttons: [
-        {
-          text: 'Apagar',
-          icon: 'trash',
-          cssClass: 'trash-icon',
-          handler: () => {
-            this.apagarChamada(chamada);
-          }
-        }
-      ]
-    });
-
-    actionSheet.present();
   }
 
   async doInfinit(infiniteScroll: IonInfiniteScroll) {
@@ -125,7 +64,6 @@ export class ChamadasPage implements OnInit {
       });
 
       if (!resp.hasMorePages) {
-        // tslint:disable-next-line:no-unused-expression
         infiniteScroll.disabled;
       } else {
         this.page++;
@@ -141,7 +79,8 @@ export class ChamadasPage implements OnInit {
     infiniteScroll.complete();
   }
 
-  async apagarChamada(chamada: Chamada) {
+  async apagarChamada(event, chamada: Chamada) {
+    event.stopPropagation();
     if (!this.hasOthersChamadasInDay(chamada)) {
       const alert = await this.alertCtrl.create({
         header: 'Só existe essa chamada desse dia',
@@ -208,35 +147,62 @@ export class ChamadasPage implements OnInit {
     this.navCtrl.navigateForward('/presenca');
   }
 
-  async uploadFile(filePath: string) {
-    const loadingDialog = await this.loader.create({
-      message: 'Uploading...'
-    });
-    await loadingDialog.present();
+  async doRefresh(event){
+    let resp = await this.requests.get("turma/" + this.turma.id + "/can_make_chamada");
+    this.canMakeChamada = resp.canMakeChamada
+    if (event) event.target.complete();
+  }
 
-    try {
-      const resp = await this.requests.uploadFile(
-        filePath,
-        'turma/' + this.turma.id + '/chamada',
-        { previousPresentes: [] }
-      );
-      this.navParams.setParams({
-        presencas: resp.presencas,
-        timestampFoto: resp.timestampFoto,
-        qtdPessoasReconhecidas: resp.total,
-        turma: this.turma,
-        chamadas: this.chamadas
+  async uploadFile(filesPath: Array<string>) {
+    let presentes: Array<number> = new Array();
+    let sucess: boolean = true;
+    let result: any;
+
+    let i: number = 1;
+
+    for (let filePath of filesPath) {
+      const loadingDialog = await this.loader.create({
+        message: 'Uploading foto ' + i + '...'
       });
-      this.navCtrl.navigateForward('/confirma');
-    } catch (error) {
-      await this.requests.requestErrorPageHandler(
-        error,
-        this.toast,
-        this.navCtrl
-      );
-    } finally {
-      await loadingDialog.dismiss();
+      await loadingDialog.present();
+      i++;
+
+      try {
+        const resp = await this.requests.uploadFile(
+          filePath,
+          'turma/' + this.turma.id + '/chamada',
+          { previousPresentes: presentes }
+        );
+
+        let presencas: any[] = resp.presencas.filter((presenca: any) => { return presenca.isPresente });
+        presentes = presencas.map((presenca: any) => { return presenca.alunoId });
+
+        result = {
+          presencas: resp.presencas,
+          timestampFoto: resp.timestampFoto,
+          qtdPessoasReconhecidas: resp.total,
+          turma: this.turma,
+          chamadas: this.chamadas
+        };
+
+      } catch (error) {
+        await this.requests.requestErrorPageHandler(
+          error,
+          this.toast,
+          this.navCtrl
+        );
+
+        sucess = false;
+      } finally {
+        loadingDialog.dismiss();
+      }
+    }
+
+    if (sucess) {
+      this.navParams.setParams(result);
+      this.navCtrl.navigateForward("/confirma");
     }
   }
+
   ngOnInit(): void {}
 }

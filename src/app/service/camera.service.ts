@@ -19,7 +19,7 @@ export class CameraService {
   async takePicture() {
     const options: CameraOptions = {
       quality: 100,
-      saveToPhotoAlbum: false,
+      saveToPhotoAlbum: true,
       sourceType: this.camera.PictureSourceType.CAMERA,
       correctOrientation: true
     };

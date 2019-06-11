@@ -7,6 +7,7 @@ import { NavParamsService } from '../../service/nav-params.service';
 import { ImageLoaderConfigService } from 'ionic-image-loader';
 import { HttpHeaders } from '@angular/common/http';
 import { PopoverNavComponent } from '../../components/popover-nav/popover-nav.component';
+import { File } from '@ionic-native/file/ngx';
 
 @Component({
   selector: 'app-turmas',
@@ -33,6 +34,7 @@ export class TurmasPage implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     public imageLoaderConfig: ImageLoaderConfigService,
     public plt: Platform,
+    public file: File,
     //private fcm: FCM,
     //public localNotifications: LocalNotifications,
   ) {
@@ -81,59 +83,48 @@ export class TurmasPage implements OnInit {
     this.navCtrl.navigateForward("presenca-turma");
   }
 
-  async optionsClick(event, turma: Turma) {
-    event.stopPropagation();
-    event.preventDefault();
+  async export(turma: Turma) {
+    try {
+      const resp = await this.requests.get(
+        'turma/' + turma.id + '/chamadas'
+      );
+      const fileName = 'chamada_' + resp.turma.replace(' ', '_') + '.csv';
+      try {
+        await this.file.checkDir(this.file.externalRootDirectory, 'IAmHere');
+      } catch (err) {
+        await this.file.createDir(
+          this.file.externalRootDirectory,
+          'IAmHere',
+          false
+        );
+      }
 
-    let actionSheet;
+      await this.file.writeFile(
+        this.file.externalRootDirectory,
+        'IAmHere/' + fileName,
+        resp.csv,
+        { replace: true }
+      );
 
-    if (this.userType == "Professor") {
-      actionSheet = await this.actionSheetCtrl.create({
-        header: turma.nome + " - " + turma.ano + "/" + turma.semestre,
-        buttons: [
-          {
-            text: "Editar",
-            icon: "create",
-            handler: () => this.editar(turma)
-          },
-          {
-            text: "Alunos",
-            icon: "people",
-            handler: () => this.getAlunos(turma)
-          },
-          {
-            text: "Apagar",
-            icon: "trash",
-            cssClass: "trash-icon",
-            handler: () => { this.apagar(turma) }
-          }
-        ]
+      const t = await this.toast.create({
+        message:
+          'Exportação feita com sucesso: IAmHere/chamada_' +
+          resp.turma +
+          '.csv',
+        duration: 6000
       });
-
-    } else {
-      actionSheet = await this.actionSheetCtrl.create({
-        header: turma.nome + " - " + turma.ano + "/" + turma.semestre,
-        buttons: [
-          {
-            text: "Desinscrever-se",
-            icon: "trash",
-            cssClass: "trash-icon",
-            handler: () => { this.desinscrever(turma) }
-          }
-        ]
+      t.present();
+    } catch (error) {
+      const t = await this.toast.create({
+        message: error.message,
+        duration: 3000
       });
+      t.present();
     }
-
-    actionSheet.present();
-
-  }
-
-  goPerfil() {
-    this.navCtrl.navigateForward('/perfil-usuario');
   }
 
   async popoverDeslogar(event) {
-    this.navParams.setParams({ "is_logoff": true });
+    this.navParams.setParams({ "is_logoff": true, "isGoPerfil": true });
     let popover = await this.popoverCtrl.create({
       component: PopoverNavComponent,
       event: event
@@ -185,7 +176,9 @@ export class TurmasPage implements OnInit {
     this.navCtrl.navigateForward('/editar-turma')
   }
 
-  async apagar(turma: Turma) {
+  async apagar(event, turma: Turma) {
+    event.stopPropagation();
+
     let alert = await this.alertCtrl.create({
       header: 'Confirme',
       message: 'Deseja mesmo apagar essa turma?',
@@ -243,7 +236,9 @@ export class TurmasPage implements OnInit {
     }
   }
 
-  async desinscrever(turma: Turma) {
+  async desinscrever(event, turma: Turma) {
+    event.stopPropagation();
+
     let alert = await this.alertCtrl.create({
       header: 'Confirme',
       message: 'Deseja mesmo se desinscrever?',

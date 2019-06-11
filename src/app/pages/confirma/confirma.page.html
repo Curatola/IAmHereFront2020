@@ -6,37 +6,43 @@
 -->
 <ion-header>
   <ion-toolbar>
-    <ion-title>Confirmação ({{qtdPessoasReconhecidas}})</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button ion-button icon-only (click)="getConteudo()">
-        <ion-icon name="document"></ion-icon>
-      </ion-button>
-      <ion-button ion-button icon-only (click)="done()">
-        <ion-icon name="checkmark"></ion-icon>
-      </ion-button>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
     </ion-buttons>
+
+    <ion-title>
+      <div id="badgeWrapper">
+        Confirmação <ion-badge>{{qtdPessoasReconhecidas}}</ion-badge>
+      </div>
+    </ion-title>
+
   </ion-toolbar>
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="comparecimento">
       <ion-segment-button value="areAusentes">
-        Ausentes ({{ausentes.length}})
+        <div id="badgeWrapper">
+          Ausentes
+          <ion-badge>{{ausentes.length}}</ion-badge>
+        </div>
       </ion-segment-button>
       <ion-segment-button value="arePresentes">
-        Presentes ({{presentes.length}})
+        <div id="badgeWrapper">
+          Presentes
+          <ion-badge>{{presentes.length}}</ion-badge>
+        </div>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <div [ngSwitch]="comparecimento">
     <ion-list *ngSwitchCase="'areAusentes'">
       <ion-item *ngFor="let presenca of ausentes" ion-item>
         <span presente="true" *ngIf="presenca.isPresent === true">P</span>
         <span presente="false" *ngIf="presenca.isPresent === false">F</span>
-        <ion-toggle color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
+        <ion-toggle (click)="onChange()" color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
         <ion-label>{{presenca.aluno.nome}}</ion-label>
       </ion-item>
     </ion-list>
@@ -44,11 +50,14 @@
       <ion-item *ngFor="let presenca of presentes" ion-item>
         <span presente="true" *ngIf="presenca.isPresent === true">P</span>
         <span presente="false" *ngIf="presenca.isPresent === false">F</span>
-        <ion-toggle color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
+        <ion-toggle (click)="onChange()" color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
         <ion-label>{{presenca.aluno.nome}}</ion-label>
       </ion-item>
     </ion-list>
   </div>
-
-  <app-add-foto [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>
 </ion-content>
+
+<div id="wrapper">
+  <ion-textarea (ionChange)="onChange()" [(ngModel)]="conteudo" row="2" placeholder="Assuntos Tratados"></ion-textarea>
+  <ion-button (click)="done()" expand="full">Salvar</ion-button>
+</div>

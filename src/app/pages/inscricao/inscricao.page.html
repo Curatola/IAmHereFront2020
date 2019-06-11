@@ -12,12 +12,6 @@
     </ion-buttons>
     
     <ion-title>Inscrição</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button [disabled]="!form.valid" (click)="confirmar()">
-        Confirmar
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
@@ -52,6 +46,12 @@
           {{ validation.msg }}
         </div>
       </ng-container>
+    </div>
+
+    <div id="wrapper">
+      <ion-button type="submit" [disabled]="!form.valid" (click)="confirmar()">
+        Confirmar
+      </ion-button>
     </div>
 
   </form>

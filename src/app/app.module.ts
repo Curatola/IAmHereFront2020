@@ -14,6 +14,7 @@ import { ComponetsModule } from './components/componets.module';
 import { IonicImageLoader } from 'ionic-image-loader';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
+import { CanDeactivateGuard } from './can-deactivate.guard';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,6 +36,7 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
     File,
     WebView,
     Deeplinks,
+    CanDeactivateGuard,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

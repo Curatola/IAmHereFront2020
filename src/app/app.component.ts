@@ -1,7 +1,7 @@
 import { AuthService } from "./service/auth.service";
 import { Component } from "@angular/core";
 
-import { Platform, ToastController, NavController } from "@ionic/angular";
+import { Platform, ToastController, NavController, AlertController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { RequestService } from "./service/request.service";
@@ -26,7 +26,8 @@ export class AppComponent {
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     public auth: AuthService,
-    private router: Router
+    private router: Router,
+    private alert: AlertController
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -43,8 +44,8 @@ export class AppComponent {
       this.imgLoaderConfig.setImageReturnType("base64");
 
       this.deep.route({
-        "/confirm_email/:token":'/login',
-        "/reset_senha/:token":"/nova-senha",
+        "/confirm_email/:token": '/login',
+        "/reset_senha/:token": "/nova-senha",
       }).subscribe(
         match => {
           this.handle_deeplink(match);
@@ -89,7 +90,7 @@ export class AppComponent {
         this.nav.navigateForward('/nova-senha');
       }
     } catch (error) {
-      await this.requests.requestErrorPageHandler(error,this.toast,this.nav);
+      await this.requests.requestErrorPageHandler(error, this.toast, this.nav);
     }
   }
 }

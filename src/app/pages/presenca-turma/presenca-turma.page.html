@@ -15,19 +15,22 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-list>
-    <ion-item *ngFor="let presenca of presencas">
-      <ion-label>
-        <h2>{{presenca.dateStr}} - {{presenca.timeStr}}</h2>
-        <h3 *ngIf="presenca.isPresente">Presente</h3>
-        <h3 *ngIf="!presenca.isPresente">Ausente</h3>
-      </ion-label>
+<ion-content>
+  <ion-card *ngFor="let presenca of presencas">
+    <ion-item>
+      <ion-card-header>
+        <ion-card-title>{{presenca.dateStr}} - {{presenca.timeStr}}</ion-card-title>
+        <ion-card-subtitle *ngIf="presenca.isPresente">Presente</ion-card-subtitle>
+        <ion-card-subtitle *ngIf="!presenca.isPresente">Ausente</ion-card-subtitle>
+      </ion-card-header>
     </ion-item>
-    <ion-item *ngIf="presencas && presencas.length <= 0">
+  </ion-card>
+
+  <div padding-top *ngIf="presencas && presencas.length <= 0">
+    <ion-item>
       Nenhuma chamada foi feita!
     </ion-item>
-  </ion-list>
+  </div>
 
   <ion-infinite-scroll (ionInfinite)="doInfinit($event)">
     <ion-infinite-scroll-content loadingText="Carregando..."></ion-infinite-scroll-content>

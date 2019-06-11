@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ValidatorMessages } from '../../validator-messages';
 import { TurmasPage } from '../turmas/turmas.page';
 import { Turma } from 'src/models/turma';
-import { NavController, LoadingController, ToastController } from '@ionic/angular';
-import { LoginPage } from '../login/login.page';
+import { NavController, LoadingController, ToastController, IonInput } from '@ionic/angular';
+import { ConfirmSenhaValidator } from 'src/app/confirm-senha-validator';
 
 @Component({
   selector: 'app-editar-turma',
@@ -14,6 +14,7 @@ import { LoginPage } from '../login/login.page';
   styleUrls: ['./editar-turma.page.scss'],
 })
 export class EditarTurmaPage implements OnInit {
+  @ViewChild("senhaInput") senhaInput: IonInput;
 
   ngOnInit() {
   }
@@ -41,16 +42,27 @@ export class EditarTurmaPage implements OnInit {
       nome: new FormControl(this.turma.nome,Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern("^[a-zA-Z0-9 ]+$")])),
       ano: new FormControl(this.turma.ano, Validators.required),
       semestre: new FormControl(this.turma.semestre, Validators.required),
-      senhaTurma: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4)]))
-    });
+      senhaTurma: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4)])),
+      confirmSenhaTurma: new FormControl("", Validators.compose([Validators.required, Validators.minLength(4)]))
+    },  { "validator": ConfirmSenhaValidator.isMatching });
 
     this.form.get("senhaTurma").disable();
+    this.form.get("confirmSenhaTurma").disable();
   }
 
   change(){
     let senhaControl = this.form.get("senhaTurma");
-    if (this.enableSenha) senhaControl.enable();
-    else senhaControl.disable();
+    let confirmControl = this.form.get("confirmSenhaTurma");
+    if (this.enableSenha){
+      senhaControl.enable();
+      confirmControl.enable();
+      setTimeout(() => {
+        this.senhaInput.setFocus();
+      }, 50);
+    } else {
+      senhaControl.disable();
+      confirmControl.disable();
+    }
   }
 
   async editar(){

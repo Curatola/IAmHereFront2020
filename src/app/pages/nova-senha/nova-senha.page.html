@@ -42,9 +42,11 @@
       </ng-container>
     </div>
 
-    <div padding>
-      <ion-button type="submit" [disabled]="!resetform.valid" expand="full">Confirmar</ion-button>
-    </div>
-
   </form>
 </ion-content>
+
+<div id="wrapper">
+  <ion-button type="submit" [disabled]="!resetform.valid">
+    Confirmar
+  </ion-button>
+</div>

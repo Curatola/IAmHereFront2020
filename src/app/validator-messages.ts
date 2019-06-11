@@ -29,6 +29,11 @@ export class ValidatorMessages{
             {type: "required", msg: "Senha da turma é obrigatório"},
             {type: "minlength", msg: "Senha da turma dever ter pelo menos 4 caracteres"}
         ],
+        "confirmSenhaTurma": [
+            {type: "required", msg: "Senha da turma é obrigatório"},
+            {type: "minlength", msg: "Senha da turma dever ter pelo menos 4 caracteres"},
+            {type: "mismatch", msg: "Senha não é a mesma da confirmação"}
+        ],
         "ano": [
             {type: "required", msg: "Ano é obrigatório"}
         ],

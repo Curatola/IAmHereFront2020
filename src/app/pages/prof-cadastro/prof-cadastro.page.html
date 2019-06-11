@@ -74,10 +74,11 @@
       </ng-container>
     </div>
 
-
-    <div padding>
-      <ion-button type="submit" [disabled]="!form.valid" expand="full">Cadastrar</ion-button>
-    </div>
-
   </form>
 </ion-content>
+
+<div id="wrapper">
+  <ion-button type="submit" [disabled]="!form.valid" (click)="cadastrar()">
+    Cadastrar
+  </ion-button>
+</div>

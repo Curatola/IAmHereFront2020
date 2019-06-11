@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CameraService } from 'src/app/service/camera.service';
+import { AlertController } from '@ionic/angular';
+import { pathToFileURL } from 'url';
 
 
 
@@ -11,14 +13,49 @@ import { CameraService } from 'src/app/service/camera.service';
 export class AddFotoComponent {
   @Input() uploadFunction: Function;
   text: string;
+  pathsFotos: Array<string>;
+  max = 10;
 
-  constructor(public camera: CameraService) {
+  constructor(public camera: CameraService, public alertCtrl: AlertController) {
+    this.pathsFotos = new Array();
   }
 
   async takePicture() {
     try {
       let imageData = await this.camera.takePicture();
-      await this.uploadFunction(imageData);
+      this.pathsFotos.push(imageData);
+
+      let msg = "Essa será a " + (this.pathsFotos.length + 1) + "ª foto de no máximo " + this.max;
+      if (this.pathsFotos.length === this.max - 1) {
+        msg = "Essa será a última foto desse conjunto!"
+      }
+
+      if (this.pathsFotos.length < this.max) {
+        const alert = await this.alertCtrl.create({
+          header: 'Deseja tirar mais fotos?',
+          message: msg,
+          buttons: [
+            {
+              text: 'Não',
+              handler: async () => {
+                await this.uploadFunction(this.pathsFotos);
+                this.pathsFotos = new Array();
+              }
+            },
+            {
+              text: 'Sim',
+              handler: () => {
+                this.takePicture();
+              }
+            }
+          ]
+        });
+        alert.present();
+      } else {
+        await this.uploadFunction(this.pathsFotos)
+        this.pathsFotos = new Array();
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -27,10 +64,44 @@ export class AddFotoComponent {
   async getFromGallery() {
     try {
       let imageData = await this.camera.getFromGallery();
-      await this.uploadFunction(imageData);
+      this.pathsFotos.push(imageData);
+
+      let msg = "Essa será a " + (this.pathsFotos.length + 1) + "ª foto de no máximo " + this.max;
+      if (this.pathsFotos.length === this.max - 1) {
+        msg = "Essa será a última foto desse conjunto!"
+      }
+
+      if (this.pathsFotos.length < this.max) {
+        const alert = await this.alertCtrl.create({
+          header: 'Deseja selecionar mais fotos?',
+          message: msg,
+          buttons: [
+            {
+              text: 'Não',
+              handler: async () => {
+                await this.uploadFunction(this.pathsFotos);
+                this.pathsFotos = new Array();
+              }
+            },
+            {
+              text: 'Sim',
+              handler: () => {
+                this.getFromGallery();
+              }
+            }
+          ]
+        });
+        alert.present();
+      } else {
+        await this.uploadFunction(this.pathsFotos);
+        this.pathsFotos = new Array();
+      }
+
     } catch (error) {
       console.log(error);
     }
   }
+
+
 
 }

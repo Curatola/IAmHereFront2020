@@ -11,22 +11,28 @@ import {
   AlertController
 } from '@ionic/angular';
 import { Aluno } from 'src/models/aluno';
+import { ComponentCanDeactivate } from 'src/app/component-can-deactivate';
 
 @Component({
   selector: 'app-presenca',
   templateUrl: './presenca.page.html',
   styleUrls: ['./presenca.page.scss']
 })
-export class PresencaPage implements OnInit {
+
+export class PresencaPage extends ComponentCanDeactivate implements OnInit {
   presentes: Array<Presenca>;
   ausentes: Array<Presenca>;
   turma: Turma;
   chamada: Chamada;
-  conteudo: string;
+  conteudo: string = "";
   qtdPessoasReconhecidas: number;
   comparecimento = 'areAusentes';
 
   ngOnInit() {}
+
+  onChange() {
+    this.isToDoBack = false;
+  }
 
   constructor(
     public navCtrl: NavController,
@@ -34,9 +40,9 @@ export class PresencaPage implements OnInit {
     public requests: RequestService,
     private loader: LoadingController,
     public toast: ToastController,
-    // public popoverCtrl: PopoverController,
     public alertCtrl: AlertController
   ) {
+    super(alertCtrl, navCtrl);
     this.presentes = new Array();
     this.ausentes = new Array();
 
@@ -47,39 +53,11 @@ export class PresencaPage implements OnInit {
     this.load();
   }
 
-  /*
-  popoverDeslogar(event) {
-    this.popoverCtrl.create(PopoverNavPage, {"turma": this.turma, "chamada": this.chamada})
-      .present({ ev: event });
-  }
-  */
-
-  async getConteudo() {
-    const prompt = await this.alertCtrl.create({
-      header: 'Assuntos Tratados',
-      message: 'Descreva os assuntos abordados.',
-      inputs: [
-        {
-          name: 'conteudo',
-          placeholder: 'Conteúdo',
-          value: this.conteudo
-        }
-      ],
-      buttons: [
-        {
-          text: 'Ok',
-          handler: data => {
-            this.conteudo = data.conteudo;
-          }
-        }
-      ]
-    });
-    prompt.present();
-  }
-
-  showImages() {
+  async showImages() {
+    this.ignore = true;
     this.navParams.setParams({ turma: this.turma, chamada: this.chamada });
-    this.navCtrl.navigateForward('/chamada-images');
+    await this.navCtrl.navigateForward('/chamada-images');
+    this.ignore = false;
   }
 
   async load() {

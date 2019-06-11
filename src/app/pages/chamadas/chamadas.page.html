@@ -5,31 +5,38 @@
     </ion-buttons>
 
     <ion-title>{{turma.nome}} - Aulas</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="export()">
-        <ion-icon name="download"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding-vertical padding-left>
-  <ion-list>
-    <ion-item detail *ngFor="let chamada of chamadas" (click)="details(chamada)">
-      <ion-label>
-        <h2>{{chamada.dateStr}} - {{chamada.timeStr}}</h2>
-        <h3>{{chamada.conteudo}}</h3>
-      </ion-label>
-      <ion-button color="black" default (click)="optionsClick($event, chamada)" fill="clear" slot="end">
-        <ion-icon class="black" slot="icon-only" name="more"></ion-icon>
-      </ion-button>
-    </ion-item>
-
-    <ion-item *ngIf="chamadas && chamadas.length <= 0">
+<ion-content>
+  <div padding-top *ngIf="chamadas && chamadas.length <= 0">
+    <ion-item>
       Nenhuma chamada foi registrada.
     </ion-item>
-  </ion-list>
+    <ion-item *ngIf="!canMakeChamada">
+      A chamada não pode ser feita, pois nenhum aluno está inscrito na turma ainda.
+    </ion-item>
+    <ion-item *ngIf="canMakeChamada">
+      Click no botão abaixo para fazer uma chamada.
+    </ion-item>
+  </div>
+
+  <ion-refresher [disabled]="canMakeChamada" slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content>
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card *ngFor="let chamada of chamadas">
+    <ion-item>
+      <ion-card-header (click)="details(chamada)">
+        <ion-card-title>{{chamada.dateStr}} - {{chamada.timeStr}}</ion-card-title>
+        <ion-card-subtitle>{{chamada.conteudo}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-button fill="clear" (click)="apagarChamada($event, turma)">
+        <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>  
 
   <app-add-foto [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>
 

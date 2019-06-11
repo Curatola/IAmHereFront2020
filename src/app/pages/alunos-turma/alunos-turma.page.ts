@@ -53,22 +53,6 @@ export class AlunosTurmaPage implements OnInit {
     }
   }
 
-  async optionsClick(event, aluno: Aluno){
-    let actionSheet = await this.actionSheetCtrl.create({
-      header: aluno.nome,
-      buttons: [{
-        text: "Desinscrever",
-        icon: "trash",
-        cssClass: "trash-icon",
-        handler: () => {this.desinscrever(aluno)}
-      }]
-    });
-   
-    
-    actionSheet.present();
-    event.stopPropagation();
-  }
-
   async desinscrever(aluno: Aluno){
     let alert = await this.alertCtrl.create({
       header: 'Confirme',

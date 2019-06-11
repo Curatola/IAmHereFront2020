@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { CanDeactivateGuard } from './can-deactivate.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -14,7 +15,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   { path: 'nova-senha', loadChildren: './pages/nova-senha/nova-senha.module#NovaSenhaPageModule' },
   { path: 'perfil-usuario', loadChildren: './pages/perfil-usuario/perfil-usuario.module#PerfilUsuarioPageModule' },
-  { path: 'presenca', loadChildren: './pages/presenca/presenca.module#PresencaPageModule' },
+  { path: 'presenca', loadChildren: './pages/presenca/presenca.module#PresencaPageModule'},
   { path: 'presenca-turma', loadChildren: './pages/presenca-turma/presenca-turma.module#PresencaTurmaPageModule' },
   { path: 'prof-cadastro', loadChildren: './pages/prof-cadastro/prof-cadastro.module#ProfCadastroPageModule' },
   { path: 'request-email', loadChildren: './pages/request-email/request-email.module#RequestEmailPageModule' },

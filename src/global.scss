@@ -10,14 +10,16 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
-ion-item{
-    ion-button{
+ion-item {
+    ion-button {
         padding: 0px;
         margin: 0px;
-        ion-icon{
+
+        ion-icon {
             color: black;
-        }   
+        }
     }
+
     h3 {
         margin: 0px;
         padding-right: 8px;
@@ -44,11 +46,108 @@ img-loader {
 }
 
 .trash-icon {
-    ion-icon{
+    ion-icon {
         color: red !important;
         fill: red;
     }
+
     span {
         color: red !important;
     }
 }
+
+ion-card {
+    ion-item {
+        ion-card-header {
+            padding-left: 0px;
+            width: 100%
+        }
+
+        ion-button {
+            float: right;
+        }
+
+        h3 {
+            float: right;
+            margin: 0px;
+            white-space: nowrap;
+            padding-right: 8px;
+            font-size: 14px;
+        }
+    }
+}
+
+ion-textarea {
+    border: solid 1px #dedede;
+    border-radius: 3px;
+}
+
+ion-card-content {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+
+    ion-button {
+        margin: 0px;
+        --color: initial;
+        --padding-start: 8px;
+    }
+
+    ion-button[slot="end"] {
+        float: right;
+        --padding-start: 8px;
+        --padding-end: 8px;
+    }
+}
+
+form:not([notfull]) {
+    height: 100%;
+
+    #wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+        ion-button {
+            position: absolute;
+            align-self: center;
+            width: 65%;
+            margin-bottom: 16px;
+            bottom: 0px;
+        }
+    }
+}
+
+#wrapper {
+    padding: 0px 16px 8px 16px;
+    display: flex;
+    flex-direction: column;
+
+    ion-button {
+        width: 65%;
+        align-self: center;
+    }
+}
+
+#senhaWrapper {
+    display: flex;
+
+    ion-item {
+        width: 100%;
+        display: inline-block;
+    }
+
+    ion-checkbox { 
+        align-self: center;
+        margin: 0 8px;
+    }
+}
+
+#badgeWrapper {
+    display: flex;
+    align-items: center;
+    
+    ion-badge { 
+        margin: 0 4px;
+    }
+}
+
