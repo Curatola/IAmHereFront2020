@@ -90,8 +90,8 @@ export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
   }
 
   async done() {
-    let presencas: any[] = this.presentes.filter((presenca: any, index, presencas: Presenca[]) => { return !presenca.checked });
-    presencas = presencas.concat(this.ausentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.checked }));
+    let presencas: any[] = this.presentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.isPresent });
+    presencas = presencas.concat(this.ausentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.isPresent }));
     let alunosPresentesId: any[] = presencas.map((presenca: any, index, presencas: Presenca[]) => { return presenca.aluno.id });
 
     let loadingDialog = await this.loader.create({ message: 'Confirmando nova chamada...', spinner: 'crescent' });

@@ -146,6 +146,7 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
       t.present();
       this.chamada.conteudo = this.conteudo;
 
+      this.ignore = true;
       this.navCtrl.pop();
     } catch (error) {
       await this.requests.requestErrorPageHandler(

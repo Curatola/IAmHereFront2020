@@ -10,7 +10,11 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>Alunos Inscritos ({{inscritos}})</ion-title>
+    <ion-title>
+      <div id="badgeWrapper">
+        Alunos Inscritos <ion-badge>{{inscritos}}</ion-badge>
+      </div>
+    </ion-title>
   </ion-toolbar>
 
 </ion-header>

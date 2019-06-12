@@ -157,6 +157,8 @@ export class ChamadasPage implements OnInit {
     let presentes: Array<number> = new Array();
     let sucess: boolean = true;
     let result: any;
+    let timestampPrimeiraFoto: string = "";
+    let qtdPessoasReconhecidas: number= 0;
 
     let i: number = 1;
 
@@ -165,13 +167,16 @@ export class ChamadasPage implements OnInit {
         message: 'Uploading foto ' + i + '...'
       });
       await loadingDialog.present();
-      i++;
+      
 
       try {
         const resp = await this.requests.uploadFile(
           filePath,
           'turma/' + this.turma.id + '/chamada',
-          { previousPresentes: presentes }
+          {
+            previousPresentes: presentes,
+            dataHoraOriginal: (result) ? timestampPrimeiraFoto : undefined
+          }
         );
 
         let presencas: any[] = resp.presencas.filter((presenca: any) => { return presenca.isPresente });
@@ -179,12 +184,16 @@ export class ChamadasPage implements OnInit {
 
         result = {
           presencas: resp.presencas,
-          timestampFoto: resp.timestampFoto,
-          qtdPessoasReconhecidas: resp.total,
           turma: this.turma,
           chamadas: this.chamadas
         };
 
+        if (i === 1) {
+          timestampPrimeiraFoto = resp.timestampFoto;
+        }
+
+        qtdPessoasReconhecidas += resp.total;
+        i++;
       } catch (error) {
         await this.requests.requestErrorPageHandler(
           error,
@@ -199,6 +208,9 @@ export class ChamadasPage implements OnInit {
     }
 
     if (sucess) {
+      result.timestampFoto = timestampPrimeiraFoto;
+      result.qtdPessoasReconhecidas = qtdPessoasReconhecidas;
+
       this.navParams.setParams(result);
       this.navCtrl.navigateForward("/confirma");
     }
