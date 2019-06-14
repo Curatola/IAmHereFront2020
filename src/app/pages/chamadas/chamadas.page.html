@@ -38,10 +38,10 @@
     </ion-item>
   </ion-card>  
 
-  <app-add-foto [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>
-
-  <ion-infinite-scroll (ionInfinite)="doInfinit($event)">
+  <ion-infinite-scroll (ionInfinite)="doInfinit()">
     <ion-infinite-scroll-content loadingText="Carregando..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
 </ion-content>
+
+<app-add-foto [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>

@@ -31,7 +31,7 @@ img-loader {
     img {
         min-width: 100%;
         min-height: 250px !important;
-        object-fit: cover;
+        object-fit: contain;
     }
 }
 

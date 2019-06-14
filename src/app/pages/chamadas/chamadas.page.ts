@@ -47,11 +47,11 @@ export class ChamadasPage implements OnInit {
       spinner: 'crescent'
     });
     await loadingDialog.present();
-    await this.doInfinit(this.infiniteScroll);
+    await this.doInfinit();
     await loadingDialog.dismiss();
   }
 
-  async doInfinit(infiniteScroll: IonInfiniteScroll) {
+  async doInfinit() {
     try {
       const resp = await this.requests.get(
         'turma/' + this.turma.id + '/chamadas/pag/' + this.page
@@ -64,7 +64,7 @@ export class ChamadasPage implements OnInit {
       });
 
       if (!resp.hasMorePages) {
-        infiniteScroll.disabled;
+        this.infiniteScroll.disabled = true;
       } else {
         this.page++;
       }
@@ -76,7 +76,7 @@ export class ChamadasPage implements OnInit {
       );
     }
 
-    infiniteScroll.complete();
+    this.infiniteScroll.complete();
   }
 
   async apagarChamada(event, chamada: Chamada) {

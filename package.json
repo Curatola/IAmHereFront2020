@@ -94,7 +94,7 @@
       "ionic-plugin-deeplinks": {
         "URL_SCHEME": "iamhere",
         "DEEPLINK_SCHEME": "http",
-        "DEEPLINK_HOST": "192.168.42.60",
+        "DEEPLINK_HOST": "200.137.75.28",
         "ANDROID_PATH_PREFIX": "/",
         "ANDROID_2_PATH_PREFIX": "/",
         "ANDROID_3_PATH_PREFIX": "/",
