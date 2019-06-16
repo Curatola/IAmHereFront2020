@@ -15,6 +15,8 @@ import { IonicImageLoader } from 'ionic-image-loader';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { CanDeactivateGuard } from './can-deactivate.guard';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,6 +38,8 @@ import { CanDeactivateGuard } from './can-deactivate.guard';
     File,
     WebView,
     Deeplinks,
+    FCM,
+    LocalNotifications,
     CanDeactivateGuard,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

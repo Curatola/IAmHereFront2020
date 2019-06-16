@@ -2,12 +2,14 @@ import { Turma } from '../../../models/turma';
 import { AuthService } from '../../service/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from '../../service/request.service';
-import { Events, NavController, LoadingController, ToastController, PopoverController, AlertController, ActionSheetController, Platform } from '@ionic/angular';
+import { Events, NavController, LoadingController, ToastController, PopoverController, AlertController, Platform } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
 import { ImageLoaderConfigService } from 'ionic-image-loader';
 import { HttpHeaders } from '@angular/common/http';
 import { PopoverNavComponent } from '../../components/popover-nav/popover-nav.component';
 import { File } from '@ionic-native/file/ngx';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-turmas',
@@ -31,17 +33,16 @@ export class TurmasPage implements OnInit {
     public popoverCtrl: PopoverController,
     public events: Events,
     private alertCtrl: AlertController,
-    private actionSheetCtrl: ActionSheetController,
     public imageLoaderConfig: ImageLoaderConfigService,
     public plt: Platform,
     public file: File,
-    //private fcm: FCM,
-    //public localNotifications: LocalNotifications,
+    private fcm: FCM,
+    public localNotifications: LocalNotifications,
   ) {
 
     this.userType = authProvider.getUserType();
 
-    /*if (this.userType == AuthProvider.ALUNO && (!this.plt.is('core'))){
+    if (this.userType === AuthService.ALUNO && (!this.plt.is('desktop'))){
       this.localNotifications.hasPermission().then(hasPerm => {
         if (!hasPerm) this.localNotifications.requestPermission();
       })
@@ -52,11 +53,10 @@ export class TurmasPage implements OnInit {
 
       this.fcm.onTokenRefresh().subscribe(token => {
         this.requests.post("fcm/aluno/"+token, {});
-      })
+      });
 
-     
       this.fcm.onNotification().subscribe(data => {
-        if(!data.wasTapped){
+        if (!data.wasTapped) {
           this.localNotifications.schedule({
             title: data.title,
             text: data.body,
@@ -67,7 +67,7 @@ export class TurmasPage implements OnInit {
         console.log(data);
       });
 
-    }*/
+    }
 
     this.events.unsubscribe("refresh turmas")
     this.events.subscribe("refresh turmas", () => { this.load() });
