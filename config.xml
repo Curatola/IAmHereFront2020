@@ -21,7 +21,9 @@
     <preference name="SplashScreenDelay" value="3000" />
     <platform name="android">
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
-            <application android:networkSecurityConfig="@xml/network_security_config" />
+            <application android:networkSecurityConfig="@xml/network_security_config">
+                <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_notification" />
+            </application>
         </edit-config>
         <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
         <allow-intent href="market:*" />
@@ -31,6 +33,11 @@
         <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
         <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
         <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+        <resource-file src="resources/android/notification-icon/drawable-hdpi/ic_notification.png" target="app/src/main/res/mipmap-hdpi/ic_notification.png" />
+        <resource-file src="resources/android/notification-icon/drawable-mdpi/ic_notification.png" target="app/src/main/res/mipmap-mdpi/ic_notification.png" />
+        <resource-file src="resources/android/notification-icon/drawable-xhdpi/ic_notification.png" target="app/src/main/res/mipmap-xhdpi/ic_notification.png" />
+        <resource-file src="resources/android/notification-icon/drawable-xxhdpi/ic_notification.png" target="app/src/main/res/mipmap-xxhdpi/ic_notification.png" />
+        <resource-file src="resources/android/notification-icon/drawable-xxxhdpi/ic_notification.png" target="app/src/main/res/mipmap-xxxhdpi/ic_notification.png" />
         <splash density="land-ldpi" src="resources/android/splash/drawable-land-ldpi-screen.png" />
         <splash density="land-mdpi" src="resources/android/splash/drawable-land-mdpi-screen.png" />
         <splash density="land-hdpi" src="resources/android/splash/drawable-land-hdpi-screen.png" />

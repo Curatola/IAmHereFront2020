@@ -60,7 +60,8 @@ export class TurmasPage implements OnInit {
           this.localNotifications.schedule({
             title: data.title,
             text: data.body,
-            vibrate: true
+            vibrate: true,
+            smallIcon: "res://mipmap/ic_notification"
           });
         }
 
