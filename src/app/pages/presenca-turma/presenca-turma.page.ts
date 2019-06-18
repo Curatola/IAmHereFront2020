@@ -34,11 +34,11 @@ export class PresencaTurmaPage implements OnInit {
   async load() {
     let loadingDialog = await this.loader.create({ message: 'Carregando Chamadas...', spinner: 'crescent' });
     await loadingDialog.present();
-    await this.doInfinit(this.infiniteScroll);
+    await this.doInfinit();
     await loadingDialog.dismiss();
   }
 
-  async doInfinit(infiniteScroll: IonInfiniteScroll) {
+  async doInfinit() {
     try {
       let resp = await this.requests.get("turma/" + this.turma.id + "/presencas/pag/" + this.page);
       if (!this.presencas) this.presencas = new Array();
@@ -47,7 +47,7 @@ export class PresencaTurmaPage implements OnInit {
       })
   
       if (!resp.hasMorePages) {
-        infiniteScroll.disabled = true;
+        this.infiniteScroll.disabled = true;
       } else {
         this.page++;
       }
@@ -55,7 +55,7 @@ export class PresencaTurmaPage implements OnInit {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     }
 
-    infiniteScroll.complete();
+    this.infiniteScroll.complete();
   }
 
 }

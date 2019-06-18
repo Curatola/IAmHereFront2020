@@ -34,6 +34,7 @@ export class NovaSenhaPage implements OnInit {
         confirm: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)]))
       },{"validator": ConfirmSenhaValidator.isMatching})
     }
+    
   async novasenha() {
     let loadingDialog = await this.loader.create({ message: 'Verificando nova senha...', spinner: 'crescent' });
     await loadingDialog.present();

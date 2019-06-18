@@ -3,6 +3,7 @@ import { NavController, LoadingController, ToastController, PopoverController, A
 import { NavParamsService } from 'src/app/service/nav-params.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { RequestService } from 'src/app/service/request.service';
+import { Chamada } from 'src/models/chamada';
 
 @Component({
   selector: 'app-popover-nav',
@@ -16,7 +17,7 @@ export class PopoverNavComponent implements OnInit {
   isLogoff: any;
   isGoPerfil: boolean;
   //turma: Turma;
-  //chamada: Chamada;
+  chamada: Chamada;
 
   constructor(
     public navCtrl: NavController,
@@ -53,6 +54,10 @@ export class PopoverNavComponent implements OnInit {
       ]
     });
     alert.present();
+  }
+
+  download() {
+
   }
 
   async commitLogoff() {

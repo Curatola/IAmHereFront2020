@@ -18,7 +18,7 @@ export class ProfCadastroPage implements OnInit {
       email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
       senha: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)])),
       confirm: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)]))
-    })
+    }, { "validator": ConfirmSenhaValidator.isMatching })
   }
 
   form: FormGroup;

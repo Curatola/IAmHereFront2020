@@ -37,12 +37,12 @@
 </ion-header>
 
 <ion-content>
-  <div [ngSwitch]="comparecimento">
+  <div id="list-scroll" [ngSwitch]="comparecimento">
     <ion-list *ngSwitchCase="'areAusentes'">
       <ion-item *ngFor="let presenca of ausentes" ion-item>
         <span presente="true" *ngIf="presenca.isPresent === true">P</span>
         <span presente="false" *ngIf="presenca.isPresent === false">F</span>
-        <ion-toggle (click)="onChange()" color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
+        <ion-toggle color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
         <ion-label>{{presenca.aluno.nome}}</ion-label>
       </ion-item>
     </ion-list>
@@ -50,14 +50,15 @@
       <ion-item *ngFor="let presenca of presentes" ion-item>
         <span presente="true" *ngIf="presenca.isPresent === true">P</span>
         <span presente="false" *ngIf="presenca.isPresent === false">F</span>
-        <ion-toggle (click)="onChange()" color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
+        <ion-toggle color="success" [(ngModel)]="presenca.isPresent"></ion-toggle>
         <ion-label>{{presenca.aluno.nome}}</ion-label>
       </ion-item>
     </ion-list>
   </div>
+
+  <div id="wrapper-bottom">
+    <ion-textarea [(ngModel)]="conteudo" row="2" placeholder="Assuntos Tratados"></ion-textarea>
+    <ion-button (click)="done()" expand="full">Salvar</ion-button>
+  </div>
 </ion-content>
 
-<div id="wrapper">
-  <ion-textarea (ionChange)="onChange()" [(ngModel)]="conteudo" row="2" placeholder="Assuntos Tratados"></ion-textarea>
-  <ion-button (click)="done()" expand="full">Salvar</ion-button>
-</div>

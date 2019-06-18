@@ -6,12 +6,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ConfirmaPage } from './confirma.page';
-import { ComponetsModule } from '../../components/componets.module';
+import { CanDeactivateGuard } from 'src/app/can-deactivate.guard';
 
 const routes: Routes = [
   {
     path: '',
-    component: ConfirmaPage
+    component: ConfirmaPage,
+    canDeactivate: [CanDeactivateGuard]
   }
 ];
 

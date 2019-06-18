@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content padding>
-  <form [formGroup]="resetform" (ngSubmit)="novasenha()">
+  <form [formGroup]="resetform">
     <ion-item>
       <ion-label position="floating">Nova Senha</ion-label>
       <ion-input type="password" formControlName="senha"></ion-input>
@@ -46,7 +46,7 @@
 </ion-content>
 
 <div id="wrapper">
-  <ion-button type="submit" [disabled]="!resetform.valid">
+  <ion-button type="submit" [disabled]="!resetform.valid" (click)="novasenha()">
     Confirmar
   </ion-button>
 </div>

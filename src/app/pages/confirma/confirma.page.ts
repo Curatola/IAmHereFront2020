@@ -18,9 +18,6 @@ import { ComponentCanDeactivate } from 'src/app/component-can-deactivate';
 export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
 
   ngOnInit() {
-  }
-
-  onChange() {
     this.isToDoBack = false;
   }
 
@@ -64,31 +61,6 @@ export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
     })
   }
 
-  async getConteudo() {
-    const prompt = await this.alertCtrl.create({
-      header: 'Conteúdo da Aula',
-      message: "Descreva o conteúdo da aula.",
-      inputs: [
-        {
-          name: 'conteudo',
-          placeholder: 'Conteúdo',
-          value: this.conteudo
-        },
-      ],
-      buttons: [
-        {
-          text: 'Ok',
-          handler: data => {
-            this.conteudo = data.conteudo
-
-          }
-        }
-      ]
-    });
-    prompt.present();
-
-  }
-
   async done() {
     let presencas: any[] = this.presentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.isPresent });
     presencas = presencas.concat(this.ausentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.isPresent }));
@@ -120,34 +92,9 @@ export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
 
         return 0;
       })
-
+      
+      this.ignore = true;
       this.navCtrl.pop();
-    } catch (error) {
-      await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
-    } finally {
-      await loadingDialog.dismiss();
-    }
-  }
-
-  async uploadFile(filePath: string) {
-    let loadingDialog = await this.loader.create({ message: "Uploading...", spinner: 'crescent' });
-    await loadingDialog.present();
-
-    let presencas: any[] = this.presentes.filter((presenca: any, index, presencas: Presenca[]) => { return !presenca.checked });
-    presencas = presencas.concat(this.ausentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.checked }));
-    let alunosPresentesId: any[] = presencas.map((presenca: any, index, presencas: Presenca[]) => { return presenca.aluno.id });
-
-    try {
-      let resp = await this.requests.uploadFile(
-        filePath,
-        "turma/" + this.turma.id + "/chamada",
-        {
-          "previousPresentes": alunosPresentesId,
-          "dataHoraOriginal": this.timestampFoto
-        })
-
-      this.atualizaListas(resp.presencas);
-      this.qtdPessoasReconhecidas += resp.total
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     } finally {

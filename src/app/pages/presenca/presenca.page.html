@@ -46,7 +46,7 @@
 </ion-header>
 
 <ion-content>
-  <div [ngSwitch]="comparecimento">
+  <div id="list-scroll" [ngSwitch]="comparecimento">
     <ion-list *ngSwitchCase="'areAusentes'">
       <ion-item *ngFor="let presenca of ausentes">
         <span presente="true" *ngIf="presenca.isPresent === true">P</span>
@@ -64,9 +64,10 @@
       </ion-item>
     </ion-list>
   </div>
-</ion-content>
 
-<div id="wrapper">
-  <ion-textarea (ionChange)="onChange()" [(ngModel)]="conteudo" row="2" placeholder="Assuntos Tratados"></ion-textarea>
-  <ion-button (click)="done()" expand="full">Salvar</ion-button>
-</div>
+  <div id="wrapper-bottom">
+    <ion-textarea (ionChange)="onChange()" [(ngModel)]="conteudo" row="2" placeholder="Assuntos Tratados"></ion-textarea>
+    <ion-button (click)="done()" expand="full">Salvar</ion-button>
+  </div>
+
+</ion-content>
