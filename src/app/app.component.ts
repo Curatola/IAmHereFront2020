@@ -26,7 +26,7 @@ export class AppComponent {
     statusBar: StatusBar,
     splashScreen: SplashScreen,
     public auth: AuthService,
-    private router: Router,
+    router: Router,
     private alert: AlertController
   ) {
     platform.ready().then(() => {
@@ -38,8 +38,14 @@ export class AppComponent {
 
       let logged: boolean = this.auth.userIsLogged();
 
-      if (logged) this.router.navigate(["turmas"])
-      else this.router.navigate(["login"])
+      if (logged) router.navigate(["turmas"])
+      else router.navigate(["login"])
+
+      platform.backButton.subscribe(() => {
+        if (router.url === "/turmas" || router.url === "/login") {
+          this.showAlertExit();
+        }
+      })
 
       this.imgLoaderConfig.setImageReturnType("base64");
 
@@ -55,6 +61,24 @@ export class AppComponent {
         }
       );
     });
+  }
+
+  async showAlertExit(){
+    let alertDialog = await this.alert.create({
+      header: "Deseja mesmo sair do app?",
+      buttons:[
+        {
+          text: "Sim",
+          handler: () => navigator['app'].exitApp()
+        },
+        {
+          text: "Não",
+          role: "cancel"
+        }
+      ],
+    });
+
+    alertDialog.present();
   }
 
   async handle_deeplink(match: DeeplinkMatch) {

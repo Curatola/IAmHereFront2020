@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { CanDeactivateGuard } from './can-deactivate.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'aluno-cadastro', loadChildren: './pages/aluno-cadastro/aluno-cadastro.module#AlunoCadastroPageModule' },
   { path: 'alunos-turma', loadChildren: './pages/alunos-turma/alunos-turma.module#AlunosTurmaPageModule' },
   { path: 'chamada-images', loadChildren: './pages/chamada-images/chamada-images.module#ChamadaImagesPageModule' },

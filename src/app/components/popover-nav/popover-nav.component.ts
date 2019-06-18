@@ -67,7 +67,7 @@ export class PopoverNavComponent implements OnInit {
       await this.auth.deslogar();
 
       await this.popoverController.dismiss();
-      await this.navCtrl.navigateRoot('/')
+      await this.navCtrl.navigateRoot('/login')
     } catch (error) {
       await this.popoverController.dismiss();
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
