@@ -85,7 +85,9 @@ export class TurmasPage implements OnInit {
   }
 
   async lockUnlock(turma: Turma) {
-    const loadingDialog = await this.loader.create({ message: 'Carregando Turmas...', spinner: 'crescent' });
+    const msg = (turma.inscricoes_aberta) ? "Bloqueando inscrições..." : "Liberando inscrições..."
+
+    const loadingDialog = await this.loader.create({ message: msg, spinner: 'crescent' });
     await loadingDialog.present();
 
     try {
