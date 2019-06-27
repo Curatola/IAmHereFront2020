@@ -18,7 +18,6 @@ export class AlunosTurmaPage implements OnInit {
 
   turma: Turma;
   alunos: Array<{aluno: Aluno, filename: string}>;
-  inscritos: number;
   url: string = AuthService.API_URL;
 
   constructor(public navCtrl: NavController,
@@ -45,7 +44,6 @@ export class AlunosTurmaPage implements OnInit {
       resp.forEach(elem => {
         this.alunos.push({aluno: new Aluno(elem.id,elem.nome), filename: elem.foto})
       });
-      this.inscritos =this.alunos.length;
       
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
