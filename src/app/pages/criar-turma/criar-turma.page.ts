@@ -63,7 +63,7 @@ export class CriarTurmaPage implements OnInit {
       
       t.present();
 
-      this.turmas.push(new Turma(resp.id, nome, ano, semestre));
+      this.turmas.push(new Turma(resp.id, nome, ano, semestre, true));
       this.turmasPage.ordenarTurmas();
       this.navCtrl.pop();
       

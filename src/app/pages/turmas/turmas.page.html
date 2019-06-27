@@ -43,6 +43,10 @@
           <ion-button slot="end" fill="clear" (click)="editar(turma)" color="primary">
             <ion-icon name="create"></ion-icon>
           </ion-button>
+          <ion-button slot="end" fill="clear" (click)="lockUnlock(turma)">
+            <ion-icon *ngIf="!turma.inscricoes_aberta" name="lock"></ion-icon>
+            <ion-icon *ngIf="turma.inscricoes_aberta" name="unlock"></ion-icon>
+          </ion-button>
           <ion-button slot="end" fill="clear" (click)="export(turma)">
             <ion-icon name="download"></ion-icon>
           </ion-button>

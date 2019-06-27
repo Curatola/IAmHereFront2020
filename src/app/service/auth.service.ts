@@ -6,7 +6,7 @@ import { Headers, Http, Response } from '@angular/http';
   providedIn: 'root'
 })
 export class AuthService {
-  public static API_URL = 'http://192.168.0.7:5000/';
+  public static API_URL = 'http://172.17.105.233:5000/';
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';
 

@@ -84,6 +84,32 @@ export class TurmasPage implements OnInit {
     this.navCtrl.navigateForward("presenca-turma");
   }
 
+  async lockUnlock(turma: Turma) {
+    const loadingDialog = await this.loader.create({ message: 'Carregando Turmas...', spinner: 'crescent' });
+    await loadingDialog.present();
+
+    try {
+      const resp = await this.requests.post(
+        'change_inscricoes_aberta/turma/' + turma.id,
+        { inscricoes_aberta: !turma.inscricoes_aberta }
+      );
+
+      turma.inscricoes_aberta = !turma.inscricoes_aberta
+
+      const t = await this.toast.create({
+        message: resp.sucesso,
+        duration: 6000
+      });
+
+      t.present();
+
+    } catch (error) {
+      await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
+    } finally {
+      await loadingDialog.dismiss();
+    }
+  }
+
   async export(turma: Turma) {
     try {
       const resp = await this.requests.get(
@@ -143,7 +169,7 @@ export class TurmasPage implements OnInit {
 
       this.turmas = new Array();
       resp.forEach(elem => {
-        this.turmas.push(new Turma(elem.id, elem.nome, elem.ano, elem.semestre))
+        this.turmas.push(new Turma(elem.id, elem.nome, elem.ano, elem.semestre, elem.inscricoes_aberta))
       })
 
     } catch (error) {
