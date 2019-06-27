@@ -21,7 +21,7 @@
 
 <ion-content>
   <ion-card *ngFor="let obj of alunos">
-    <ion-item>
+    <ion-item lines="none">
       <ion-avatar slot="start">
         <img-loader [src]="url+'img/aluno/' + obj.aluno.id + '/' + obj.filename" useImg></img-loader>
       </ion-avatar>
