@@ -65,7 +65,7 @@
 
     <div *ngSwitchCase="'Aluno'">
       <ion-card *ngFor="let turma of turmas">
-        <ion-item>
+        <ion-item lines="none">
           <ion-card-header (click)="goPresencasTurmaPage(turma)">
             <ion-card-title>{{turma.nome}}</ion-card-title>
             <ion-card-subtitle>{{turma.ano}}/{{turma.semestre}}</ion-card-subtitle>

@@ -58,6 +58,13 @@ img-loader {
 
 ion-card {
     ion-item {
+        img {
+            min-height: 0px !important;
+            height: 100%;
+            border-radius: var(--border-radius);
+            object-fit: cover;
+        }
+
         ion-card-header {
             padding-left: 0px;
             width: 100%

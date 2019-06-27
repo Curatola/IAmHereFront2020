@@ -20,12 +20,15 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let aluno of alunos">
+  <ion-card *ngFor="let obj of alunos">
     <ion-item>
+      <ion-avatar slot="start">
+        <img-loader [src]="url+'img/aluno/' + obj.aluno.id + '/' + obj.filename" useImg></img-loader>
+      </ion-avatar>
       <ion-card-header>
-        <ion-card-title>{{aluno.nome}}</ion-card-title>
+        <ion-card-title>{{obj.aluno.nome}}</ion-card-title>
       </ion-card-header>
-      <ion-button fill="clear" (click)="desinscrever(aluno)">
+      <ion-button fill="clear" (click)="desinscrever(obj)">
         <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
       </ion-button>
     </ion-item>

@@ -4,7 +4,7 @@ import { RequestService } from '../../service/request.service';
 import { Turma } from 'src/models/turma';
 import { Aluno } from 'src/models/aluno';
 import { NavController, LoadingController, ToastController, AlertController, ActionSheetController } from '@ionic/angular';
-import { LoginPage } from '../login/login.page';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'app-alunos-turma',
@@ -17,8 +17,9 @@ export class AlunosTurmaPage implements OnInit {
   }
 
   turma: Turma;
-  alunos: Array<Aluno>;
+  alunos: Array<{aluno: Aluno, filename: string}>;
   inscritos: number;
+  url: string = AuthService.API_URL;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParamsService,
@@ -42,7 +43,7 @@ export class AlunosTurmaPage implements OnInit {
 
       this.alunos = new Array();
       resp.forEach(elem => {
-        this.alunos.push(new Aluno(elem.id,elem.nome))
+        this.alunos.push({aluno: new Aluno(elem.id,elem.nome), filename: elem.foto})
       });
       this.inscritos =this.alunos.length;
       
@@ -53,7 +54,7 @@ export class AlunosTurmaPage implements OnInit {
     }
   }
 
-  async desinscrever(aluno: Aluno){
+  async desinscrever(obj: {aluno: Aluno, filename: string}){
     let alert = await this.alertCtrl.create({
       header: 'Confirme',
       message: 'Deseja mesmo desinscrever esse aluno?',
@@ -65,7 +66,7 @@ export class AlunosTurmaPage implements OnInit {
         {
           text: 'Sim',
           handler: () => {
-            this.commitDesinscrever(aluno);
+            this.commitDesinscrever(obj);
           }
         }
       ]
@@ -73,12 +74,12 @@ export class AlunosTurmaPage implements OnInit {
     alert.present();
   }
 
-  async commitDesinscrever(aluno: Aluno){
+  async commitDesinscrever(obj: {aluno: Aluno, filename: string}){
     let loadingDialog = await this.loader.create({ message: 'Desinscrevendo Aluno...', spinner: 'crescent' });
     await loadingDialog.present();
 
     try {
-      let resp = await this.requests.delete("inscricao/turma/" + this.turma.id + "/aluno/" + aluno.id);
+      let resp = await this.requests.delete("inscricao/turma/" + this.turma.id + "/aluno/" + obj.aluno.id);
       let t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
@@ -86,7 +87,7 @@ export class AlunosTurmaPage implements OnInit {
 
       t.present();
 
-      let indx = this.alunos.indexOf(aluno);
+      let indx = this.alunos.indexOf(obj);
       this.alunos.splice(indx,1);
 
     } catch (error) {

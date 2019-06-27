@@ -17,7 +17,7 @@
 
 <ion-content>
   <ion-card *ngFor="let presenca of presencas">
-    <ion-item>
+    <ion-item lines="none">
       <ion-card-header>
         <ion-card-title>{{presenca.dateStr}} - {{presenca.timeStr}}</ion-card-title>
         <ion-card-subtitle *ngIf="presenca.isPresente">Presente</ion-card-subtitle>
