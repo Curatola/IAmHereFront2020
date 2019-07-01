@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
 
-import { Headers, Http, Response } from '@angular/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  constructor(public http: HttpClient) {}
   public static API_URL = 'http://172.17.105.233:5000/';
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';
 
-  constructor(public http: Http) {}
+  public static erroHandler(error: HttpErrorResponse) {
+    console.log(error);
+
+    if (error.status === 400) throw new Error(JSON.parse(error.message).error);
+    else if (error.status === 401) throw new Error('401');
+    else if (error.status === 0)
+      throw new Error('Não foi possivel se conectar ao servidor!');
+    else throw new Error('Erro desconhecido');
+  }
 
   userIsLogged(): boolean {
     if (this.getToken()) {
@@ -37,15 +47,9 @@ export class AuthService {
   }
 
   async deslogar() {
-    let header = new Headers();
-
-    let token: string = this.getToken();
-    if (!token) return false;
-
-    header.append('Authorization', 'Bearer ' + token);
     try {
       await this.http
-        .post(AuthService.API_URL + 'logoff', {}, { headers: header })
+        .post(AuthService.API_URL + 'logoff', {}, {withCredentials: true })
         .toPromise();
       this.deslogarOnlyOnApp();
     } catch (error) {
@@ -54,20 +58,19 @@ export class AuthService {
   }
 
   async login(email: string, password: string, isPersistent: boolean) {
-    let header = new Headers();
-    header.append('Authorization', 'Basic ' + btoa(email + ':' + password));
+    let header = new HttpHeaders();
+    header = header.set('Authorization', 'Basic ' + btoa(email + ':' + password));
     try {
       let result = await this.http
-        .get(AuthService.API_URL + 'login', { headers: header })
+        .get<any>(AuthService.API_URL + 'login', { headers: header })
         .toPromise();
 
-      let json = result.json();
       if (isPersistent) {
-        localStorage.setItem('token', json.token);
-        localStorage.setItem('user', json.userType);
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('user', result.userType);
       } else {
-        sessionStorage.setItem('token', json.token);
-        sessionStorage.setItem('user', json.userType);
+        sessionStorage.setItem('token', result.token);
+        sessionStorage.setItem('user', result.userType);
       }
     } catch (error) {
       if (error.status === 401) {
@@ -76,15 +79,5 @@ export class AuthService {
         AuthService.erroHandler(error);
       }
     }
-  }
-
-  public static erroHandler(error: Response) {
-    console.log(error);
-
-    if (error.status === 400) throw new Error(JSON.parse(error.text()).error);
-    else if (error.status === 401) throw new Error('401');
-    else if (error.status === 0)
-      throw new Error('Não foi possivel se conectar ao servidor!');
-    else throw new Error('Erro desconhecido');
   }
 }

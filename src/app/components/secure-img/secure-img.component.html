@@ -1,0 +1,3 @@
+<ion-spinner [color]="spinnerColor" *ngIf="!loaded" name="crescent"></ion-spinner>
+
+<img [ngClass]="{'img-not-loaded': !loaded}" [src]="dataUrl$|async"/>

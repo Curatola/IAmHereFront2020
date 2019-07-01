@@ -2,7 +2,6 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { HttpModule } from '@angular/http';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -17,6 +16,8 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { CanDeactivateGuard } from './can-deactivate.guard';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './service/auth-interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +26,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     ComponetsModule,
@@ -41,7 +42,12 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
     FCM,
     LocalNotifications,
     CanDeactivateGuard,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+     }
   ],
   bootstrap: [AppComponent]
 })

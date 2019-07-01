@@ -1,103 +1,62 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { Http, Headers } from '@angular/http';
 import { ToastController, NavController } from '@ionic/angular';
 import {
   FileTransfer,
   FileUploadOptions,
   FileTransferObject
 } from '@ionic-native/file-transfer/ngx';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestService {
   constructor(
-    public http: Http,
+    public http: HttpClient,
     public auth: AuthService,
     private transfer: FileTransfer
   ) {}
   async get(rota: string, withAuthorization = true) {
-    const header = new Headers();
-
-    if (withAuthorization) {
-      const token: string = this.auth.getToken();
-      if (!token) {
-        return false;
-      }
-
-      header.append('Authorization', 'Bearer ' + token);
-    }
 
     try {
       const result = await this.http
-        .get(AuthService.API_URL + rota, { headers: header })
+        .get<any>(AuthService.API_URL + rota, { withCredentials: withAuthorization })
         .toPromise();
-      return result.json();
+      return result;
     } catch (error) {
       AuthService.erroHandler(error);
     }
   }
 
   async post(rota: string, data: any, withAuthorization = true) {
-    const header = new Headers();
-
-    if (withAuthorization) {
-      const token: string = this.auth.getToken();
-      if (!token) {
-        return false;
-      }
-
-      header.append('Authorization', 'Bearer ' + token);
-    }
-
     try {
       const result = await this.http
-        .post(AuthService.API_URL + rota, data, { headers: header })
+        .post<any>(AuthService.API_URL + rota, data, { withCredentials: withAuthorization })
         .toPromise();
-      return result.json();
+      return result;
     } catch (error) {
       AuthService.erroHandler(error);
     }
   }
 
   async put(rota: string, data: any, withAuthorization = true) {
-    const header = new Headers();
-
-    if (withAuthorization) {
-      const token: string = this.auth.getToken();
-      if (!token) {
-        return false;
-      }
-
-      header.append('Authorization', 'Bearer ' + token);
-    }
-
     try {
       const result = await this.http
-        .put(AuthService.API_URL + rota, data, { headers: header })
+        .put<any>(AuthService.API_URL + rota, data, { withCredentials: withAuthorization })
         .toPromise();
-      return result.json();
+      return result;
     } catch (error) {
       AuthService.erroHandler(error);
     }
   }
 
   async delete(rota: string) {
-    const header = new Headers();
-
-    const token: string = this.auth.getToken();
-    if (!token) {
-      return false;
-    }
-
-    header.append('Authorization', 'Bearer ' + token);
-
     try {
       const result = await this.http
-        .delete(AuthService.API_URL + rota, { headers: header })
+        .delete<any>(AuthService.API_URL + rota, {withCredentials: true})
         .toPromise();
-      return result.json();
+      return result;
     } catch (error) {
       AuthService.erroHandler(error);
     }

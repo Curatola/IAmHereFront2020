@@ -23,7 +23,7 @@
   <ion-card *ngFor="let obj of alunos">
     <ion-item lines="none">
       <ion-avatar slot="start">
-        <img-loader [src]="url+'img/aluno/' + obj.aluno.id + '/' + obj.filename" useImg></img-loader>
+        <app-secure-img [src]="url+'img/aluno/' + obj.aluno.id + '/' + obj.filename"></app-secure-img>
       </ion-avatar>
       <ion-card-header>
         <ion-card-title>{{obj.aluno.nome}}</ion-card-title>

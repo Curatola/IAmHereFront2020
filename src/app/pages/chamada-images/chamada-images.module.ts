@@ -9,6 +9,7 @@ import { ChamadaImagesPage } from './chamada-images.page';
 import { IonicImageLoader } from 'ionic-image-loader';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { DirectivesModule } from '../../directives/directives.module';
+import { ComponetsModule } from 'src/app/components/componets.module';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     IonicImageLoader,
+    ComponetsModule,
     PinchZoomModule,
     DirectivesModule
   ],

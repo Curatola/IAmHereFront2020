@@ -29,9 +29,9 @@
   <div [ngSwitch]="userType">
     <div class="wrapper" *ngSwitchCase="'Aluno'">
       <ion-slides pager>
+        <ion-spinner [color]="'light'" *ngIf="!filenames" name="crescent"></ion-spinner>
         <ion-slide *ngFor="let filename of filenames">
-          <img-loader [src]="url+'img/aluno/'+filename" #img useImg (click)="onImgClick(img)" (load)="onImageLoad()">
-          </img-loader>
+          <app-secure-img [src]="url+'img/aluno/'+filename"></app-secure-img>
         </ion-slide>
       </ion-slides>
       <ion-fab-button horizontal="end" margin-right color="danger" (click)="apagarFoto()">
@@ -85,7 +85,8 @@
           <ion-label position="floating">Senha</ion-label>
           <ion-input #senhaInput type="password" formControlName="senha"></ion-input>
         </ion-item>
-        <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}"></ion-checkbox>
+        <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}">
+        </ion-checkbox>
       </div>
 
       <div>

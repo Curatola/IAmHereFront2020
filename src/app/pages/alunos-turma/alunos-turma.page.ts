@@ -26,9 +26,7 @@ export class AlunosTurmaPage implements OnInit {
     private toast: ToastController,
     private requests: RequestService,
     private alertCtrl: AlertController,
-    private actionSheetCtrl: ActionSheetController
     ) {
-
       this.turma = this.navParams.get("turma");
       this.load();
   }
@@ -41,6 +39,7 @@ export class AlunosTurmaPage implements OnInit {
       let resp = await this.requests.get("alunos/turma/" + this.turma.id);
 
       this.alunos = new Array();
+
       resp.forEach(elem => {
         this.alunos.push({aluno: new Aluno(elem.id,elem.nome), filename: elem.foto})
       });

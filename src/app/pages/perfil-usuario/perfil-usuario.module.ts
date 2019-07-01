@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { PerfilUsuarioPage } from './perfil-usuario.page';
 import { IonicImageLoader } from 'ionic-image-loader';
+import { ComponetsModule } from 'src/app/components/componets.module';
 
 const routes: Routes = [
   {
@@ -22,7 +23,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     IonicImageLoader,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ComponetsModule
   ],
   declarations: [PerfilUsuarioPage]
 })

@@ -1,6 +1,10 @@
 ion-slides {
     height: 100%;
 
+    ion-spinner {
+        margin: auto;
+    }
+
     pinch-zoom {
         width: 100%;
     }

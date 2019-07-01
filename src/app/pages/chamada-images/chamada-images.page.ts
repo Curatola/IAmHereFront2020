@@ -33,7 +33,6 @@ export class ChamadaImagesPage implements OnInit {
     ) {
     this.turma = navParams.get("turma");
     this.chamada = navParams.get("chamada");
-    this.filenames = Array();
 
     this.statusBar.hide();
 
@@ -55,6 +54,7 @@ export class ChamadaImagesPage implements OnInit {
   async getFilenamesImg() {
     try{
       let resp = await this.requests.get("img/filename/turma/"+this.turma.id+"/chamada/"+this.chamada.id);
+      this.filenames = Array();
       resp.forEach(elem => {
         this.filenames.push(elem);
       });

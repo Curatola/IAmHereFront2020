@@ -81,27 +81,29 @@ export class ChamadasPage implements OnInit {
 
   async apagarChamada(event, chamada: Chamada) {
     event.stopPropagation();
+    let msg: string = '';
+
     if (!this.hasOthersChamadasInDay(chamada)) {
-      const alert = await this.alertCtrl.create({
-        header: 'Só existe essa chamada desse dia',
-        message: 'Deseja mesmo apagar essa chamada?',
-        buttons: [
-          {
-            text: 'Não',
-            role: 'cancel'
-          },
-          {
-            text: 'Sim',
-            handler: () => {
-              this.commitApagar(chamada);
-            }
-          }
-        ]
-      });
-      alert.present();
-    } else {
-      this.commitApagar(chamada);
+      msg = 'Só existe essa chamada desse dia';
     }
+
+    const alert = await this.alertCtrl.create({
+      header: 'Deseja mesmo apagar essa chamada?',
+      message: msg,
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel'
+        },
+        {
+          text: 'Sim',
+          handler: () => {
+            this.commitApagar(chamada);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   async commitApagar(chamada: Chamada) {
