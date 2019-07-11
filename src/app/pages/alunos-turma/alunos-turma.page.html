@@ -12,9 +12,14 @@
     </ion-buttons>
     <ion-title>
       <div id="badgeWrapper">
-        Alunos Inscritos <ion-badge>{{alunos.length}}</ion-badge>
+        Alunos Inscritos <ion-badge *ngIf="alunos">{{alunos.length}}</ion-badge>
       </div>
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addAlunos()">
+          <ion-icon name="person-add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
@@ -39,5 +44,11 @@
       Nenhum aluno se inscreveu nessa turma ainda.
     </ion-item>
   </div>
+
+  <ion-slide>
+    <ion-slide *ngFor="let img of imgs">
+      <img [src]="img"/>
+    </ion-slide>
+  </ion-slide>
 
 </ion-content>
