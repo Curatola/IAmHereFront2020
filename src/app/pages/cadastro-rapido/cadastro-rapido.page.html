@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Cadastro Rápido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+    <ion-list *ngFor="let img of imgs;let index = index;trackBy:trackByIndex;">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="'data:image/jpeg;base64,' + img.img" />
+        </ion-avatar>
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input [(ngModel)]="imgs[index].nome" formControlName='{{"nome"+index}}' type="text"></ion-input>
+      </ion-item>
+
+      <div>
+        <ng-container *ngFor="let validation of msgs.nome">
+          <div class="error-message"
+            *ngIf="form.get('nome'+index).hasError(validation.type) && (form.get('nome'+index).dirty || form.get('nome'+index).touched)">
+            {{ validation.msg }}
+          </div>
+        </ng-container>
+      </div>
+    </ion-list>
+  </form>
+
+</ion-content>
+
+<div id="wrapper">
+  <ion-button type="submit" [disabled]="!form.valid" (click)="cadastrar()">
+    Cadastrar
+  </ion-button>
+</div>

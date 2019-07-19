@@ -22,12 +22,12 @@ export class AddFotoComponent {
 
   async takePicture() {
     try {
-      let imageData = await this.camera.takePicture();
+      const imageData = await this.camera.takePicture();
       this.pathsFotos.push(imageData);
 
-      let msg = "Essa será a " + (this.pathsFotos.length + 1) + "ª foto de no máximo " + this.max;
+      let msg = 'Essa será a ' + (this.pathsFotos.length + 1) + 'ª foto de no máximo ' + this.max;
       if (this.pathsFotos.length === this.max - 1) {
-        msg = "Essa será a última foto desse conjunto!"
+        msg = 'Essa será a última foto desse conjunto!';
       }
 
       if (this.pathsFotos.length < this.max) {
@@ -52,7 +52,7 @@ export class AddFotoComponent {
         });
         alert.present();
       } else {
-        await this.uploadFunction(this.pathsFotos)
+        await this.uploadFunction(this.pathsFotos);
         this.pathsFotos = new Array();
       }
 
@@ -63,12 +63,12 @@ export class AddFotoComponent {
 
   async getFromGallery() {
     try {
-      let imageData = await this.camera.getFromGallery();
+      const imageData = await this.camera.getFromGallery();
       this.pathsFotos.push(imageData);
 
-      let msg = "Essa será a " + (this.pathsFotos.length + 1) + "ª foto de no máximo " + this.max;
+      let msg = 'Essa será a ' + (this.pathsFotos.length + 1) + 'ª foto de no máximo ' + this.max;
       if (this.pathsFotos.length === this.max - 1) {
-        msg = "Essa será a última foto desse conjunto!"
+        msg = 'Essa será a última foto desse conjunto!';
       }
 
       if (this.pathsFotos.length < this.max) {
