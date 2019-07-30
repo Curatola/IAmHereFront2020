@@ -1,9 +1,10 @@
-import { HostListener } from "@angular/core";
+import { HostListener } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
 
 export abstract class ComponentCanDeactivate {
-    isToDoBack: boolean = true;
-    ignore: boolean = false;
+    isToDoBack = true;
+    ignore = false;
+    isLoaded = false;
 
     constructor(
         public alertCtrl: AlertController,
@@ -16,20 +17,20 @@ export abstract class ComponentCanDeactivate {
     }
 
     async confirm() {
-        let alert = await this.alertCtrl.create({
-            header: "Deseja mesmo sair?",
-            message: "As alterações feitas serão perdidas!",
+        const alert = await this.alertCtrl.create({
+            header: 'Deseja mesmo sair?',
+            message: 'As alterações feitas serão perdidas!',
             buttons: [
                 {
-                    text: "Sim",
+                    text: 'Sim',
                     handler: () => {
                         this.isToDoBack = true;
                         this.navCtrl.pop();
                     }
                 },
                 {
-                    text: "Não",
-                    role: "cancel"
+                    text: 'Não',
+                    role: 'cancel'
                 }
             ]
         });

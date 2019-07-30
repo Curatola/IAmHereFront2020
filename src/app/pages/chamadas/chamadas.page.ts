@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import {
   NavController,
   LoadingController,
@@ -33,7 +33,8 @@ export class ChamadasPage implements OnInit {
     public toast: ToastController,
     public camera: CameraService,
     public actionSheetCtrl: ActionSheetController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    private changeDet: ChangeDetectorRef,
   ) {
     this.turma = navParams.get('turma');
 
@@ -125,6 +126,8 @@ export class ChamadasPage implements OnInit {
         duration: 3000
       });
       t.present();
+
+      this.changeDet.detectChanges();
     } catch (error) {
       await this.requests.requestErrorPageHandler(
         error,

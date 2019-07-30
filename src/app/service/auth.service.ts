@@ -8,16 +8,16 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 export class AuthService {
 
   constructor(public http: HttpClient) {}
-  public static API_URL = 'http://172.17.105.233:5000/';
+  public static API_URL = 'http://192.168.0.3:5000/';
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';
 
-  public static erroHandler(error: HttpErrorResponse) {
-    console.log(error);
+  public static erroHandler(httpError: HttpErrorResponse) {
+    console.log(httpError);
 
-    if (error.status === 400) throw new Error(JSON.parse(error.message).error);
-    else if (error.status === 401) throw new Error('401');
-    else if (error.status === 0)
+    if (httpError.status === 400) throw new Error(httpError.error.error);
+    else if (httpError.status === 401) throw new Error('401');
+    else if (httpError.status === 0)
       throw new Error('Não foi possivel se conectar ao servidor!');
     else throw new Error('Erro desconhecido');
   }

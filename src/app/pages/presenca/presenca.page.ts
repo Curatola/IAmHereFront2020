@@ -31,7 +31,7 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
   ngOnInit() {}
 
   onChange() {
-    this.isToDoBack = false;
+    if (this.isLoaded) { this.isToDoBack = false; }
   }
 
   constructor(
@@ -102,6 +102,7 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
         this.navCtrl
       );
     } finally {
+      this.isLoaded = true;
       await loadingDialog.dismiss();
     }
   }

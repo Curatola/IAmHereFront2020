@@ -12,9 +12,14 @@
     </ion-buttons>
     <ion-title>
       <div id="badgeWrapper">
-        Alunos Inscritos <ion-badge>{{alunos.length}}</ion-badge>
+        Alunos Inscritos <ion-badge *ngIf="alunos">{{alunos.length}}</ion-badge>
       </div>
     </ion-title>
+    <ion-buttons slot="end" *ngIf="this.authService.isAdmin()">
+      <ion-button (click)="addAlunos()">
+          <ion-icon name="person-add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
 </ion-header>
