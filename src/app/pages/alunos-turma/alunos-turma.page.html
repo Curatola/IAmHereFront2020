@@ -15,7 +15,7 @@
         Alunos Inscritos <ion-badge *ngIf="alunos">{{alunos.length}}</ion-badge>
       </div>
     </ion-title>
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="this.authService.isAdmin()">
       <ion-button (click)="addAlunos()">
           <ion-icon name="person-add"></ion-icon>
       </ion-button>

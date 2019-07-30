@@ -27,7 +27,8 @@ export class AlunosTurmaPage implements OnInit {
     private camera: CameraService,
     private actionSheetCtrl: ActionSheetController,
     public events: Events,
-    private changeDet: ChangeDetectorRef
+    private changeDet: ChangeDetectorRef,
+    public authService: AuthService
   ) {
       this.turma = this.navParams.get('turma');
       this.load();

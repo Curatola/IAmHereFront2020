@@ -36,17 +36,17 @@ export class AppComponent {
       statusBar.overlaysWebView(false);
       splashScreen.hide();
 
-      let logged: boolean = this.auth.userIsLogged();
-
-      if (logged) router.navigate(["turmas"])
-      else router.navigate(["login"])
-
       platform.backButton.subscribe(() => {
         if (router.url === "/turmas" || router.url === "/login") {
           this.showAlertExit();
         }
-      })
+      });
 
+      let logged: boolean = this.auth.userIsLogged();
+
+      if (logged) router.navigate(["turmas"])
+      else router.navigate(["login"])
+      
       this.imgLoaderConfig.setImageReturnType("base64");
 
       this.deep.route({

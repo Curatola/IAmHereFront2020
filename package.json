@@ -53,8 +53,7 @@
     "ngx-pinch-zoom": "^1.2.3",
     "rxjs": "~6.5.1",
     "tslib": "^1.9.0",
-    "zone.js": "~0.8.29",
-    "cordova-android": "~7.0.0"
+    "zone.js": "~0.8.29"
   },
   "devDependencies": {
     "@angular-devkit/architect": "~0.13.8",

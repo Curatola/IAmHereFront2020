@@ -1,6 +1,6 @@
 import { Turma } from '../../../models/turma';
 import { AuthService } from '../../service/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RequestService } from '../../service/request.service';
 import { Events, NavController, LoadingController, ToastController, PopoverController, AlertController, Platform } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
@@ -38,6 +38,7 @@ export class TurmasPage implements OnInit {
     public file: File,
     private fcm: FCM,
     public localNotifications: LocalNotifications,
+    private changeDet: ChangeDetectorRef
   ) {
 
     this.userType = authProvider.getUserType();
@@ -250,7 +251,7 @@ export class TurmasPage implements OnInit {
     try {
       let resp = await this.requests.delete("turma/" + turma.id)
       let indx = this.turmas.indexOf(turma);
-      this.turmas.splice(indx, 1)
+      this.turmas.splice(indx, 1);
 
       let t = await this.toast.create({
         message: resp.sucesso,
@@ -258,6 +259,8 @@ export class TurmasPage implements OnInit {
       });
 
       t.present();
+
+      this.changeDet.detectChanges();
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     } finally {

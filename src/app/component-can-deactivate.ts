@@ -4,6 +4,7 @@ import { AlertController, NavController } from '@ionic/angular';
 export abstract class ComponentCanDeactivate {
     isToDoBack = true;
     ignore = false;
+    isLoaded = false;
 
     constructor(
         public alertCtrl: AlertController,
