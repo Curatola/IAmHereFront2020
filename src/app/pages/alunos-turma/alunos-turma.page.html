@@ -28,7 +28,8 @@
   <ion-card *ngFor="let obj of alunos">
     <ion-item lines="none">
       <ion-avatar slot="start">
-        <app-secure-img [src]="url+'img/aluno/' + obj.aluno.id + '/' + obj.filename"></app-secure-img>
+        <app-secure-img *ngIf="obj.filename" [src]="url+'img/aluno/' + obj.aluno.id + '/' + obj.filename"></app-secure-img>
+        <img *ngIf="!obj.filename" src="../../assets/imgs/avatar.svg"/>
       </ion-avatar>
       <ion-card-header>
         <ion-card-title>{{obj.aluno.nome}}</ion-card-title>

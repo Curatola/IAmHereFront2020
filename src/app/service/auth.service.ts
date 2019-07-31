@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 export class AuthService {
 
   constructor(public http: HttpClient) {}
-  public static API_URL = 'http://192.168.0.3:5000/';
+  public static API_URL = 'http://172.17.104.62:5000/';
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';
 
@@ -38,12 +38,19 @@ export class AuthService {
     return localStorage.getItem('user') || sessionStorage.getItem('user');
   }
 
+  isAdmin() {
+    return JSON.parse(localStorage.getItem('isAdmin')) || JSON.parse(sessionStorage.getItem('isAdmin'));
+  }
+
   deslogarOnlyOnApp() {
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
 
     localStorage.removeItem('user');
     sessionStorage.removeItem('user');
+
+    localStorage.removeItem('isAdmin');
+    sessionStorage.removeItem('isAdmin');
   }
 
   async deslogar() {
@@ -68,9 +75,11 @@ export class AuthService {
       if (isPersistent) {
         localStorage.setItem('token', result.token);
         localStorage.setItem('user', result.userType);
+        localStorage.setItem('isAdmin', result.isAdmin);
       } else {
         sessionStorage.setItem('token', result.token);
         sessionStorage.setItem('user', result.userType);
+        sessionStorage.setItem('isAdmin', result.isAdmin);
       }
     } catch (error) {
       if (error.status === 401) {
