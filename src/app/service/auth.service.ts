@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 export class AuthService {
 
   constructor(public http: HttpClient) {}
-  public static API_URL = 'http://172.17.104.62:5000/';
+  public static API_URL = 'http://172.17.105.39:5000/';
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';
 

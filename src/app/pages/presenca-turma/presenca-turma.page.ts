@@ -3,7 +3,6 @@ import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
 import { IonInfiniteScroll, NavController, LoadingController, ToastController } from '@ionic/angular';
 import { Turma } from 'src/models/turma';
-import { LoginPage } from '../login/login.page';
 
 @Component({
   selector: 'app-presenca-turma',
@@ -19,6 +18,8 @@ export class PresencaTurmaPage implements OnInit {
   presencas: Array<PresencasTurma>;
   page: number = 1;
   turma: Turma;
+  qtdPresenca: number;
+  qtdChamada: number;
 
   constructor(public navCtrl: NavController,
       public navParams: NavParamsService,
@@ -45,6 +46,9 @@ export class PresencaTurmaPage implements OnInit {
       resp.presencas.forEach(elem => {
         this.presencas.push(new PresencasTurma(elem.isPresente, elem.dateHour));
       })
+
+      this.qtdChamada = resp.qtdChamada;
+      this.qtdPresenca = resp.qtdPresenca;
   
       if (!resp.hasMorePages) {
         this.infiniteScroll.disabled = true;
