@@ -110,7 +110,6 @@ form:not([notfull]) {
     height: 100%;
 
     #wrapper {
-        height: 100%;
         display: flex;
         flex-direction: column;
 
@@ -148,6 +147,7 @@ form:not([notfull]) {
     padding: 0px 16px 8px 16px;
     display: flex;
     flex-direction: column;
+    width: 100%;
 
     ion-button {
         width: 65%;
@@ -178,3 +178,54 @@ form:not([notfull]) {
     }
 }
 
+.ion-page {
+    align-items: center;
+}
+
+@media (min-width: 576px) {
+    ion-content {
+        max-width: 100%;
+    }
+
+    .swiper-slide {
+        img {
+            max-height: 100%;
+        }
+    }
+}
+@media (min-width: 768px) {
+    ion-content {
+        max-width: 75%;
+    }
+
+    .swiper-slide {
+        img {
+            max-height: -webkit-fill-available;
+        }
+    }
+}
+@media (min-width: 992px) {
+    ion-content {
+        max-width: 67%;
+    }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #222; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #888; 
+  }
