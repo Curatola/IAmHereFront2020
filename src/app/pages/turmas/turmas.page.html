@@ -77,9 +77,15 @@
         </ion-item>
       </ion-card>
 
-      <ion-item *ngIf="turmas && turmas.length <= 0">
-        Inscreva-se em uma turma!
-      </ion-item>
+      <div padding-top *ngIf="turmas && turmas.length <= 0">
+        <ion-item>
+          Inscreva-se em uma turma!
+        </ion-item>
+        <ion-item>
+          Click no botão abaixo para se inscrever
+        </ion-item>
+      </div>
+
     </div>
 
   </div>
