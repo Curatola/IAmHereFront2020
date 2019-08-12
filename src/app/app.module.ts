@@ -1,4 +1,3 @@
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -16,8 +15,7 @@ import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { CanDeactivateGuard } from './can-deactivate.guard';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './service/auth-interceptor';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,7 +33,6 @@ import { AuthInterceptor } from './service/auth-interceptor';
   providers: [
     StatusBar,
     SplashScreen,
-    FileTransfer,
     File,
     WebView,
     Deeplinks,
@@ -43,11 +40,6 @@ import { AuthInterceptor } from './service/auth-interceptor';
     LocalNotifications,
     CanDeactivateGuard,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-     }
   ],
   bootstrap: [AppComponent]
 })

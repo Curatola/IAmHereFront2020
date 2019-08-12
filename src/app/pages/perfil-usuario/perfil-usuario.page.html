@@ -111,6 +111,9 @@
           </div>
         </ng-container>
       </div>
+
+      <input #fileInput (change)="upload($event.target.files[0])" *ngIf="!plat.is('cordova')" type="file">
+
     </form>
   </div>
 

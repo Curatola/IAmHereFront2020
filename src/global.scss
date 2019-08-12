@@ -178,6 +178,10 @@ form:not([notfull]) {
     }
 }
 
+input[type=file] {
+    visibility: hidden;
+}
+
 .ion-page {
     align-items: center;
 }
@@ -213,19 +217,19 @@ form:not([notfull]) {
 /* width */
 ::-webkit-scrollbar {
     width: 4px;
-  }
+}
   
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: #222; 
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #888; 
-  }
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #222; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #888; 
+}

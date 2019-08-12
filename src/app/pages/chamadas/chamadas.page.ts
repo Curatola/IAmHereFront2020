@@ -5,7 +5,8 @@ import {
   ToastController,
   ActionSheetController,
   AlertController,
-  IonInfiniteScroll
+  IonInfiniteScroll,
+  Platform
 } from '@ionic/angular';
 import { RequestService } from '../../service/request.service';
 import { CameraService } from '../../service/camera.service';
@@ -23,7 +24,7 @@ export class ChamadasPage implements OnInit {
   chamadas: Array<Chamada>;
   page = 1;
   turma: Turma;
-  canMakeChamada: boolean = false;
+  canMakeChamada = false;
 
   constructor(
     public navCtrl: NavController,
@@ -35,6 +36,7 @@ export class ChamadasPage implements OnInit {
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController,
     private changeDet: ChangeDetectorRef,
+    public plat: Platform
   ) {
     this.turma = navParams.get('turma');
 
@@ -82,7 +84,7 @@ export class ChamadasPage implements OnInit {
 
   async apagarChamada(event, chamada: Chamada) {
     event.stopPropagation();
-    let msg: string = '';
+    let msg = '';
 
     if (!this.hasOthersChamadasInDay(chamada)) {
       msg = 'Só existe essa chamada desse dia';
@@ -152,40 +154,39 @@ export class ChamadasPage implements OnInit {
     this.navCtrl.navigateForward('/presenca');
   }
 
-  async doRefresh(event){
-    let resp = await this.requests.get("turma/" + this.turma.id + "/can_make_chamada");
-    this.canMakeChamada = resp.canMakeChamada
+  async doRefresh(event) {
+    const resp = await this.requests.get('turma/' + this.turma.id + '/can_make_chamada');
+    this.canMakeChamada = resp.canMakeChamada;
     if (event) event.target.complete();
   }
 
   async uploadFile(filesPath: Array<string>) {
     let presentes: Array<number> = new Array();
-    let sucess: boolean = true;
+    let sucess = true;
     let result: any;
-    let timestampPrimeiraFoto: string = "";
-    let qtdPessoasReconhecidas: number= 0;
+    let timestampPrimeiraFoto = -1;
+    let qtdPessoasReconhecidas = 0;
 
-    let i: number = 1;
+    let i = 1;
 
-    for (let filePath of filesPath) {
+    for (const filePath of filesPath) {
       const loadingDialog = await this.loader.create({
         message: 'Uploading foto ' + i + '...'
       });
       await loadingDialog.present();
-      
 
       try {
         const resp = await this.requests.uploadFile(
-          filePath,
           'turma/' + this.turma.id + '/chamada',
+          filePath,
           {
             previousPresentes: presentes,
             dataHoraOriginal: (result) ? timestampPrimeiraFoto : undefined
           }
         );
 
-        let presencas: any[] = resp.presencas.filter((presenca: any) => { return presenca.isPresente });
-        presentes = presencas.map((presenca: any) => { return presenca.alunoId });
+        const presencas: any[] = resp.presencas.filter((presenca: any) => presenca.isPresente);
+        presentes = presencas.map((presenca: any) => presenca.alunoId);
 
         result = {
           presencas: resp.presencas,
@@ -200,11 +201,7 @@ export class ChamadasPage implements OnInit {
         qtdPessoasReconhecidas += resp.total;
         i++;
       } catch (error) {
-        await this.requests.requestErrorPageHandler(
-          error,
-          this.toast,
-          this.navCtrl
-        );
+        await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
 
         sucess = false;
       } finally {
@@ -217,7 +214,7 @@ export class ChamadasPage implements OnInit {
       result.qtdPessoasReconhecidas = qtdPessoasReconhecidas;
 
       this.navParams.setParams(result);
-      this.navCtrl.navigateForward("/confirma");
+      this.navCtrl.navigateForward('/confirma');
     }
   }
 

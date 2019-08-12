@@ -1,23 +1,22 @@
-import { AuthService } from "./service/auth.service";
-import { Component } from "@angular/core";
+import { AuthService } from './service/auth.service';
+import { Component, OnDestroy, HostListener } from '@angular/core';
 
-import { Platform, ToastController, NavController, AlertController } from "@ionic/angular";
-import { SplashScreen } from "@ionic-native/splash-screen/ngx";
-import { StatusBar } from "@ionic-native/status-bar/ngx";
-import { RequestService } from "./service/request.service";
+import { Platform, ToastController, NavController, AlertController } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { RequestService } from './service/request.service';
 import { Router } from '@angular/router';
-import { ImageLoaderConfigService } from 'ionic-image-loader';
 import { Deeplinks, DeeplinkMatch } from '@ionic-native/deeplinks/ngx';
 import { NavParamsService } from './service/nav-params.service';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "app.component.html"
+  selector: 'app-root',
+  templateUrl: 'app.component.html'
 })
 export class AppComponent {
+  
   constructor(
     platform: Platform,
-    private imgLoaderConfig: ImageLoaderConfigService,
     private toast: ToastController,
     private nav: NavController,
     private navParams: NavParamsService,
@@ -37,43 +36,41 @@ export class AppComponent {
       splashScreen.hide();
 
       platform.backButton.subscribe(() => {
-        if (router.url === "/turmas" || router.url === "/login") {
+        if (router.url === '/turmas' || router.url === '/login') {
           this.showAlertExit();
         }
       });
 
-      let logged: boolean = this.auth.userIsLogged();
+      const logged: boolean = this.auth.userIsLogged();
 
-      if (logged) router.navigate(["turmas"])
-      else router.navigate(["login"])
-      
-      this.imgLoaderConfig.setImageReturnType("base64");
+      if (logged) router.navigate(['turmas'])
+      else router.navigate(['login'])
 
       this.deep.route({
-        "/confirm_email/:token": '/login',
-        "/reset_senha/:token": "/nova-senha",
+        '/confirm_email/:token': '/login',
+        '/reset_senha/:token': '/nova-senha',
       }).subscribe(
         match => {
           this.handle_deeplink(match);
         },
         nomatch => {
-          console.log("no match", nomatch);
+          console.log('no match', nomatch);
         }
       );
     });
   }
 
-  async showAlertExit(){
-    let alertDialog = await this.alert.create({
-      header: "Deseja mesmo sair do app?",
-      buttons:[
+  async showAlertExit() {
+    const alertDialog = await this.alert.create({
+      header: 'Deseja mesmo sair do app?',
+      buttons: [
         {
-          text: "Sim",
+          text: 'Sim',
           handler: () => navigator['app'].exitApp()
         },
         {
-          text: "Não",
-          role: "cancel"
+          text: 'Não',
+          role: 'cancel'
         }
       ],
     });
@@ -84,8 +81,8 @@ export class AppComponent {
   async handle_deeplink(match: DeeplinkMatch) {
     try {
       if (this.auth.userIsLogged()) {
-        let t = await this.toast.create({
-          message: "Faça logout primeiro!",
+        const t = await this.toast.create({
+          message: 'Faça logout primeiro!',
           duration: 3000
         });
 
@@ -94,22 +91,22 @@ export class AppComponent {
         return;
       }
 
-      if (match.$link.path.split("/")[1] == "confirm_email") {
-        let resp = await this.requests.put(
-          "confirm_email",
+      if (match.$link.path.split('/')[1] === 'confirm_email') {
+        const resp = await this.requests.put(
+          'confirm_email',
           { token: match.$args.token },
           false
         );
-        let msg: string = "";
+        let msg: string = '';
         if (resp.sucesso) msg = resp.sucesso;
         else if (resp.warning) msg = resp.warning;
 
-        let t = await this.toast.create({
+        const t = await this.toast.create({
           message: msg,
           duration: 3000
         })
         t.present();
-      } else if (match.$link.path.split("/")[1] == "reset_senha") {
+      } else if (match.$link.path.split('/')[1] == 'reset_senha') {
         this.navParams.setParams({ token: match.$args.token })
         this.nav.navigateForward('/nova-senha');
       }

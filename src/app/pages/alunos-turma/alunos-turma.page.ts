@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
 import { Turma } from 'src/models/turma';
 import { Aluno } from 'src/models/aluno';
-import { NavController, LoadingController, ToastController, AlertController, ActionSheetController, Events } from '@ionic/angular';
+import { NavController, LoadingController, ToastController, AlertController, ActionSheetController, Events, Platform } from '@ionic/angular';
 import { AuthService } from 'src/app/service/auth.service';
 import { CameraService } from 'src/app/service/camera.service';
 
@@ -13,6 +13,8 @@ import { CameraService } from 'src/app/service/camera.service';
   styleUrls: ['./alunos-turma.page.scss'],
 })
 export class AlunosTurmaPage implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
+
   turma: Turma;
   alunos: Array<{aluno: Aluno, filename: string, presenca: number}>;
   url: string = AuthService.API_URL;
@@ -29,7 +31,8 @@ export class AlunosTurmaPage implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     public events: Events,
     private changeDet: ChangeDetectorRef,
-    public authService: AuthService
+    public authService: AuthService,
+    public plat: Platform
   ) {
       this.turma = this.navParams.get('turma');
       this.load();
@@ -86,29 +89,33 @@ export class AlunosTurmaPage implements OnInit {
   }
 
   async addAlunos() {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Selecione o modo',
-      buttons: [
-        {
-          text: 'Camera',
-          handler: () => {
-            this.camera.takePicture()
-              .then((imageData) => this.commitAddAluno(imageData))
-              .catch((error) => console.log(error));
+    if (!this.plat.is('cordova')) {
+      this.fileInput.nativeElement.click();
+    } else {
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: 'Selecione o modo',
+        buttons: [
+          {
+            text: 'Camera',
+            handler: () => {
+              this.camera.takePicture()
+                .then((imageData) => this.commitAddAluno(imageData))
+                .catch((error) => console.log(error));
+            }
+          },
+          {
+            text: 'Galeria',
+            handler: () => {
+              this.camera.getFromGallery()
+                .then((imageData) => this.commitAddAluno(imageData))
+                .catch((error) => console.log(error));
+            }
           }
-        },
-        {
-          text: 'Galeria',
-          handler: () => {
-            this.camera.getFromGallery()
-              .then((imageData) => this.commitAddAluno(imageData))
-              .catch((error) => console.log(error));
-          }
-        }
-      ]
-    });
+        ]
+      });
 
-    actionSheet.present();
+      actionSheet.present();
+    }
   }
 
   async commitAddAluno(imageData) {
@@ -116,7 +123,7 @@ export class AlunosTurmaPage implements OnInit {
     await loadingDialog.present();
 
     try {
-      const resp = await this.requests.uploadFile(imageData, 'inscricao/rapida/turma/' + this.turma.id, {});
+      const resp = await this.requests.uploadFile('inscricao/rapida/turma/' + this.turma.id, imageData, {});
 
       this.navParams.setParams({ data: resp, turma: this.turma });
       this.navCtrl.navigateForward('/cadastro-rapido');

@@ -4,8 +4,6 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RequestService } from '../../service/request.service';
 import { Events, NavController, LoadingController, ToastController, PopoverController, AlertController, Platform } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
-import { ImageLoaderConfigService } from 'ionic-image-loader';
-import { HttpHeaders } from '@angular/common/http';
 import { PopoverNavComponent } from '../../components/popover-nav/popover-nav.component';
 import { File } from '@ionic-native/file/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
@@ -17,14 +15,11 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
   styleUrls: ['./turmas.page.scss'],
 })
 export class TurmasPage implements OnInit {
-
-  ngOnInit() {
-  }
-
-  turmas: Array<Turma>
+  turmas: Array<Turma>;
   userType: string;
 
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     private navParams: NavParamsService,
     public requests: RequestService,
     public authProvider: AuthService,
@@ -33,7 +28,6 @@ export class TurmasPage implements OnInit {
     public popoverCtrl: PopoverController,
     public events: Events,
     private alertCtrl: AlertController,
-    public imageLoaderConfig: ImageLoaderConfigService,
     public plt: Platform,
     public file: File,
     private fcm: FCM,
@@ -43,17 +37,17 @@ export class TurmasPage implements OnInit {
 
     this.userType = authProvider.getUserType();
 
-    if (this.userType === AuthService.ALUNO && (!this.plt.is('desktop'))){
+    if (this.userType === AuthService.ALUNO && (this.plt.is('cordova'))){
       this.localNotifications.hasPermission().then(hasPerm => {
         if (!hasPerm) this.localNotifications.requestPermission();
-      })
+      });
 
       this.fcm.getToken().then(token => {
-        this.requests.post("fcm/aluno/"+token, {});
+        this.requests.post('fcm/aluno/'+token, {});
       });
 
       this.fcm.onTokenRefresh().subscribe(token => {
-        this.requests.post("fcm/aluno/"+token, {});
+        this.requests.post('fcm/aluno/'+token, {});
       });
 
       this.fcm.onNotification().subscribe(data => {
@@ -62,7 +56,7 @@ export class TurmasPage implements OnInit {
             title: data.title,
             text: data.body,
             vibrate: true,
-            smallIcon: "res://mipmap/ic_notification"
+            smallIcon: 'res://mipmap/ic_notification'
           });
         }
 
@@ -71,22 +65,22 @@ export class TurmasPage implements OnInit {
 
     }
 
-    this.events.unsubscribe("refresh turmas")
-    this.events.subscribe("refresh turmas", () => { this.load() });
-
-    const headers = new HttpHeaders().set("Authorization", "Bearer " + authProvider.getToken());
-    this.imageLoaderConfig.setHttpHeaders(headers);
+    this.events.unsubscribe('refresh turmas');
+    this.events.subscribe('refresh turmas', () => { this.load(); });
 
     this.load();
   }
 
+  ngOnInit() {
+  }
+
   goPresencasTurmaPage(turma: Turma) {
-    this.navParams.setParams({ "turma": turma });
-    this.navCtrl.navigateForward("presenca-turma");
+    this.navParams.setParams({ turma });
+    this.navCtrl.navigateForward('presenca-turma');
   }
 
   async lockUnlock(turma: Turma) {
-    const msg = (turma.inscricoes_aberta) ? "Bloqueando inscrições..." : "Liberando inscrições..."
+    const msg = (turma.inscricoes_aberta) ? 'Bloqueando inscrições...' : 'Liberando inscrições...';
 
     const loadingDialog = await this.loader.create({ message: msg, spinner: 'crescent' });
     await loadingDialog.present();
@@ -97,7 +91,7 @@ export class TurmasPage implements OnInit {
         { inscricoes_aberta: !turma.inscricoes_aberta }
       );
 
-      turma.inscricoes_aberta = !turma.inscricoes_aberta
+      turma.inscricoes_aberta = !turma.inscricoes_aberta;
 
       const t = await this.toast.create({
         message: resp.sucesso,
@@ -114,6 +108,7 @@ export class TurmasPage implements OnInit {
   }
 
   async export(turma: Turma) {
+    // TODO fazer conversão para funcionar na web
     try {
       const resp = await this.requests.get(
         'turma/' + turma.id + '/chamadas'
@@ -154,26 +149,26 @@ export class TurmasPage implements OnInit {
   }
 
   async popoverDeslogar(event) {
-    this.navParams.setParams({ "is_logoff": true, "isGoPerfil": true });
-    let popover = await this.popoverCtrl.create({
+    this.navParams.setParams({ is_logoff: true, isGoPerfil: true });
+    const popover = await this.popoverCtrl.create({
       component: PopoverNavComponent,
-      event: event
+      event
     });
 
     popover.present();
   }
 
   async load() {
-    let loadingDialog = await this.loader.create({ message: 'Carregando Turmas...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Carregando Turmas...', spinner: 'crescent' });
     await loadingDialog.present();
 
     try {
-      let resp = await this.requests.get("turmas");
+      const resp = await this.requests.get('turmas');
 
       this.turmas = new Array();
       resp.forEach(elem => {
-        this.turmas.push(new Turma(elem.id, elem.nome, elem.ano, elem.semestre, elem.inscricoes_aberta))
-      })
+        this.turmas.push(new Turma(elem.id, elem.nome, elem.ano, elem.semestre, elem.inscricoes_aberta));
+      });
 
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
@@ -183,13 +178,13 @@ export class TurmasPage implements OnInit {
   }
 
   showListasPresenca(turma: Turma): void {
-    this.navParams.setParams({ 'turma': turma });
-    this.navCtrl.navigateForward("/chamadas");
+    this.navParams.setParams({ turma });
+    this.navCtrl.navigateForward('/chamadas');
   }
 
   add() {
     if (this.userType === AuthService.PROFESSOR) {
-      this.navParams.setParams({ "turmas": this.turmas, "turmasPage": this })
+      this.navParams.setParams({ turmas: this.turmas, turmasPage: this });
       this.navCtrl.navigateForward('/criar-turma');
     } else {
       this.navCtrl.navigateForward('/inscricao');
@@ -197,19 +192,19 @@ export class TurmasPage implements OnInit {
   }
 
   getAlunos(turma: Turma) {
-    this.navParams.setParams({ "turma": turma });
+    this.navParams.setParams({ turma });
     this.navCtrl.navigateForward('/alunos-turma');
   }
 
   editar(turma: Turma) {
-    this.navParams.setParams({ "turma": turma, "turmasPage": this });
-    this.navCtrl.navigateForward('/editar-turma')
+    this.navParams.setParams({ turma, turmasPage: this });
+    this.navCtrl.navigateForward('/editar-turma');
   }
 
   async apagar(event, turma: Turma) {
     event.stopPropagation();
 
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirme',
       message: 'Deseja mesmo apagar essa turma?',
       buttons: [
@@ -245,15 +240,15 @@ export class TurmasPage implements OnInit {
   }
 
   async commitApagar(turma: Turma) {
-    let loadingDialog = await this.loader.create({ message: 'Apagando turma...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Apagando turma...', spinner: 'crescent' });
     await loadingDialog.present();
 
     try {
-      let resp = await this.requests.delete("turma/" + turma.id)
-      let indx = this.turmas.indexOf(turma);
+      const resp = await this.requests.delete('turma/' + turma.id);
+      const indx = this.turmas.indexOf(turma);
       this.turmas.splice(indx, 1);
 
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });
@@ -271,7 +266,7 @@ export class TurmasPage implements OnInit {
   async desinscrever(event, turma: Turma) {
     event.stopPropagation();
 
-    let alert = await this.alertCtrl.create({
+    const alert = await this.alertCtrl.create({
       header: 'Confirme',
       message: 'Deseja mesmo se desinscrever?',
       buttons: [
@@ -291,15 +286,15 @@ export class TurmasPage implements OnInit {
   }
 
   async commitDesinscricao(turma: Turma) {
-    let loadingDialog = await this.loader.create({ message: 'Desinscrevendo-se...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Desinscrevendo-se...', spinner: 'crescent' });
     await loadingDialog.present();
 
     try {
-      let resp = await this.requests.delete("inscricao/turma/" + turma.id)
-      let indx = this.turmas.indexOf(turma);
+      const resp = await this.requests.delete('inscricao/turma/' + turma.id);
+      const indx = this.turmas.indexOf(turma);
       this.turmas.splice(indx, 1);
 
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });

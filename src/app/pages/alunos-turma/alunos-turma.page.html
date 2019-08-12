@@ -47,4 +47,6 @@
     </ion-item>
   </div>
 
+  <input #fileInput (change)="commitAddAluno($event.target.files[0])" *ngIf="!plat.is('cordova')" type="file">
+
 </ion-content>

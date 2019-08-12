@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CameraService } from 'src/app/service/camera.service';
 import { AlertController } from '@ionic/angular';
-import { pathToFileURL } from 'url';
 
 
 
@@ -16,7 +15,10 @@ export class AddFotoComponent {
   pathsFotos: Array<string>;
   max = 10;
 
-  constructor(public camera: CameraService, public alertCtrl: AlertController) {
+  constructor(
+    public camera: CameraService,
+    public alertCtrl: AlertController,
+    ) {
     this.pathsFotos = new Array();
   }
 
