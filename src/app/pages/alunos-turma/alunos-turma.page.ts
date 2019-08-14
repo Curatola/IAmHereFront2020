@@ -14,8 +14,9 @@ import { CameraService } from 'src/app/service/camera.service';
 })
 export class AlunosTurmaPage implements OnInit {
   turma: Turma;
-  alunos: Array<{aluno: Aluno, filename: string}>;
+  alunos: Array<{aluno: Aluno, filename: string, presenca: number}>;
   url: string = AuthService.API_URL;
+  qtdChamada: number;
 
   constructor(
     public navCtrl: NavController,
@@ -47,9 +48,15 @@ export class AlunosTurmaPage implements OnInit {
 
       this.alunos = new Array();
 
-      resp.forEach(elem => {
-        this.alunos.push({aluno: new Aluno(elem.id, elem.nome), filename: elem.foto});
+      resp.alunos.forEach(elem => {
+        this.alunos.push({
+          aluno: new Aluno(elem.id, elem.nome),
+          filename: elem.foto,
+          presenca: elem.presenca
+        });
       });
+
+      this.qtdChamada = resp.qtdChamada;
 
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
@@ -58,7 +65,7 @@ export class AlunosTurmaPage implements OnInit {
     }
   }
 
-  async desinscrever(obj: {aluno: Aluno, filename: string}) {
+  async desinscrever(obj: {aluno: Aluno, filename: string, presenca: number}) {
     const alert = await this.alertCtrl.create({
       header: 'Confirme',
       message: 'Deseja mesmo desinscrever esse aluno?',
@@ -120,7 +127,7 @@ export class AlunosTurmaPage implements OnInit {
     }
   }
 
-  async commitDesinscrever(obj: {aluno: Aluno, filename: string}) {
+  async commitDesinscrever(obj: {aluno: Aluno, filename: string, presenca: number}) {
     const loadingDialog = await this.loader.create({ message: 'Desinscrevendo Aluno...', spinner: 'crescent' });
     await loadingDialog.present();
 

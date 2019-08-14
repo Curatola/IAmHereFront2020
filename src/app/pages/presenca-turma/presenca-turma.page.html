@@ -16,6 +16,11 @@
 
 
 <ion-content>
+  <ion-chip class="ion-margin-top ion-margin-start">
+    <ion-label>Presenças {{qtdPresenca}}/{{qtdChamada}}</ion-label>
+  </ion-chip>
+
+
   <ion-card *ngFor="let presenca of presencas">
     <ion-item lines="none">
       <ion-card-header>

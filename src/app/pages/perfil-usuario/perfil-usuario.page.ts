@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { IonSlides, IonContent, IonInput, NavController, LoadingController, ToastController, ActionSheetController } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
@@ -16,12 +16,36 @@ import { IonicImageLoaderComponent } from 'ionic-image-loader';
 })
 export class PerfilUsuarioPage implements OnInit {
 
-  ngOnInit() {
+  constructor(
+      public navCtrl: NavController,
+      public navParams: NavParamsService,
+      private formBuilder: FormBuilder,
+      private requests: RequestService,
+      public authProvider: AuthService,
+      private loader: LoadingController,
+      private toast: ToastController,
+      private actionSheetCtrl: ActionSheetController,
+      private camera: CameraService,
+      private changeDet: ChangeDetectorRef
+    ) {
+      this.form = this.formBuilder.group({
+        nome: new FormControl('',Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern('^[a-zA-Z\u00C0-\u024F ]+$')])),
+        senha: new FormControl('',Validators.compose([Validators.required, Validators.minLength(6)])),
+        confirm: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)]))
+      }, { 'validator': ConfirmSenhaValidator.isMatching });
+
+      this.form.get('senha').disable();
+      this.form.get('confirm').disable();
+      this.userType = authProvider.getUserType();
+
+      if (this.userType === 'Aluno') this.form.addControl('matricula', new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')])),)
+
+      this.load();
   }
 
   @ViewChild(IonContent) content: IonContent;
   @ViewChild(IonSlides) slides: IonSlides;
-  @ViewChild("senhaInput") senhaInput: IonInput;
+  @ViewChild('senhaInput') senhaInput: IonInput;
 
   form: FormGroup;
   msgs = ValidatorMessages.msgs;
@@ -32,38 +56,16 @@ export class PerfilUsuarioPage implements OnInit {
   url: string = AuthService.API_URL;
   email: string;
 
-  imgsLoaded: boolean = false;
+  imgsLoaded = false;
 
   filenames: Array<string> = new Array();
 
-  constructor(public navCtrl: NavController,
-      public navParams: NavParamsService,
-      private formBuilder: FormBuilder,
-      private requests: RequestService,
-      public authProvider: AuthService,
-      private loader: LoadingController,
-      private toast: ToastController,
-      private actionSheetCtrl: ActionSheetController,
-      private camera: CameraService,
-    ) {
-      this.form = this.formBuilder.group({
-        nome: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern("^[a-zA-Z\u00C0-\u024F ]+$")])),
-        senha: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)])),
-        confirm: new FormControl("", Validators.compose([Validators.required, Validators.minLength(6)]))
-      }, { "validator": ConfirmSenhaValidator.isMatching });
-
-      this.form.get("senha").disable();
-      this.form.get("confirm").disable();
-      this.userType = authProvider.getUserType();
-
-      if (this.userType === "Aluno") this.form.addControl("matricula", new FormControl("", Validators.compose([Validators.required, Validators.pattern("^[a-zA-Z0-9 ]+$")])),)
-
-      this.load();
+  ngOnInit() {
   }
 
   async getFilenamesImg(){
     try{
-      let resp = await this.requests.get("img/filename/aluno");
+      const resp = await this.requests.get('img/filename/aluno');
       resp.forEach(elem => {
         this.filenames.push(elem);
       });
@@ -81,17 +83,17 @@ export class PerfilUsuarioPage implements OnInit {
   }
 
   async load(){
-    let loadingDialog = await this.loader.create({ message: 'Carregando Perfil, aguarde...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Carregando Perfil, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
     
-    if (this.userType == "Aluno") this.getFilenamesImg();
+    if (this.userType == 'Aluno') this.getFilenamesImg();
 
     try{
-      let resp = await this.requests.get("perfil");
-      this.form.get("nome").setValue(resp.nome);
+      const resp = await this.requests.get('perfil');
+      this.form.get('nome').setValue(resp.nome);
       this.email = resp.email
 
-      if (this.userType === "Aluno") this.form.get("matricula").setValue(resp.matricula);
+      if (this.userType === 'Aluno') this.form.get('matricula').setValue(resp.matricula);
 
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
@@ -102,8 +104,8 @@ export class PerfilUsuarioPage implements OnInit {
   }
 
   async change(){
-    let senhaControl = this.form.get("senha");
-    let confirmControl = this.form.get("confirm");
+    const senhaControl = this.form.get('senha');
+    const confirmControl = this.form.get('confirm');
     if (this.enableSenha) {
       senhaControl.enable();
       confirmControl.enable();
@@ -118,21 +120,21 @@ export class PerfilUsuarioPage implements OnInit {
   }
 
   async editar(){
-    let loadingDialog = await this.loader.create({ message: 'Salvando alterações, aguarde...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Salvando alterações, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
 
-    let nome = this.form.get("nome").value;
-    let senha = this.form.get("senha");
+    const nome = this.form.get('nome').value;
+    const senha = this.form.get('senha');
 
-    let data = {"nome": nome}
+    const data = {'nome': nome}
 
-    if (senha.enabled) data["senha"] = senha.value
-    if (this.form.get("matricula")) data["matricula"] = this.form.get("matricula").value;
+    if (senha.enabled) data['senha'] = senha.value
+    if (this.form.get('matricula')) data['matricula'] = this.form.get('matricula').value;
     
     try{
-      let resp = await this.requests.put(this.authProvider.getUserType().toLowerCase(), data);
+      const resp = await this.requests.put(this.authProvider.getUserType().toLowerCase(), data);
       
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       }); 
@@ -148,8 +150,8 @@ export class PerfilUsuarioPage implements OnInit {
 
   async apagarFoto(){
     if (this.filenames.length == 1) {
-      let t = await this.toast.create({
-        message: "Você deve ter pelo menos 1 foto cadastrada!",
+      const t = await this.toast.create({
+        message: 'Você deve ter pelo menos 1 foto cadastrada!',
         duration: 3000
       });
       
@@ -158,24 +160,26 @@ export class PerfilUsuarioPage implements OnInit {
       return;
     }
 
-    let loadingDialog = await this.loader.create({ message: 'Apagando foto, aguarde...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Apagando foto, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
 
     try{
-      let filename = this.filenames[ await this.slides.getActiveIndex()];
+      const filename = this.filenames[ await this.slides.getActiveIndex()];
       
-      let resp = await this.requests.delete("img/aluno/" + filename);
+      const resp = await this.requests.delete('img/aluno/' + filename);
       
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });
-      
+
       t.present();
 
-      this.filenames = this.filenames.filter((elem) => elem != filename);
+      this.filenames = this.filenames.filter((elem) => elem !== filename);
       this.slides.slidePrev();
-      
+
+      this.changeDet.detectChanges();
+
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     } finally {
@@ -184,7 +188,7 @@ export class PerfilUsuarioPage implements OnInit {
   }
 
   async addNewPhoto() {
-    let actionSheet = await this.actionSheetCtrl.create({
+    const actionSheet = await this.actionSheetCtrl.create({
       header: 'Selecione o modo',
       buttons: [
         {
@@ -210,18 +214,18 @@ export class PerfilUsuarioPage implements OnInit {
   }
 
   async upload(imageData){
-    let loadingDialog = await this.loader.create({ message: 'Cadastrando, aguarde...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Cadastrando, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
     try{
-      let resp = await this.requests.uploadFile(imageData, "img/aluno", {}, "PUT");
+      const resp = await this.requests.uploadFile(imageData, 'img/aluno', {}, 'PUT');
       resp.filenames.forEach(elem => {
         this.filenames.push(elem);
       });
 
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
-      }); 
+      });
       
       t.present();
 
