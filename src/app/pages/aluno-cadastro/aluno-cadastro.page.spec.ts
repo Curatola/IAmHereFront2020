@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { AlunoCadastroPage } from './aluno-cadastro.page';
 
 describe('AlunoCadastroPage', () => {
@@ -11,6 +11,7 @@ describe('AlunoCadastroPage', () => {
     TestBed.configureTestingModule({
       declarations: [ AlunoCadastroPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [ReactiveFormsModule],
     })
     .compileComponents();
   }));
