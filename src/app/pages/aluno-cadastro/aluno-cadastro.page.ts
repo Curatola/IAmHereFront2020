@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ValidatorMessages } from '../../validator-messages';
 import { NavController, LoadingController, ToastController, Platform } from '@ionic/angular';
@@ -12,7 +12,7 @@ import { ConfirmSenhaValidator } from '../../confirm-senha-validator';
   styleUrls: ['./aluno-cadastro.page.scss'],
 })
 export class AlunoCadastroPage implements OnInit {
-
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   form: FormGroup;
   msgs = ValidatorMessages.msgs;

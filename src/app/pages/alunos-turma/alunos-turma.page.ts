@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
 import { Turma } from 'src/models/turma';
@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/service/auth.service';
   styleUrls: ['./alunos-turma.page.scss'],
 })
 export class AlunosTurmaPage implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   turma: Turma;
   alunos: Array<{aluno: Aluno, filename: string, presenca: number}>;

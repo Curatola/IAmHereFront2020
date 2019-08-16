@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { IonSlides, IonContent, IonInput, NavController, LoadingController, ToastController, Platform } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
@@ -13,6 +13,7 @@ import { ValidatorMessages } from '../../validator-messages';
   styleUrls: ['./perfil-usuario.page.scss'],
 })
 export class PerfilUsuarioPage implements OnInit {
+  @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild(IonContent) content: IonContent;
   @ViewChild(IonSlides) slides: IonSlides;
   @ViewChild('senhaInput') senhaInput: IonInput;
