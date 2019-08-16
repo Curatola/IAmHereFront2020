@@ -6,7 +6,6 @@ import { AuthService } from '../../service/auth.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ConfirmSenhaValidator } from '../../confirm-senha-validator';
 import { ValidatorMessages } from '../../validator-messages';
-import { IonicImageLoaderComponent } from 'ionic-image-loader';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -69,10 +68,6 @@ export class PerfilUsuarioPage implements OnInit {
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     }
-  }
-
-  onImgClick(img: IonicImageLoaderComponent){
-    // TODO
   }
 
   async onImageLoad() {
