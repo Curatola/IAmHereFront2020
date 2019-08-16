@@ -9,7 +9,6 @@ import {
   Platform
 } from '@ionic/angular';
 import { RequestService } from '../../service/request.service';
-import { CameraService } from '../../service/camera.service';
 import { Chamada } from 'src/models/chamada';
 import { Turma } from 'src/models/turma';
 import { NavParamsService } from '../../service/nav-params.service';
@@ -32,7 +31,6 @@ export class ChamadasPage implements OnInit {
     public requests: RequestService,
     private loader: LoadingController,
     public toast: ToastController,
-    public camera: CameraService,
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController,
     private changeDet: ChangeDetectorRef,
@@ -57,7 +55,7 @@ export class ChamadasPage implements OnInit {
   async doInfinit() {
     try {
       const resp = await this.requests.get(
-        'turma/' + this.turma.id + '/chamadas/pag/' + this.page
+        '/turma/' + this.turma.id + '/chamadas/pag/' + this.page
       );
       if (!this.chamadas) {
         this.chamadas = new Array();
@@ -118,7 +116,7 @@ export class ChamadasPage implements OnInit {
 
     try {
       const resp = await this.requests.delete(
-        'turma/' + this.turma.id + '/chamada/' + chamada.id
+        '/turma/' + this.turma.id + '/chamada/' + chamada.id
       );
       const indx = this.chamadas.indexOf(chamada);
       this.chamadas.splice(indx, 1);
@@ -155,7 +153,7 @@ export class ChamadasPage implements OnInit {
   }
 
   async doRefresh(event) {
-    const resp = await this.requests.get('turma/' + this.turma.id + '/can_make_chamada');
+    const resp = await this.requests.get('/turma/' + this.turma.id + '/can_make_chamada');
     this.canMakeChamada = resp.canMakeChamada;
     if (event) event.target.complete();
   }
@@ -177,7 +175,7 @@ export class ChamadasPage implements OnInit {
 
       try {
         const resp = await this.requests.uploadFile(
-          'turma/' + this.turma.id + '/chamada',
+          '/turma/' + this.turma.id + '/chamada',
           filePath,
           {
             previousPresentes: presentes,

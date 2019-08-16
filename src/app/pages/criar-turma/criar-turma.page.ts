@@ -6,7 +6,6 @@ import { ValidatorMessages } from '../../validator-messages';
 import { Turma } from 'src/models/turma';
 import { TurmasPage } from '../turmas/turmas.page';
 import { NavController, LoadingController, ToastController } from '@ionic/angular';
-import { LoginPage } from '../login/login.page';
 
 @Component({
   selector: 'app-criar-turma',
@@ -14,12 +13,9 @@ import { LoginPage } from '../login/login.page';
   styleUrls: ['./criar-turma.page.scss'],
 })
 export class CriarTurmaPage implements OnInit {
-  ngOnInit() {
-  }
-
   form: FormGroup;
   msgs = ValidatorMessages.msgs;
-  turmas: Array<Turma>
+  turmas: Array<Turma>;
   turmasPage: TurmasPage;
 
   constructor(
@@ -31,47 +27,49 @@ export class CriarTurmaPage implements OnInit {
     private toast: ToastController
     ) {
 
-      this.turmas = this.navParams.get("turmas");
-      this.turmasPage = this.navParams.get("turmasPage");
-      
+      this.turmas = this.navParams.get('turmas');
+      this.turmasPage = this.navParams.get('turmasPage');
+
       this.form = this.formBuilder.group({
-        nome: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern("^[a-zA-Z0-9\u00C0-\u024F ]+$")])),
-        ano: new FormControl("", Validators.required),
-        semestre: new FormControl("", Validators.compose([Validators.required, Validators.max(2), Validators.min(1)])),
-        senhaTurma: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4)]))
-    })
+        nome: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern('^[a-zA-Z0-9\u00C0-\u024F ]+$')])),
+        ano: new FormControl('', Validators.required),
+        semestre: new FormControl('', Validators.compose([Validators.required, Validators.max(2), Validators.min(1)])),
+        senhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)]))
+    });
   }
 
-  async criar(){
-    let loadingDialog = await this.loader.create({ message: 'Cadastrando, aguarde...', spinner: 'crescent' });
+  async criar() {
+    const loadingDialog = await this.loader.create({ message: 'Cadastrando, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
 
-    let nome = this.form.get("nome").value;
-    let ano = this.form.get("ano").value;
-    let semestre = this.form.get("semestre").value;
-    let senhaTurma = this.form.get("senhaTurma").value;
+    const nome = this.form.get('nome').value;
+    const ano = this.form.get('ano').value;
+    const semestre = this.form.get('semestre').value;
+    const senhaTurma = this.form.get('senhaTurma').value;
 
-    let data = {"nome": nome,"ano": ano, "semestre": semestre, "senha": senhaTurma} 
+    const data = { nome, ano, semestre, senha: senhaTurma }; 
 
     try{
-      let resp = await this.requests.post("turma", data);
-      
-      let t = await this.toast.create({
+      const resp = await this.requests.post('/turma', data);
+
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });
-      
+
       t.present();
 
       this.turmas.push(new Turma(resp.id, nome, ano, semestre, true));
       this.turmasPage.ordenarTurmas();
       this.navCtrl.pop();
-      
+
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     } finally {
       await loadingDialog.dismiss();
     }
   }
-  
+
+  ngOnInit() {
+  }
 }

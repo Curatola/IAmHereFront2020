@@ -69,7 +69,7 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
 
     try {
       const resp = await this.requests.get(
-        'turma/' + this.turma.id + '/chamada/' + this.chamada.id
+        '/turma/' + this.turma.id + '/chamada/' + this.chamada.id
       );
 
       this.presentes = new Array();
@@ -132,7 +132,7 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
 
     try {
       const resp = await this.requests.put(
-        'turma/' + this.turma.id + '/chamada/' + this.chamada.id,
+        '/turma/' + this.turma.id + '/chamada/' + this.chamada.id,
         {
           presentes: alunosPresentesId,
           conteudo: this.conteudo

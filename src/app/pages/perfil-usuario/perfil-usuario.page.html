@@ -15,7 +15,7 @@
     <ion-title>Perfil</ion-title>
 
     <ion-buttons slot="end">
-      <ion-button *ngIf="userType === 'Aluno'" (click)="addNewPhoto()">
+      <ion-button *ngIf="userType === 'Aluno'" appImgGetter [fileInput]="fileInput" (callback)="upload($event)">
         <ion-icon name="camera"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -31,7 +31,7 @@
       <ion-slides pager>
         <ion-spinner [color]="'light'" *ngIf="!filenames" name="crescent"></ion-spinner>
         <ion-slide *ngFor="let filename of filenames">
-          <app-secure-img [src]="url+'img/aluno/'+filename"></app-secure-img>
+          <app-secure-img [src]="url+'/img/aluno/'+filename"></app-secure-img>
         </ion-slide>
       </ion-slides>
       <ion-fab-button horizontal="end" margin-right color="danger" (click)="apagarFoto()">

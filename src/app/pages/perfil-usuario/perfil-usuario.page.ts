@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { IonSlides, IonContent, IonInput, NavController, LoadingController, ToastController, ActionSheetController, Platform } from '@ionic/angular';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { IonSlides, IonContent, IonInput, NavController, LoadingController, ToastController, Platform } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
 import { AuthService } from '../../service/auth.service';
-import { CameraService } from '../../service/camera.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ConfirmSenhaValidator } from '../../confirm-senha-validator';
 import { ValidatorMessages } from '../../validator-messages';
@@ -15,7 +14,6 @@ import { IonicImageLoaderComponent } from 'ionic-image-loader';
   styleUrls: ['./perfil-usuario.page.scss'],
 })
 export class PerfilUsuarioPage implements OnInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
   @ViewChild(IonContent) content: IonContent;
   @ViewChild(IonSlides) slides: IonSlides;
   @ViewChild('senhaInput') senhaInput: IonInput;
@@ -41,8 +39,6 @@ export class PerfilUsuarioPage implements OnInit {
       public authProvider: AuthService,
       private loader: LoadingController,
       private toast: ToastController,
-      private actionSheetCtrl: ActionSheetController,
-      private camera: CameraService,
       private changeDet: ChangeDetectorRef,
       public plat: Platform
     ) {
@@ -66,7 +62,7 @@ export class PerfilUsuarioPage implements OnInit {
 
   async getFilenamesImg() {
     try {
-      const resp = await this.requests.get('img/filename/aluno');
+      const resp = await this.requests.get('/img/filename/aluno');
       resp.forEach(elem => {
         this.filenames.push(elem);
       });
@@ -90,7 +86,7 @@ export class PerfilUsuarioPage implements OnInit {
     if (this.userType == 'Aluno') this.getFilenamesImg();
 
     try {
-      const resp = await this.requests.get('perfil');
+      const resp = await this.requests.get('/perfil');
       this.form.get('nome').setValue(resp.nome);
       this.email = resp.email;
 
@@ -131,7 +127,7 @@ export class PerfilUsuarioPage implements OnInit {
     if (this.form.get('matricula')) data['matricula'] = this.form.get('matricula').value;
 
     try {
-      const resp = await this.requests.put(this.authProvider.getUserType().toLowerCase(), data);
+      const resp = await this.requests.put('/' + this.authProvider.getUserType().toLowerCase(), data);
 
       const t = await this.toast.create({
         message: resp.sucesso,
@@ -164,7 +160,7 @@ export class PerfilUsuarioPage implements OnInit {
 
     try {
       const filename = this.filenames[ await this.slides.getActiveIndex()];
-      const resp = await this.requests.delete('img/aluno/' + filename);
+      const resp = await this.requests.delete('/img/aluno/' + filename);
 
       const t = await this.toast.create({
         message: resp.sucesso,
@@ -185,41 +181,11 @@ export class PerfilUsuarioPage implements OnInit {
     }
   }
 
-  async addNewPhoto() {
-    if (!this.plat.is('cordova')) {
-      this.fileInput.nativeElement.click();
-    } else {
-      const actionSheet = await this.actionSheetCtrl.create({
-        header: 'Selecione o modo',
-        buttons: [
-          {
-            text: 'Camera',
-            handler: () => {
-              this.camera.takePicture()
-                .then((imageData) => this.upload(imageData))
-                .catch((error) => console.log(error));
-            }
-          },
-          {
-            text: 'Galeria',
-            handler: () => {
-              this.camera.getFromGallery()
-                .then((imageData) => this.upload(imageData))
-                .catch((error) => console.log(error));
-            }
-          }
-        ]
-      });
-
-      actionSheet.present();
-    }
-  }
-
   async upload(imageData) {
     const loadingDialog = await this.loader.create({ message: 'Cadastrando, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
     try {
-      const resp = await this.requests.uploadFile('img/aluno', imageData, {}, true, 'PUT');
+      const resp = await this.requests.uploadFile('/img/aluno', imageData, {}, true, 'PUT');
       resp.filenames.forEach(elem => {
         this.filenames.push(elem);
       });

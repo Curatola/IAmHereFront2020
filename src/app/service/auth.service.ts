@@ -8,7 +8,9 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 export class AuthService {
 
   constructor(public http: HttpClient) {}
-  public static API_URL = 'http://192.168.0.7:5000/api_v1/';
+  public static readonly API_VERSION = 'api_v1';
+  public static readonly API_URL = 'http://192.168.0.3:5000/' + AuthService.API_VERSION;
+
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';
 
@@ -43,7 +45,7 @@ export class AuthService {
   async deslogar() {
     try {
       await this.http
-        .post(AuthService.API_URL + 'logoff', {}, { withCredentials: true })
+        .post(AuthService.API_URL + '/logoff', {}, { withCredentials: true })
         .toPromise();
       this.deslogarOnlyOnApp();
     } catch (error) {
@@ -56,7 +58,7 @@ export class AuthService {
     header = header.set('Authorization', 'Basic ' + btoa(email + ':' + password));
     try {
       const result = await this.http
-        .get<any>(AuthService.API_URL + 'login', { headers: header, withCredentials: true})
+        .get<any>(AuthService.API_URL + '/login', { headers: header, withCredentials: true})
         .toPromise();
 
       localStorage.setItem('user', result.userType);

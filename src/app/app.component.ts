@@ -93,7 +93,7 @@ export class AppComponent {
 
       if (match.$link.path.split('/')[1] === 'confirm_email') {
         const resp = await this.requests.put(
-          'confirm_email',
+          '/confirm_email',
           { token: match.$args.token },
           false
         );

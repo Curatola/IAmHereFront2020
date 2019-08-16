@@ -9,8 +9,8 @@ import { Directive, Input, ElementRef, Renderer2 } from '@angular/core';
 export class HeaderOnclickDirective {
 
 // tslint:disable-next-line: no-input-rename
-  @Input("header") header: any;
-  isHided: boolean = false;
+  @Input() header: any;
+  isHided = false;
 
   constructor(public element: ElementRef, public renderer: Renderer2) {
   }

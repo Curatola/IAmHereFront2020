@@ -43,11 +43,11 @@ export class TurmasPage implements OnInit {
       });
 
       this.fcm.getToken().then(token => {
-        this.requests.post('fcm/aluno/'+token, {});
+        this.requests.post('/fcm/aluno/' + token, {});
       });
 
       this.fcm.onTokenRefresh().subscribe(token => {
-        this.requests.post('fcm/aluno/'+token, {});
+        this.requests.post('/fcm/aluno/' + token, {});
       });
 
       this.fcm.onNotification().subscribe(data => {
@@ -87,7 +87,7 @@ export class TurmasPage implements OnInit {
 
     try {
       const resp = await this.requests.post(
-        'change_inscricoes_aberta/turma/' + turma.id,
+        '/change_inscricoes_aberta/turma/' + turma.id,
         { inscricoes_aberta: !turma.inscricoes_aberta }
       );
 
@@ -111,7 +111,7 @@ export class TurmasPage implements OnInit {
     // TODO fazer conversão para funcionar na web
     try {
       const resp = await this.requests.get(
-        'turma/' + turma.id + '/chamadas'
+        '/turma/' + turma.id + '/chamadas'
       );
       const fileName = 'chamada_' + resp.turma.replace(' ', '_') + '.csv';
       try {
@@ -163,7 +163,7 @@ export class TurmasPage implements OnInit {
     await loadingDialog.present();
 
     try {
-      const resp = await this.requests.get('turmas');
+      const resp = await this.requests.get('/turmas');
 
       this.turmas = new Array();
       resp.forEach(elem => {
@@ -244,7 +244,7 @@ export class TurmasPage implements OnInit {
     await loadingDialog.present();
 
     try {
-      const resp = await this.requests.delete('turma/' + turma.id);
+      const resp = await this.requests.delete('/turma/' + turma.id);
       const indx = this.turmas.indexOf(turma);
       this.turmas.splice(indx, 1);
 
@@ -290,7 +290,7 @@ export class TurmasPage implements OnInit {
     await loadingDialog.present();
 
     try {
-      const resp = await this.requests.delete('inscricao/turma/' + turma.id);
+      const resp = await this.requests.delete('/inscricao/turma/' + turma.id);
       const indx = this.turmas.indexOf(turma);
       this.turmas.splice(indx, 1);
 

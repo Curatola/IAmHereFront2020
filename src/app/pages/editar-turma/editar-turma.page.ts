@@ -14,10 +14,7 @@ import { ConfirmSenhaValidator } from 'src/app/confirm-senha-validator';
   styleUrls: ['./editar-turma.page.scss'],
 })
 export class EditarTurmaPage implements OnInit {
-  @ViewChild("senhaInput") senhaInput: IonInput;
-
-  ngOnInit() {
-  }
+  @ViewChild('senhaInput') senhaInput: IonInput;
 
   form: FormGroup;
   msgs = ValidatorMessages.msgs;
@@ -35,25 +32,28 @@ export class EditarTurmaPage implements OnInit {
     private loader: LoadingController,
     private toast: ToastController
     ) {
-    this.turma = navParams.get("turma");
-    this.turmasPage = this.navParams.get("turmasPage");
+    this.turma = navParams.get('turma');
+    this.turmasPage = this.navParams.get('turmasPage');
 
     this.form = this.formBuilder.group({
-      nome: new FormControl(this.turma.nome,Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern("^[a-zA-Z0-9 ]+$")])),
+      nome: new FormControl(this.turma.nome, Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern('^[a-zA-Z0-9 ]+$')])),
       ano: new FormControl(this.turma.ano, Validators.required),
       semestre: new FormControl(this.turma.semestre, Validators.required),
-      senhaTurma: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4)])),
-      confirmSenhaTurma: new FormControl("", Validators.compose([Validators.required, Validators.minLength(4)]))
-    },  { "validator": ConfirmSenhaValidator.isMatching });
+      senhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)])),
+      confirmSenhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)]))
+    },  { validator: ConfirmSenhaValidator.isMatching });
 
-    this.form.get("senhaTurma").disable();
-    this.form.get("confirmSenhaTurma").disable();
+    this.form.get('senhaTurma').disable();
+    this.form.get('confirmSenhaTurma').disable();
   }
 
-  change(){
-    let senhaControl = this.form.get("senhaTurma");
-    let confirmControl = this.form.get("confirmSenhaTurma");
-    if (this.enableSenha){
+  ngOnInit() {
+  }
+
+  change() {
+    const senhaControl = this.form.get('senhaTurma');
+    const confirmControl = this.form.get('confirmSenhaTurma');
+    if (this.enableSenha) {
       senhaControl.enable();
       confirmControl.enable();
       setTimeout(() => {
@@ -65,37 +65,38 @@ export class EditarTurmaPage implements OnInit {
     }
   }
 
-  async editar(){
-    let loadingDialog = await this.loader.create({ message: 'Salvando alterações, aguarde...', spinner: 'crescent' });
+  async editar() {
+    const loadingDialog = await this.loader.create({ message: 'Salvando alterações, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
 
-    let nome = this.form.get("nome").value;
-    let ano = this.form.get("ano").value;
-    let semestre = this.form.get("semestre").value;
-    let senhaTurma = this.form.get("senhaTurma");
+    const nome = this.form.get('nome').value;
+    const ano = this.form.get('ano').value;
+    const semestre = this.form.get('semestre').value;
+    const senhaTurma = this.form.get('senhaTurma');
 
-    let data = {"nome": nome,"ano": ano, "semestre": semestre}
+    const data = { nome, ano, semestre};
 
-    if (senhaTurma.enabled)
-      data["senha"] = senhaTurma.value
-    
-    try{
-      let resp = await this.requests.put("turma/" + this.turma.id, data)
-      
-      let t = await this.toast.create({
+    if (senhaTurma.enabled) {
+      data['senha'] = senhaTurma.value;
+    }
+
+    try {
+      const resp = await this.requests.put('/turma/' + this.turma.id, data);
+
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });
-      
+
       t.present();
-      
+
       this.turma.nome = nome;
       this.turma.ano = ano;
       this.turma.semestre = semestre;
 
       this.turmasPage.ordenarTurmas();
       this.navCtrl.pop();
-      
+
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
     } finally {

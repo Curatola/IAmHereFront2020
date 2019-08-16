@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ValidatorMessages } from '../../validator-messages';
-import { NavController, LoadingController, ToastController, ActionSheetController, Platform } from '@ionic/angular';
+import { NavController, LoadingController, ToastController, Platform } from '@ionic/angular';
 import { NavParamsService } from '../../service/nav-params.service';
 import { RequestService } from '../../service/request.service';
 import { ConfirmSenhaValidator } from '../../confirm-senha-validator';
-import { CameraService } from '../../service/camera.service';
-import { text } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-aluno-cadastro',
@@ -14,7 +12,6 @@ import { text } from '@angular/core/src/render3';
   styleUrls: ['./aluno-cadastro.page.scss'],
 })
 export class AlunoCadastroPage implements OnInit {
-  @ViewChild('fileInput') fileInput: ElementRef;
 
 
   form: FormGroup;
@@ -26,8 +23,6 @@ export class AlunoCadastroPage implements OnInit {
     private request: RequestService,
     private loader: LoadingController,
     private toast: ToastController,
-    private actionSheetCtrl: ActionSheetController,
-    private camera: CameraService,
     private formBuilder: FormBuilder,
     public plat: Platform
     ) {
@@ -39,35 +34,6 @@ export class AlunoCadastroPage implements OnInit {
       confirm: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)])),
       termosUso: new FormControl(null, Validators.requiredTrue)
     }, { validator: ConfirmSenhaValidator.isMatching });
-  }
-
-  async cadastrar() {
-    if (!this.plat.is('cordova')) {
-      this.fileInput.nativeElement.click();
-    } else {
-      const actionSheet = await this.actionSheetCtrl.create({
-        header: 'Selecione o modo',
-        buttons: [
-          {
-            text: 'Camera',
-            handler: () => {
-              this.camera.takePicture()
-                .then((imageData) => this.upload(imageData))
-                .catch((error) => console.log(error));
-            }
-          },
-          {
-            text: 'Galeria',
-            handler: () => {
-              this.camera.getFromGallery()
-                .then((imageData) => this.upload(imageData))
-                .catch((error) => console.log(error));
-            }
-          }
-        ]
-      });
-      actionSheet.present();
-    }
   }
 
   goTermosUso(event) {
@@ -87,7 +53,7 @@ export class AlunoCadastroPage implements OnInit {
     const data = { nome, matricula, login: email, senha };
 
     try {
-      const resp = await this.request.uploadFile('aluno', imageData, data, false);
+      const resp = await this.request.uploadFile('/aluno', imageData, data, false);
 
       const t = await this.toast.create({
         message: resp.sucesso,

@@ -41,7 +41,7 @@ export class LoginPage implements OnInit {
       await this.authService.login(email, senha, remember);
 
       if (this.authService.getUserType() === 'Aluno') {
-        const resp =  await this.requests.get('usuario/term_accepted');
+        const resp =  await this.requests.get('/usuario/term_accepted');
 
         if (!resp.termAccepted) {
           const confirm = await this.alertCtrl.create({
@@ -99,7 +99,7 @@ export class LoginPage implements OnInit {
   }
 
   async acceptTerm() {
-    await this.requests.post('usuario/term_accepted', {});
+    await this.requests.post('/usuario/term_accepted', {});
     this.navCtrl.navigateRoot('/turmas');
   }
 

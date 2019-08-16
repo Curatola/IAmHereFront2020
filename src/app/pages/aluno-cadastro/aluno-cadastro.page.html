@@ -105,7 +105,7 @@
 </ion-content>
 
 <div id="wrapper">
-  <ion-button type="submit" [disabled]="!form.valid" (click)="cadastrar()">
+  <ion-button type="submit" [disabled]="!form.valid" appImgGetter [fileInput]="fileInput" (callback)="upload($event)">
     Cadastrar
   </ion-button>
 </div>

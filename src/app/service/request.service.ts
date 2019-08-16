@@ -70,7 +70,7 @@ export class RequestService {
 
       for (const key in data) {
         if (data[key] !== undefined) {
-          if (typeof data[key] !== 'string'){
+          if (typeof data[key] !== 'string') {
             formData.append(key.toString(), JSON.stringify(data[key]));
           } else {
             formData.append(key.toString(), data[key]);

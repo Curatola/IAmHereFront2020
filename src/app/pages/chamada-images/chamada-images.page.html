@@ -19,7 +19,7 @@
   <ion-slides pager>
     <ion-slide *ngFor="let filename of filenames">
       <pinch-zoom (events)="event($event)" height="100%">
-        <app-secure-img [spinnerColor]="'light'" [src]='url+"img/turma/"+turma.id+"/chamada/"+chamada.id+"/"+filename'></app-secure-img>
+        <app-secure-img [spinnerColor]="'light'" [src]='url+"/img/turma/"+turma.id+"/chamada/"+chamada.id+"/"+filename'></app-secure-img>
       </pinch-zoom>
     </ion-slide>
   </ion-slides>
