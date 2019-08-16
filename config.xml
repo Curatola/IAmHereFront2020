@@ -123,5 +123,4 @@
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
-    <engine name="browser" spec="~5.0.4" />
 </widget>

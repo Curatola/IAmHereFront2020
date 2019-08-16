@@ -108,37 +108,48 @@ export class TurmasPage implements OnInit {
   }
 
   async export(turma: Turma) {
-    // TODO fazer conversão para funcionar na web
     try {
       const resp = await this.requests.get(
         '/turma/' + turma.id + '/chamadas'
       );
       const fileName = 'chamada_' + resp.turma.replace(' ', '_') + '.csv';
-      try {
-        await this.file.checkDir(this.file.externalRootDirectory, 'IAmHere');
-      } catch (err) {
-        await this.file.createDir(
+
+      let msg: string;
+      if (!this.plt.is('desktop')) {
+        try {
+          await this.file.checkDir(this.file.externalRootDirectory, 'IAmHere');
+        } catch (err) {
+          await this.file.createDir(
+            this.file.externalRootDirectory,
+            'IAmHere',
+            false
+          );
+        }
+
+        await this.file.writeFile(
           this.file.externalRootDirectory,
-          'IAmHere',
-          false
+          'IAmHere/' + fileName,
+          resp.csv,
+          { replace: true }
         );
+
+        msg = 'Exportação feita com sucesso: IAmHere/chamada_' + resp.turma + '.csv';
+      } else {
+        const a = document.createElement('a');
+        const file = new Blob([resp.csv], {type: 'application/vnd.ms-excel'});
+        a.href = URL.createObjectURL(file);
+        a.download = fileName;
+        a.click();
+
+        msg = 'Exportação feita com sucesso!';
       }
 
-      await this.file.writeFile(
-        this.file.externalRootDirectory,
-        'IAmHere/' + fileName,
-        resp.csv,
-        { replace: true }
-      );
-
       const t = await this.toast.create({
-        message:
-          'Exportação feita com sucesso: IAmHere/chamada_' +
-          resp.turma +
-          '.csv',
+        message: msg,
         duration: 6000
       });
       t.present();
+
     } catch (error) {
       const t = await this.toast.create({
         message: error.message,
