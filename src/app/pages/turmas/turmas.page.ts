@@ -115,7 +115,7 @@ export class TurmasPage implements OnInit {
       const fileName = 'chamada_' + resp.turma.replace(' ', '_') + '.csv';
 
       let msg: string;
-      if (!this.plt.is('desktop')) {
+      if (this.plt.is('cordova')) {
         try {
           await this.file.checkDir(this.file.externalRootDirectory, 'IAmHere');
         } catch (err) {
