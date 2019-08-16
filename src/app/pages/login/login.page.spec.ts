@@ -2,7 +2,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginPage } from './login.page';
-import { ReactiveFormsModule } from '@angular/forms';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -12,7 +11,6 @@ describe('LoginPage', () => {
     TestBed.configureTestingModule({
       declarations: [ LoginPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [ReactiveFormsModule],
     })
     .compileComponents();
   }));
