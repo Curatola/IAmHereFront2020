@@ -11,60 +11,58 @@ import { NavController, ToastController, LoadingController } from '@ionic/angula
   styleUrls: ['./request-email.page.scss'],
 })
 export class RequestEmailPage implements OnInit {
-
-  ngOnInit() {
-  }
-
   formulario: FormGroup;
   msgs = ValidatorMessages.msgs;
-  requestNewPassword: boolean
-  
+  requestNewPassword: boolean;
 
-  constructor(public navCtrl: NavController, public navParams: NavParamsService,
+  constructor(
+    public navCtrl: NavController, public navParams: NavParamsService,
     private toast: ToastController, private requestProvider: RequestService,
     private loader: LoadingController,
     private formBuilder: FormBuilder) {
-      this.requestNewPassword = this.navParams.get("requestNewPassword")
+      this.requestNewPassword = this.navParams.get('requestNewPassword');
 
       this.formulario = this.formBuilder.group({
-        email: new FormControl("", Validators.compose([Validators.email, Validators.required]))
-      })
+        email: new FormControl('', Validators.compose([Validators.email, Validators.required]))
+      });
   }
 
   async requestEmail() {
-    let loadingDialog = await this.loader.create({ message: 'Verificando email...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Verificando email...', spinner: 'crescent' });
     await loadingDialog.present();
-    try{
+    try {
 
-      let email = this.formulario.get("email").value;
-      let rota = this.requestNewPassword ? "reset_senha" : "confirm_email"
-      let resp = await this.requestProvider.post(rota, {"email": email}, false);
-      await loadingDialog.dismiss()
+      const email = this.formulario.get('email').value;
+      const rota = this.requestNewPassword ? '/reset_senha' : '/confirm_email';
+      const resp = await this.requestProvider.post(rota, { email }, false);
+      await loadingDialog.dismiss();
 
-      if (resp.sucesso){
-        let t = await this.toast.create({
+      if (resp.sucesso) {
+        const t = await this.toast.create({
           message: resp.sucesso,
           duration: 3000
         });
-        
+
         t.present();
       } else {
-        let t = await this.toast.create({
+        const t = await this.toast.create({
           message: resp.warning,
           duration: 3000
         });
-        
+
         t.present();
       }
-    } catch (error){
-      let t = await this.toast.create({
+    } catch (error) {
+      const t = await this.toast.create({
         message: error.message,
         duration: 3000
-      }); 
-      
+      });
+
       t.present();
       await loadingDialog.dismiss();
     }
   }
 
+  ngOnInit() {
+  }
 }

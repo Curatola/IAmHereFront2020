@@ -8,7 +8,9 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 export class AuthService {
 
   constructor(public http: HttpClient) {}
-  public static API_URL = 'http://172.17.104.218:5000/';
+  public static readonly API_VERSION = 'api_v1';
+  public static readonly API_URL = 'http://192.168.0.3:5000/' + AuthService.API_VERSION;
+
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';
 
@@ -23,15 +25,7 @@ export class AuthService {
   }
 
   userIsLogged(): boolean {
-    if (this.getToken()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  getToken(): string {
-    return localStorage.getItem('token') || sessionStorage.getItem('token');
+    return JSON.parse(localStorage.getItem('isLogged'));
   }
 
   getUserType(): string {
@@ -43,20 +37,15 @@ export class AuthService {
   }
 
   deslogarOnlyOnApp() {
-    localStorage.removeItem('token');
-    sessionStorage.removeItem('token');
-
     localStorage.removeItem('user');
-    sessionStorage.removeItem('user');
-
     localStorage.removeItem('isAdmin');
-    sessionStorage.removeItem('isAdmin');
+    localStorage.removeItem('isLogged');
   }
 
   async deslogar() {
     try {
       await this.http
-        .post(AuthService.API_URL + 'logoff', {}, {withCredentials: true })
+        .post(AuthService.API_URL + '/logoff', {}, { withCredentials: true })
         .toPromise();
       this.deslogarOnlyOnApp();
     } catch (error) {
@@ -68,19 +57,13 @@ export class AuthService {
     let header = new HttpHeaders();
     header = header.set('Authorization', 'Basic ' + btoa(email + ':' + password));
     try {
-      let result = await this.http
-        .get<any>(AuthService.API_URL + 'login', { headers: header })
+      const result = await this.http
+        .get<any>(AuthService.API_URL + '/login', { headers: header, withCredentials: true})
         .toPromise();
 
-      if (isPersistent) {
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('user', result.userType);
-        localStorage.setItem('isAdmin', result.isAdmin);
-      } else {
-        sessionStorage.setItem('token', result.token);
-        sessionStorage.setItem('user', result.userType);
-        sessionStorage.setItem('isAdmin', result.isAdmin);
-      }
+      localStorage.setItem('user', result.userType);
+      localStorage.setItem('isAdmin', result.isAdmin);
+      localStorage.setItem('isLogged', String(isPersistent));
     } catch (error) {
       if (error.status === 401) {
         throw new Error('Não é possivel logar com essas informações');

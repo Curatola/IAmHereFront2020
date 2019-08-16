@@ -12,51 +12,50 @@ import { ConfirmSenhaValidator } from '../../confirm-senha-validator';
   styleUrls: ['./nova-senha.page.scss'],
 })
 export class NovaSenhaPage implements OnInit {
-
-  ngOnInit() {
-  }
-
-  resetform:FormGroup;
+  resetform: FormGroup;
   msgs = ValidatorMessages.msgs;
   token: string;
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParamsService, 
-    private toast: ToastController, 
+    public navParams: NavParamsService,
+    private toast: ToastController,
     private requestProvider: RequestService,
-    private loader: LoadingController, 
+    private loader: LoadingController,
     private formBuilder: FormBuilder) {
-      this.token = navParams.get("token");
+      this.token = navParams.get('token');
 
       this.resetform = this.formBuilder.group({
-        senha: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)])),
-        confirm: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)]))
-      },{"validator": ConfirmSenhaValidator.isMatching})
+        senha: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)])),
+        confirm: new FormControl('', Validators.compose([Validators.required, Validators.minLength(6)]))
+      }, { validator: ConfirmSenhaValidator.isMatching});
     }
-    
+
+  ngOnInit() {
+  }
+
   async novasenha() {
-    let loadingDialog = await this.loader.create({ message: 'Verificando nova senha...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Verificando nova senha...', spinner: 'crescent' });
     await loadingDialog.present();
-    try{
-      let senha = this.resetform.get("senha").value;
+    try {
+      const senha = this.resetform.get('senha').value;
 
-      let resp = await this.requestProvider.put("reset_senha",{"novasenha":senha, "token": this.token},false)
-      await loadingDialog.dismiss()
+      const resp = await this.requestProvider.put('/reset_senha', {novasenha: senha, token: this.token}, false);
+      await loadingDialog.dismiss();
 
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });
-      
+
       t.present();
-      this.navCtrl.navigateRoot("/login")
-    } catch (error){
-      let t = await this.toast.create({
+      this.navCtrl.navigateRoot('/login');
+    } catch (error) {
+      const t = await this.toast.create({
         message: error.message,
         duration: 3000
-      })
-      
+      });
+
       t.present();
 
       await loadingDialog.dismiss();

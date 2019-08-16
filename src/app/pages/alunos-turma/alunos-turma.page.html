@@ -16,7 +16,7 @@
       </div>
     </ion-title>
     <ion-buttons slot="end" *ngIf="this.authService.isAdmin()">
-      <ion-button (click)="addAlunos()">
+      <ion-button appImgGetter [fileInput]="fileInput" (callback)="commitAddAluno($event)">
           <ion-icon name="person-add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -28,8 +28,8 @@
   <ion-card *ngFor="let obj of alunos">
     <ion-item lines="none">
       <ion-avatar slot="start">
-        <app-secure-img *ngIf="obj.filename" [src]="url+'img/aluno/' + obj.aluno.id + '/' + obj.filename"></app-secure-img>
-        <img *ngIf="!obj.filename" src="../../assets/imgs/avatar.svg"/>
+        <app-secure-img *ngIf="obj.filename" [src]="url+'/img/aluno/' + obj.aluno.id + '/' + obj.filename"></app-secure-img>
+        <img *ngIf="!obj.filename" src="./assets/imgs/avatar.svg"/>
       </ion-avatar>
       <ion-card-header>
         <ion-card-title>{{obj.aluno.nome}}</ion-card-title>
@@ -46,5 +46,7 @@
       Nenhum aluno se inscreveu nessa turma ainda.
     </ion-item>
   </div>
+
+  <input #fileInput (change)="commitAddAluno($event.target.files[0])" *ngIf="!plat.is('cordova')" type="file">
 
 </ion-content>

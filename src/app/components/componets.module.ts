@@ -6,8 +6,6 @@ import { IonicModule } from '@ionic/angular';
 import { CameraService } from '../service/camera.service';
 import { Camera } from '@ionic-native/camera/ngx';
 import { SecureImgComponent } from './secure-img/secure-img.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from '../service/auth-interceptor';
 
 @NgModule({
   declarations: [AddFotoComponent, PopoverNavComponent, SecureImgComponent],
@@ -17,12 +15,7 @@ import { AuthInterceptor } from '../service/auth-interceptor';
   ],
   providers: [
     CameraService,
-    Camera,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    }
+    Camera
   ],
   entryComponents: [PopoverNavComponent],
   exports: [AddFotoComponent, PopoverNavComponent, SecureImgComponent]

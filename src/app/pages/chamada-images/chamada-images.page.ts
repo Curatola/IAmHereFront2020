@@ -5,7 +5,7 @@ import { Turma } from 'src/models/turma';
 import { Chamada } from 'src/models/chamada';
 import { NavController, ToastController, IonSlides } from '@ionic/angular';
 import { AuthService } from '../../service/auth.service';
-import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 @Component({
   selector: 'app-chamada-images',
@@ -13,10 +13,6 @@ import { StatusBar } from "@ionic-native/status-bar/ngx";
   styleUrls: ['./chamada-images.page.scss'],
 })
 export class ChamadaImagesPage implements OnInit {
-
-  ngOnInit() {
-  }
-
   turma: Turma;
   chamada: Chamada;
   filenames: Array<string>;
@@ -31,29 +27,29 @@ export class ChamadaImagesPage implements OnInit {
     private toast: ToastController,
     private statusBar: StatusBar
     ) {
-    this.turma = navParams.get("turma");
-    this.chamada = navParams.get("chamada");
+    this.turma = navParams.get('turma');
+    this.chamada = navParams.get('chamada');
 
     this.statusBar.hide();
 
     this.getFilenamesImg();
   }
 
-  event(data){
-    if (data.type === "swipe"){
+  event(data) {
+    if (data.type === 'swipe') {
       this.slides.lockSwipes(true);
-    } else if (data.type === "touchend") {
+    } else if (data.type === 'touchend') {
       this.slides.lockSwipes(false);
     }
   }
 
-  showStatusBar(){
+  showStatusBar() {
     this.statusBar.show();
   }
 
   async getFilenamesImg() {
-    try{
-      let resp = await this.requests.get("img/filename/turma/"+this.turma.id+"/chamada/"+this.chamada.id);
+    try {
+      const resp = await this.requests.get('/img/filename/turma/'+this.turma.id+'/chamada/'+this.chamada.id);
       this.filenames = Array();
       resp.forEach(elem => {
         this.filenames.push(elem);
@@ -63,4 +59,6 @@ export class ChamadaImagesPage implements OnInit {
     }
   }
 
+  ngOnInit() {
+  }
 }

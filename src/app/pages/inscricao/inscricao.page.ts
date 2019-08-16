@@ -11,14 +11,11 @@ import { NavParamsService } from '../../service/nav-params.service';
   styleUrls: ['./inscricao.page.scss'],
 })
 export class InscricaoPage implements OnInit {
-
-  ngOnInit() {
-  }
-
   form: FormGroup;
   msgs = ValidatorMessages.msgs;
 
-  constructor(public navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     public navParams: NavParamsService,
     private requests: RequestService,
     private toast: ToastController,
@@ -26,29 +23,29 @@ export class InscricaoPage implements OnInit {
     public events: Events,
     private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
-      codTurma: new FormControl("", Validators.required),
-      senhaTurma: new FormControl("", Validators.compose([Validators.required, Validators.minLength(4)]))
-    })
+      codTurma: new FormControl('', Validators.required),
+      senhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)]))
+    });
   }
 
   async confirmar() {
-    let loadingDialog = await this.loader.create({ message: 'Fazendo inscrição...', spinner: 'crescent' })
-    await loadingDialog.present()
+    const loadingDialog = await this.loader.create({ message: 'Fazendo inscrição...', spinner: 'crescent' });
+    await loadingDialog.present();
 
     try {
-      let codTurma = this.form.get("codTurma").value;
-      let senhaTurma = this.form.get("senhaTurma").value;
+      const codTurma = this.form.get('codTurma').value;
+      const senhaTurma = this.form.get('senhaTurma').value;
 
-      let resp = await this.requests.post("inscricao/turma/" + codTurma, { senhaTurma: senhaTurma })
+      const resp = await this.requests.post('/inscricao/turma/' + codTurma, { senhaTurma: senhaTurma });
 
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });
 
       t.present();
 
-      this.events.publish("refresh turmas");
+      this.events.publish('refresh turmas');
       this.navCtrl.pop();
 
     } catch (error) {
@@ -56,6 +53,9 @@ export class InscricaoPage implements OnInit {
     } finally {
       await loadingDialog.dismiss();
     }
+  }
+
+  ngOnInit() {
   }
 
 }

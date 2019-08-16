@@ -43,10 +43,10 @@ export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
     super(alertCtrl, navCtrl);
 
     this.turma = navParams.get('turma');
-    this.timestampFoto = navParams.get("timestampFoto")
-    let presencas = navParams.get('presencas');
-    this.qtdPessoasReconhecidas = navParams.get("qtdPessoasReconhecidas")
-    this.chamadas = navParams.get("chamadas");
+    this.timestampFoto = navParams.get('timestampFoto')
+    const presencas = navParams.get('presencas');
+    this.qtdPessoasReconhecidas = navParams.get('qtdPessoasReconhecidas')
+    this.chamadas = navParams.get('chamadas');
     this.atualizaListas(presencas);
   }
 
@@ -55,7 +55,7 @@ export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
     this.ausentes = new Array();
 
     presencas.forEach(elem => {
-      let presenca: any = new Presenca(0, elem.isPresente, new Aluno(elem.alunoId, elem.alunoNome))
+      const presenca: any = new Presenca(0, elem.isPresente, new Aluno(elem.alunoId, elem.alunoNome))
       if (presenca.isPresent) this.presentes.push(presenca);
       else this.ausentes.push(presenca);
     })
@@ -64,21 +64,21 @@ export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
   async done() {
     let presencas: any[] = this.presentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.isPresent });
     presencas = presencas.concat(this.ausentes.filter((presenca: any, index, presencas: Presenca[]) => { return presenca.isPresent }));
-    let alunosPresentesId: any[] = presencas.map((presenca: any, index, presencas: Presenca[]) => { return presenca.aluno.id });
+    const alunosPresentesId: any[] = presencas.map((presenca: any, index, presencas: Presenca[]) => { return presenca.aluno.id });
 
-    let loadingDialog = await this.loader.create({ message: 'Confirmando nova chamada...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Confirmando nova chamada...', spinner: 'crescent' });
     await loadingDialog.present();
 
     try {
-      let resp = await this.requests.post("turma/" + this.turma.id + "/chamada",
+      const resp = await this.requests.post('/turma/' + this.turma.id + '/chamada',
         {
-          "presentes": alunosPresentesId,
-          "dataHora": this.timestampFoto,
-          "qtdPessoasReconhecidas": this.qtdPessoasReconhecidas,
-          "conteudo": this.conteudo
+          presentes: alunosPresentesId,
+          dataHora: this.timestampFoto,
+          qtdPessoasReconhecidas: this.qtdPessoasReconhecidas,
+          conteudo: this.conteudo
         });
 
-      let t = await this.toast.create({
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });

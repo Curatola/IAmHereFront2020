@@ -20,9 +20,14 @@ img {
     max-height: 100vh !important;
 }
 
+ion-slide {
+    width: 100% ;
+}
+
 ion-content{
     --ion-background-color:black;
     height: 100%;
+    max-width: 100% !important;
 }
 
 .slide-zoom {

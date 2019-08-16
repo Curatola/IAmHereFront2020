@@ -2,7 +2,7 @@ import { Component, OnChanges, Input } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
-import {map, switchMap} from "rxjs/operators";
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-secure-img',
@@ -17,7 +17,7 @@ export class SecureImgComponent implements OnChanges  {
   @Input() private src: string;
   @Input() spinnerColor: string;
   private src$ = new BehaviorSubject(this.src);
-  loaded: boolean = false;
+  loaded = false;
 
   ngOnChanges(): void {
     this.src$.next(this.src);

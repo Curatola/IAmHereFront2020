@@ -4,6 +4,37 @@ import { RequestService } from '../../service/request.service';
 import { IonInfiniteScroll, NavController, LoadingController, ToastController } from '@ionic/angular';
 import { Turma } from 'src/models/turma';
 
+class PresencasTurma {
+  isPresente: boolean;
+  dateHour: number;
+  dateStr: string;
+  dateShort: string;
+  timeStr: string;
+
+  constructor(isPresente: boolean, dateHour: number) {
+    this.isPresente = isPresente;
+    this.dateHour = dateHour;
+    this.dateStr = this.getDateStr();
+    this.dateShort = this.getDateShort();
+    this.timeStr = this.getTimeStr();
+  }
+
+  getDateStr() {
+    const options = {month: 'long', day: '2-digit'};
+    return new Date(this.dateHour * 1000).toLocaleDateString('pt-BR', options);
+}
+
+  getTimeStr() {
+      const options = {hour: '2-digit', minute: '2-digit'};
+      return new Date(this.dateHour * 1000).toLocaleTimeString('pt-BR', options);
+  }
+  getDateShort() {
+      const options = {month: '2-digit', day: '2-digit'};
+      return new Date(this.dateHour).toLocaleDateString('pt-BR', options);
+  }
+
+}
+
 @Component({
   selector: 'app-presenca-turma',
   templateUrl: './presenca-turma.page.html',
@@ -11,8 +42,7 @@ import { Turma } from 'src/models/turma';
 })
 export class PresencaTurmaPage implements OnInit {
 
-  ngOnInit() {
-  }
+
 
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
   presencas: Array<PresencasTurma>;
@@ -21,19 +51,23 @@ export class PresencaTurmaPage implements OnInit {
   qtdPresenca: number;
   qtdChamada: number;
 
-  constructor(public navCtrl: NavController,
+  constructor(
+      public navCtrl: NavController,
       public navParams: NavParamsService,
       public requests: RequestService,
       private loader: LoadingController,
       public toast: ToastController
-     ) {
-    this.turma = navParams.get("turma");
-    
-    this.load()
+    ) {
+    this.turma = navParams.get('turma');
+
+    this.load();
+  }
+
+  ngOnInit() {
   }
 
   async load() {
-    let loadingDialog = await this.loader.create({ message: 'Carregando Chamadas...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Carregando Chamadas...', spinner: 'crescent' });
     await loadingDialog.present();
     await this.doInfinit();
     await loadingDialog.dismiss();
@@ -41,15 +75,15 @@ export class PresencaTurmaPage implements OnInit {
 
   async doInfinit() {
     try {
-      let resp = await this.requests.get("turma/" + this.turma.id + "/presencas/pag/" + this.page);
+      const resp = await this.requests.get('/turma/' + this.turma.id + '/presencas/pag/' + this.page);
       if (!this.presencas) this.presencas = new Array();
       resp.presencas.forEach(elem => {
         this.presencas.push(new PresencasTurma(elem.isPresente, elem.dateHour));
-      })
+      });
 
       this.qtdChamada = resp.qtdChamada;
       this.qtdPresenca = resp.qtdPresenca;
-  
+
       if (!resp.hasMorePages) {
         this.infiniteScroll.disabled = true;
       } else {
@@ -64,33 +98,4 @@ export class PresencaTurmaPage implements OnInit {
 
 }
 
-class PresencasTurma {
-  isPresente: boolean
-  dateHour: number
-  dateStr: string
-  dateShort: string 
-  timeStr: string
 
-  constructor (isPresente: boolean, dateHour: number){
-    this.isPresente = isPresente; 
-    this.dateHour = dateHour;
-    this.dateStr = this.getDateStr();
-    this.dateShort = this.getDateShort();
-    this.timeStr = this.getTimeStr();
-  }
-
-  getDateStr(){
-    let options={month:'long',day:'2-digit'}
-    return new Date(this.dateHour * 1000).toLocaleDateString('pt-BR',options);
-}
-
-  getTimeStr(){
-      let options={hour:'2-digit',minute:'2-digit'}
-      return new Date(this.dateHour * 1000).toLocaleTimeString('pt-BR',options);
-  }
-  getDateShort(){
-      let options={month:'2-digit',day:'2-digit'}
-     return new Date(this.dateHour).toLocaleDateString('pt-BR',options);
-  }
-
-}

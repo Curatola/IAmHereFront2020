@@ -65,7 +65,7 @@ export class CadastroRapidoPage extends ComponentCanDeactivate implements OnInit
     await loadingDialog.present();
 
     try {
-      const resp = await this.requests.post('inscricao/rapida/turma/' + this.turma.id, { pessoas: this.imgs });
+      const resp = await this.requests.post('/inscricao/rapida/turma/' + this.turma.id, { pessoas: this.imgs });
 
       const t = await this.toast.create({
         message: resp.sucesso,

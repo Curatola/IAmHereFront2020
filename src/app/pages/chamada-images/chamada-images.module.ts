@@ -6,7 +6,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ChamadaImagesPage } from './chamada-images.page';
-import { IonicImageLoader } from 'ionic-image-loader';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { DirectivesModule } from '../../directives/directives.module';
 import { ComponetsModule } from 'src/app/components/componets.module';
@@ -24,7 +23,6 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    IonicImageLoader,
     ComponetsModule,
     PinchZoomModule,
     DirectivesModule

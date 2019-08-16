@@ -12,14 +12,7 @@ import { RequestService } from '../../service/request.service';
   styleUrls: ['./prof-cadastro.page.scss'],
 })
 export class ProfCadastroPage implements OnInit {
-  ngOnInit() {
-    this.form = this.formBuilder.group({
-      nome: new FormControl("",Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern("^[a-zA-Z\u00C0-\u024F ]+$")])),
-      email: new FormControl("", Validators.compose([Validators.required, Validators.email])),
-      senha: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)])),
-      confirm: new FormControl("",Validators.compose([Validators.required, Validators.minLength(6)]))
-    }, { "validator": ConfirmSenhaValidator.isMatching })
-  }
+  
 
   form: FormGroup;
   msgs = ValidatorMessages.msgs;
@@ -33,28 +26,36 @@ export class ProfCadastroPage implements OnInit {
     private formBuilder: FormBuilder) {
   }
 
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      nome: new FormControl('',Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern('^[a-zA-Z\u00C0-\u024F ]+$')])),
+      email: new FormControl('', Validators.compose([Validators.required, Validators.email])),
+      senha: new FormControl('',Validators.compose([Validators.required, Validators.minLength(6)])),
+      confirm: new FormControl('',Validators.compose([Validators.required, Validators.minLength(6)]))
+    }, { validator: ConfirmSenhaValidator.isMatching });
+  }
 
-  async cadastrar(){
-    let loadingDialog = await this.loader.create({ message: 'Cadastrando, aguarde...', spinner: 'crescent' });
+  async cadastrar() {
+    const loadingDialog = await this.loader.create({ message: 'Cadastrando, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
 
-    let nome = this.form.get("nome").value;
-    let email = this.form.get("email").value;
-    let senha = this.form.get("senha").value;
+    const nome = this.form.get('nome').value;
+    const email = this.form.get('email').value;
+    const senha = this.form.get('senha').value;
 
-    let data = {"nome": nome, "login": email, "senha": senha} 
-    try{
-      let resp = await this.request.post("professor", data, false)
-      let t = await this.toast.create({
+    const data = { nome, login: email, senha };
+    try {
+      const resp = await this.request.post('/professor', data, false);
+      const t = await this.toast.create({
         message: resp.sucesso,
         duration: 3000
       });
 
       t.present();
       this.navCtrl.pop();
-    }catch (error){
+    } catch (error) {
       await this.request.requestErrorPageHandler(error, this.toast, this.navCtrl);
-    }finally{
+    } finally {
       await loadingDialog.dismiss();
     }
   }

@@ -46,4 +46,4 @@
 
 </ion-content>
 
-<app-add-foto [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>
+<app-add-foto *ngIf="plat.is('cordova')" [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>
