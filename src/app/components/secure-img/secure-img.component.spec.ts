@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SecureImgComponent } from './secure-img.component';
 
 describe('SecureImgComponent', () => {
@@ -8,7 +8,7 @@ describe('SecureImgComponent', () => {
   let fixture: ComponentFixture<SecureImgComponent>;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
+    TestBed.configureTestingModule({imports: [HttpClientTestingModule],
       declarations: [ SecureImgComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })

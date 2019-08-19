@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { PerfilUsuarioPage } from './perfil-usuario.page';
-import { ComponetsModule } from 'src/app/components/componets.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 
 const routes: Routes = [
@@ -23,7 +23,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
-    ComponetsModule,
+    ComponentsModule,
     DirectivesModule
   ],
   declarations: [PerfilUsuarioPage]

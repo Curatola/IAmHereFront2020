@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { ChamadaImagesPage } from './chamada-images.page';
 import { PinchZoomModule } from 'ngx-pinch-zoom';
 import { DirectivesModule } from '../../directives/directives.module';
-import { ComponetsModule } from 'src/app/components/componets.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 const routes: Routes = [
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponetsModule,
+    ComponentsModule,
     PinchZoomModule,
     DirectivesModule
   ],

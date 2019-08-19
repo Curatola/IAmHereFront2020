@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { AlunosTurmaPage } from './alunos-turma.page';
-import { ComponetsModule } from 'src/app/components/componets.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 
 const routes: Routes = [
@@ -21,9 +21,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    ComponetsModule,
-    RouterModule.forChild(routes),
     DirectivesModule
+    ComponentsModule,
+    RouterModule.forChild(routes)
   ],
   declarations: [AlunosTurmaPage]
 })

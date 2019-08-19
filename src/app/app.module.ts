@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { File } from '@ionic-native/file/ngx';
-import { ComponetsModule } from './components/componets.module';
+import { ComponentsModule } from './components/components.module';
 import { WebView } from '@ionic-native/ionic-webview/ngx';
 import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { CanDeactivateGuard } from './can-deactivate.guard';
@@ -26,7 +26,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    ComponetsModule
+    ComponentsModule
   ],
   providers: [
     StatusBar,

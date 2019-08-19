@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ChamadasPage } from './chamadas.page';
-import { ComponetsModule } from '../../components/componets.module';
+import { ComponentsModule } from '../../components/components.module';
 
 
 
@@ -23,7 +23,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponetsModule
+    ComponentsModule
   ],
   declarations: [ChamadasPage]
 })
