@@ -2,6 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PresencaPage } from './presenca.page';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('PresencaPage', () => {
   let component: PresencaPage;
@@ -11,6 +12,7 @@ describe('PresencaPage', () => {
     TestBed.configureTestingModule({
       declarations: [ PresencaPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [FormsModule,ReactiveFormsModule],
     })
     .compileComponents();
   }));

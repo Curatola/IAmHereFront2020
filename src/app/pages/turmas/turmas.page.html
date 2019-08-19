@@ -20,7 +20,7 @@
 
 
 <ion-content>
-  <div [ngSwitch]="userType">
+  <div class="scroller scroller-fab-padding" [ngSwitch]="userType">
     <div *ngSwitchCase="'Professor'">
       <ion-card *ngFor="let turma of turmas">
         <ion-item>
@@ -87,10 +87,8 @@
       </div>
 
     </div>
-
   </div>
 
-  <div style="width: 100%; height: 75px;"></div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button ion-fab (click)="add()">

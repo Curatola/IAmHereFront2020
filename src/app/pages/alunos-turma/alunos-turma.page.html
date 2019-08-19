@@ -25,28 +25,31 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let obj of alunos">
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <app-secure-img *ngIf="obj.filename" [src]="url+'/img/aluno/' + obj.aluno.id + '/' + obj.filename"></app-secure-img>
-        <img *ngIf="!obj.filename" src="./assets/imgs/avatar.svg"/>
-      </ion-avatar>
-      <ion-card-header>
-        <ion-card-title>{{obj.aluno.nome}}</ion-card-title>
-      </ion-card-header>
-      <h3 style="font-size: 14px">{{obj.presenca}}/{{qtdChamada}}</h3>
-      <ion-button fill="clear" (click)="desinscrever(obj)">
-        <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-card>
+  <div class="scroller">
+    <ion-card *ngFor="let obj of alunos">
+      <ion-item lines="none">
+        <ion-avatar slot="start">
+          <app-secure-img *ngIf="obj.filename" [src]="url+'/img/aluno/' + obj.aluno.id + '/' + obj.filename"></app-secure-img>
+          <img *ngIf="!obj.filename" src="./assets/imgs/avatar.svg"/>
+        </ion-avatar>
+        <ion-card-header>
+          <ion-card-title>{{obj.aluno.nome}}</ion-card-title>
+        </ion-card-header>
+        <h3 style="font-size: 14px">{{obj.presenca}}/{{qtdChamada}}</h3>
+        <ion-button fill="clear" (click)="desinscrever(obj)">
+          <ion-icon slot="icon-only" name="trash" color="danger"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card>
 
-  <div padding-top *ngIf="alunos && alunos.length <= 0">
-    <ion-item>
-      Nenhum aluno se inscreveu nessa turma ainda.
-    </ion-item>
+    <div padding-top *ngIf="alunos && alunos.length <= 0">
+      <ion-item>
+        Nenhum aluno se inscreveu nessa turma ainda.
+      </ion-item>
+    </div>
+
+    <input #fileInput (change)="commitAddAluno($event.target.files[0])" *ngIf="!plat.is('cordova')" type="file">
+
   </div>
-
-  <input #fileInput (change)="commitAddAluno($event.target.files[0])" *ngIf="!plat.is('cordova')" type="file">
 
 </ion-content>

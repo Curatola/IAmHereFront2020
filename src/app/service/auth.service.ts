@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor(public http: HttpClient) {}
   public static readonly API_VERSION = 'api_v1';
-  public static readonly API_URL = 'http://192.168.0.3:5000/' + AuthService.API_VERSION;
+  public static readonly API_URL = 'http://172.17.105.233:5000/' + AuthService.API_VERSION;
 
   public static readonly PROFESSOR = 'Professor';
   public static readonly ALUNO = 'Aluno';

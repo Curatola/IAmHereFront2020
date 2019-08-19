@@ -14,7 +14,7 @@ import { NavParamsService } from './service/nav-params.service';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  
+
   constructor(
     platform: Platform,
     private toast: ToastController,
@@ -46,10 +46,12 @@ export class AppComponent {
       if (logged) router.navigate(['turmas'])
       else router.navigate(['login'])
 
-      this.deep.route({
-        '/confirm_email/:token': '/login',
-        '/reset_senha/:token': '/nova-senha',
-      }).subscribe(
+      const routes = {};
+      routes['/' + AuthService.API_VERSION + '/confirm_email/:token'] = '/login';
+      routes['/reset_senha/:token'] = '/nova-senha';
+
+      this.deep.route(routes)
+      .subscribe(
         match => {
           this.handle_deeplink(match);
         },
