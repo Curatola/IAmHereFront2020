@@ -6,8 +6,8 @@ export class ValidatorMessages{
             {type: "pattern", msg: "Nome deve conter apenas letras"}
         ],
         "matricula": [
-            {type: "required", msg: "Matricula é obrigatória"},
-            {type: "pattern", msg: "Matricula deve conter apenas letras e números"}
+            {type: "required", msg: "Matrícula é obrigatória"},
+            {type: "pattern", msg: "Matrícula deve conter apenas letras e números"}
         ],
         "email": [
             {type: "required", msg: "Email é obrigatório"},

@@ -55,6 +55,8 @@
         <ion-input type="text" formControlName="nome"></ion-input>
       </ion-item>
 
+      
+
       <div>
         <ng-container *ngFor="let validation of msgs.nome">
           <div class="error-message"
@@ -80,7 +82,7 @@
         </div>
       </div>
 
-      <div id="senhaWrapper">
+      <div id="senhaWrapper"> <!--Editar aqui-->
         <ion-item>
           <ion-label position="floating">Senha</ion-label>
           <ion-input #senhaInput type="password" formControlName="senha"></ion-input>
@@ -88,6 +90,7 @@
         <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}">
         </ion-checkbox>
       </div>
+
 
       <div>
         <ng-container *ngFor="let validation of msgs.senha">
