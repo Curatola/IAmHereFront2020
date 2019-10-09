@@ -6,6 +6,7 @@ import { ValidatorMessages } from '../../validator-messages';
 import { Turma } from 'src/models/turma';
 import { TurmasPage } from '../turmas/turmas.page';
 import { NavController, LoadingController, ToastController } from '@ionic/angular';
+import { ConfirmSenhaValidator } from 'src/app/confirm-senha-validator';
 
 @Component({
   selector: 'app-criar-turma',
@@ -34,8 +35,10 @@ export class CriarTurmaPage implements OnInit {
         nome: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern('^[a-zA-Z0-9\u00C0-\u024F ]+$')])),
         ano: new FormControl('', Validators.required),
         semestre: new FormControl('', Validators.compose([Validators.required, Validators.max(2), Validators.min(1)])),
-        senhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)]))
-    });
+        senhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)])),
+        confirmSenhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)])),
+        codAcademico: new FormControl('', Validators.compose([Validators.required, Validators.min(1), Validators.max(99999999)]))
+    }, { validator: ConfirmSenhaValidator.isMatching });
   }
 
   async criar() {
@@ -46,10 +49,11 @@ export class CriarTurmaPage implements OnInit {
     const ano = this.form.get('ano').value;
     const semestre = this.form.get('semestre').value;
     const senhaTurma = this.form.get('senhaTurma').value;
+    const codAcademico = this.form.get('codAcademico').value;
 
-    const data = { nome, ano, semestre, senha: senhaTurma }; 
+    const data = { nome, ano, semestre, senha: senhaTurma, codAcademico };
 
-    try{
+    try {
       const resp = await this.requests.post('/turma', data);
 
       const t = await this.toast.create({
@@ -59,7 +63,7 @@ export class CriarTurmaPage implements OnInit {
 
       t.present();
 
-      this.turmas.push(new Turma(resp.id, nome, ano, semestre, true));
+      this.turmas.push(new Turma(resp.id, nome, ano, semestre, true, codAcademico));
       this.turmasPage.ordenarTurmas();
       this.navCtrl.pop();
 

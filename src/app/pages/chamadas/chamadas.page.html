@@ -30,7 +30,10 @@
     <ion-card *ngFor="let chamada of chamadas">
       <ion-item lines="none">
         <ion-card-header (click)="details(chamada)">
-          <ion-card-title>{{chamada.dateStr}} - {{chamada.timeStr}}</ion-card-title>
+          <ion-card-title>
+            {{chamada.dateStr}} - {{chamada.timeStr}}
+            <ion-icon  *ngIf="chamada.isCommited && !chamada.isEdited" name="checkbox-outline"></ion-icon>
+          </ion-card-title>
           <ion-card-subtitle>{{chamada.conteudo}}</ion-card-subtitle>
         </ion-card-header>
         <ion-button fill="clear" (click)="apagarChamada($event, chamada)">
@@ -46,4 +49,4 @@
 
 </ion-content>
 
-<app-add-foto *ngIf="plat.is('cordova')" [uploadFunction]="this.uploadFile.bind(this)"></app-add-foto>
+<app-add-foto *ngIf="plat.is('cordova')" [chamadas]="chamadas" (uploadFunction)="uploadFile($event)"></app-add-foto>

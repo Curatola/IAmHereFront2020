@@ -12,6 +12,7 @@ import { RequestService } from '../../service/request.service';
 import { Chamada } from 'src/models/chamada';
 import { Turma } from 'src/models/turma';
 import { NavParamsService } from '../../service/nav-params.service';
+import { SyncronizationService } from 'src/app/service/syncronization.service';
 
 @Component({
   selector: 'app-chamadas',
@@ -34,7 +35,8 @@ export class ChamadasPage implements OnInit {
     public actionSheetCtrl: ActionSheetController,
     public alertCtrl: AlertController,
     private changeDet: ChangeDetectorRef,
-    public plat: Platform
+    public plat: Platform,
+    private sync: SyncronizationService
   ) {
     this.turma = navParams.get('turma');
 
@@ -61,7 +63,7 @@ export class ChamadasPage implements OnInit {
         this.chamadas = new Array();
       }
       resp.chamadas.forEach(elem => {
-        this.chamadas.push(new Chamada(elem.id, elem.dateHour, elem.conteudo));
+        this.chamadas.push(new Chamada(elem.id, elem.dateHour, elem.conteudo, elem.is_commited, elem.is_edited));
       });
 
       if (!resp.hasMorePages) {
@@ -82,15 +84,9 @@ export class ChamadasPage implements OnInit {
 
   async apagarChamada(event, chamada: Chamada) {
     event.stopPropagation();
-    let msg = '';
-
-    if (!this.hasOthersChamadasInDay(chamada)) {
-      msg = 'Só existe essa chamada desse dia';
-    }
 
     const alert = await this.alertCtrl.create({
       header: 'Deseja mesmo apagar essa chamada?',
-      message: msg,
       buttons: [
         {
           text: 'Não',
@@ -104,6 +100,7 @@ export class ChamadasPage implements OnInit {
         }
       ]
     });
+
     alert.present();
   }
 
@@ -127,6 +124,8 @@ export class ChamadasPage implements OnInit {
       });
       t.present();
 
+      this.sync.setIsSync(false);
+
       this.changeDet.detectChanges();
     } catch (error) {
       await this.requests.requestErrorPageHandler(
@@ -137,14 +136,6 @@ export class ChamadasPage implements OnInit {
     } finally {
       await loadingDialog.dismiss();
     }
-  }
-
-  private hasOthersChamadasInDay(chamada: Chamada) {
-    const currentDate = new Date(chamada.dateHour).setHours(0, 0, 0, 0);
-    return this.chamadas.some((c: Chamada) => {
-      const dateC = new Date(c.dateHour).setHours(0, 0, 0, 0);
-      return dateC === currentDate && c !== chamada;
-    });
   }
 
   details(chamada: Chamada): void {
@@ -158,7 +149,14 @@ export class ChamadasPage implements OnInit {
     if (event) event.target.complete();
   }
 
-  async uploadFile(filesPath: Array<string>) {
+  async uploadFile(data: any) {
+    const pathFotos: Array<string> = data.pathFotos;
+    const chamadaApagar: Chamada = data.chamadaApagar;
+
+    if (chamadaApagar) {
+      await this.commitApagar(chamadaApagar);
+    }
+
     let presentes: Array<number> = new Array();
     let sucess = true;
     let result: any;
@@ -167,7 +165,7 @@ export class ChamadasPage implements OnInit {
 
     let i = 1;
 
-    for (const filePath of filesPath) {
+    for (const pathFoto of pathFotos) {
       const loadingDialog = await this.loader.create({
         message: 'Uploading foto ' + i + '...'
       });
@@ -176,7 +174,7 @@ export class ChamadasPage implements OnInit {
       try {
         const resp = await this.requests.uploadFile(
           '/turma/' + this.turma.id + '/chamada',
-          filePath,
+          pathFoto,
           {
             previousPresentes: presentes,
             dataHoraOriginal: (result) ? timestampPrimeiraFoto : undefined
@@ -210,7 +208,8 @@ export class ChamadasPage implements OnInit {
     if (sucess) {
       result.timestampFoto = timestampPrimeiraFoto;
       result.qtdPessoasReconhecidas = qtdPessoasReconhecidas;
-
+      
+      this.sync.setIsSync(false);
       this.navParams.setParams(result);
       this.navCtrl.navigateForward('/confirma');
     }

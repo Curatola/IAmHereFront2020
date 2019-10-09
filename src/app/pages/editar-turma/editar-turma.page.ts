@@ -24,6 +24,8 @@ export class EditarTurmaPage implements OnInit {
   turma: Turma;
   enableSenha: boolean;
 
+  //TODO adicionar campo codAcademico
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParamsService,
@@ -40,7 +42,8 @@ export class EditarTurmaPage implements OnInit {
       ano: new FormControl(this.turma.ano, Validators.required),
       semestre: new FormControl(this.turma.semestre, Validators.required),
       senhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)])),
-      confirmSenhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)]))
+      confirmSenhaTurma: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4)])),
+      codAcademico: new FormControl(this.turma.codAcademico, Validators.compose([Validators.required, Validators.min(1), Validators.max(99999999)]))
     },  { validator: ConfirmSenhaValidator.isMatching });
 
     this.form.get('senhaTurma').disable();
@@ -73,8 +76,9 @@ export class EditarTurmaPage implements OnInit {
     const ano = this.form.get('ano').value;
     const semestre = this.form.get('semestre').value;
     const senhaTurma = this.form.get('senhaTurma');
+    const codAcademico = this.form.get('codAcademico').value;
 
-    const data = { nome, ano, semestre};
+    const data = { nome, ano, semestre, cod_academico: codAcademico};
 
     if (senhaTurma.enabled) {
       data['senha'] = senhaTurma.value;

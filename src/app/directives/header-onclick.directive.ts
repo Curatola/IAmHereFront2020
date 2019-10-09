@@ -21,10 +21,10 @@ export class HeaderOnclickDirective {
     this.renderer.setStyle(this.header.el, 'top', '0px');
   }
 
-  onClick(){
-    if (this.isHided){
+  onClick() {
+    if (this.isHided) {
       this.renderer.setStyle(this.header.el, 'top', '0px');
-    }else{
+    } else {
       this.renderer.setStyle(this.header.el, 'top', '-56px');
     }
 

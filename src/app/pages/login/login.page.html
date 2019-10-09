@@ -7,56 +7,59 @@
 </ion-header>
 
 
-<ion-content padding>
-  <div padding>
-    <img height="auto" width="25%" alt="your image"
-      src="./assets/imgs/logo.png">
-  </div>
+<ion-content>
 
-  <form notfull [formGroup]="form" (ngSubmit)="login()">
-    <ion-item>
-      <ion-label position="floating">Email</ion-label>
-      <ion-input type="email" formControlName="email"></ion-input>
-    </ion-item>
-
-    <div>
-      <ng-container *ngFor="let validation of msgs.email">
-        <div class="error-message"
-          *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
-          {{ validation.msg }}
-        </div>
-      </ng-container>
-    </div>
-
-    <ion-item>
-      <ion-label position="floating">Senha</ion-label>
-      <ion-input type="password" formControlName="senha"></ion-input>
-    </ion-item>
-
-    <div>
-      <ng-container *ngFor="let validation of msgs.senha">
-        <div class="error-message"
-          *ngIf="form.get('senha').hasError(validation.type) && (form.get('senha').dirty || form.get('senha').touched)">
-          {{ validation.msg }}
-        </div>
-      </ng-container>
-    </div>
-
-    <ion-item>
-      <ion-label>Manter conectado</ion-label>
-      <ion-checkbox formControlName="remember"></ion-checkbox>
-    </ion-item>
+  <div class="scroller" padding>
 
     <div padding>
-      <ion-button type="submit" [disabled]="!form.valid"  expand="full">Entrar</ion-button>
+      <img height="auto" width="20%" alt="your image" src="./assets/imgs/logo.png">
     </div>
 
-  </form>
+    <form notfull [formGroup]="form" (submit)="login()">
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input type="email" formControlName="email"></ion-input>
+      </ion-item>
 
-  <div align="center">
-    <p><a href="#" (click)="goPageEsqueciSenha($event)">Esqueci minha senha</a></p>
-    <p><a href="#" (click)="goPageAlunoCadastro($event)">Cadastrar-se como Aluno</a></p>
-    <p><a href="#" (click)="goPageProfCadastro($event)">Cadastrar-se como Professor</a></p>
-    <p><a href="#" (click)="goPageNewConfirm($event)">Gerar email de confirmação</a></p> 
+      <div>
+        <ng-container *ngFor="let validation of msgs.email">
+          <div class="error-message"
+            *ngIf="form.get('email').hasError(validation.type) && (form.get('email').dirty || form.get('email').touched)">
+            {{ validation.msg }}
+          </div>
+        </ng-container>
+      </div>
+
+      <ion-item>
+        <ion-label position="floating">Senha</ion-label>
+        <ion-input type="password" formControlName="senha"></ion-input>
+      </ion-item>
+
+      <div>
+        <ng-container *ngFor="let validation of msgs.senha">
+          <div class="error-message"
+            *ngIf="form.get('senha').hasError(validation.type) && (form.get('senha').dirty || form.get('senha').touched)">
+            {{ validation.msg }}
+          </div>
+        </ng-container>
+      </div>
+
+      <ion-item>
+        <ion-label>Manter conectado</ion-label>
+        <ion-checkbox formControlName="remember"></ion-checkbox>
+      </ion-item>
+
+      <div padding>
+        <ion-button type="submit" [disabled]="!form.valid" expand="full">Entrar</ion-button>
+      </div>
+
+    </form>
+
+    <div align="center">
+      <p><a href="#" (click)="goPageEsqueciSenha($event)">Esqueci minha senha</a></p>
+      <p><a href="#" (click)="goPageAlunoCadastro($event)">Cadastrar-se como Aluno</a></p>
+      <p><a href="#" (click)="goPageProfCadastro($event)">Cadastrar-se como Professor</a></p>
+      <p><a href="#" (click)="goPageNewConfirm($event)">Gerar email de confirmação</a></p>
+    </div>
   </div>
 </ion-content>

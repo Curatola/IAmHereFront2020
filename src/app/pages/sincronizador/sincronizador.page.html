@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Sincronizar Chamadas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form" (submit)="sincronizar()">
+    <ion-item>
+      <ion-label position="floating">Login do Acadêmico</ion-label>
+      <ion-input type="text" formControlName="loginAcademico"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.loginAcademico">
+        <div class="error-message"
+          *ngIf="form.get('loginAcademico').hasError(validation.type) && (form.get('loginAcademico').dirty || form.get('loginAcademico').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label position="floating">Senha do Acadêmico</ion-label>
+      <ion-input type="password" formControlName="senhaAcademico"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.senhaAcademico">
+        <div class="error-message"
+          *ngIf="form.get('senhaAcademico').hasError(validation.type) && (form.get('senhaAcademico').dirty || form.get('senhaAcademico').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-item>
+      <ion-label>Lembrar</ion-label>
+      <ion-checkbox formControlName="remember"></ion-checkbox>
+    </ion-item>
+
+    <div id="wrapper">
+      <ion-button type="submit" [disabled]="!form.valid">
+        Sincronizar
+      </ion-button>
+    </div>
+
+  </form>
+
+</ion-content>

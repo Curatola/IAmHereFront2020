@@ -5,13 +5,15 @@ export class Turma {
     nome: string;
     ano: string;
     semestre: string;
-    inscricoes_aberta: boolean;
+    inscricoesAberta: boolean;
+    codAcademico: number;
 
-    constructor(id: number, nome: string, ano: string, semestre: string, inscricoes_aberta: boolean) {
+    constructor(id: number, nome: string, ano: string, semestre: string, inscricoesAberta: boolean, codAcademico: number) {
         this.id = id;
         this.nome = nome;
         this.ano = ano;
         this.semestre = semestre;
-        this.inscricoes_aberta = inscricoes_aberta;
+        this.inscricoesAberta = inscricoesAberta;
+        this.codAcademico = codAcademico;
     }
 }

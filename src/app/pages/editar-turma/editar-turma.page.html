@@ -62,12 +62,27 @@
       </ng-container>
     </div>
 
+    <ion-item>
+      <ion-label position="floating">Código do Acadêmico</ion-label>
+      <ion-input type="number" formControlName="codAcademico"></ion-input>
+    </ion-item>
+
+    <div>
+      <ng-container *ngFor="let validation of msgs.codAcademico">
+        <div class="error-message"
+          *ngIf="form.get('codAcademico').hasError(validation.type) && (form.get('codAcademico').dirty || form.get('codAcademico').touched)">
+          {{ validation.msg }}
+        </div>
+      </ng-container>
+    </div>
+
     <div id="senhaWrapper">
       <ion-item>
         <ion-label position="floating">Senha</ion-label>
         <ion-input #senhaInput type="password" formControlName="senhaTurma"></ion-input>
       </ion-item>
-      <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}"></ion-checkbox>
+      <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}">
+      </ion-checkbox>
     </div>
 
     <div>

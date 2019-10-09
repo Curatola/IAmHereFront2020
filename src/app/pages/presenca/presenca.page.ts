@@ -12,6 +12,7 @@ import {
 } from '@ionic/angular';
 import { Aluno } from 'src/models/aluno';
 import { ComponentCanDeactivate } from 'src/app/component-can-deactivate';
+import { SyncronizationService } from 'src/app/service/syncronization.service';
 
 @Component({
   selector: 'app-presenca',
@@ -24,7 +25,7 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
   ausentes: Array<Presenca>;
   turma: Turma;
   chamada: Chamada;
-  conteudo: string = "";
+  conteudo = '';
   qtdPessoasReconhecidas: number;
   comparecimento = 'areAusentes';
 
@@ -40,7 +41,8 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
     public requests: RequestService,
     private loader: LoadingController,
     public toast: ToastController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public sync: SyncronizationService
   ) {
     super(alertCtrl, navCtrl);
     this.presentes = new Array();
@@ -146,6 +148,10 @@ export class PresencaPage extends ComponentCanDeactivate implements OnInit {
 
       t.present();
       this.chamada.conteudo = this.conteudo;
+      this.chamada.isEdited = true;
+      this.chamada.isCommited = false;
+
+      this.sync.setIsSync(false);
 
       this.ignore = true;
       this.navCtrl.pop();
