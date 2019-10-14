@@ -6,6 +6,7 @@ import { AuthService } from '../../service/auth.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ConfirmSenhaValidator } from '../../confirm-senha-validator';
 import { ValidatorMessages } from '../../validator-messages';
+import { SyncronizationService } from 'src/app/service/syncronization.service';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -17,6 +18,8 @@ export class PerfilUsuarioPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
   @ViewChild(IonSlides) slides: IonSlides;
   @ViewChild('senhaInput') senhaInput: IonInput;
+  @ViewChild('loginAcademico') loginAcademico: IonInput;
+  @ViewChild('senhaAcademico') senhaAcademico: IonInput;
 
   form: FormGroup;
   msgs = ValidatorMessages.msgs;
@@ -31,6 +34,8 @@ export class PerfilUsuarioPage implements OnInit {
 
   filenames: Array<string> = new Array();
 
+  //TODO adionar campos de login e senha do academico
+
   constructor(
       public navCtrl: NavController,
       public navParams: NavParamsService,
@@ -40,7 +45,8 @@ export class PerfilUsuarioPage implements OnInit {
       private loader: LoadingController,
       private toast: ToastController,
       private changeDet: ChangeDetectorRef,
-      public plat: Platform
+      public plat: Platform,
+      private sync: SyncronizationService
     ) {
       this.form = this.formBuilder.group({
         nome: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4), Validators.pattern('^[a-zA-Z\u00C0-\u024F ]+$')])),
@@ -52,12 +58,19 @@ export class PerfilUsuarioPage implements OnInit {
       this.form.get('confirm').disable();
       this.userType = authProvider.getUserType();
 
-      if (this.userType === 'Aluno') this.form.addControl('matricula', new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')])),)
-
       this.load();
   }
 
   ngOnInit() {
+    if (this.userType === 'Aluno') {
+      this.form.addControl('matricula', new FormControl('', Validators.compose([Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')])));
+    } else {
+      if (this.sync.hasAccount()) {
+        const account = this.sync.getAccount();
+        this.loginAcademico.value = account.loginAcademico;
+        this.senhaAcademico.value = account.senhaAcademico;
+      }
+    }
   }
 
   async getFilenamesImg() {
@@ -72,21 +85,21 @@ export class PerfilUsuarioPage implements OnInit {
   }
 
   async onImageLoad() {
-    if (this.imgsLoaded) this.slides.slideTo(await this.slides.length() - 1);
+    if (this.imgsLoaded) { this.slides.slideTo(await this.slides.length() - 1); }
   }
 
   async load() {
     const loadingDialog = await this.loader.create({ message: 'Carregando Perfil, aguarde...', spinner: 'crescent' });
     await loadingDialog.present();
 
-    if (this.userType == 'Aluno') this.getFilenamesImg();
+    if (this.userType === 'Aluno') { this.getFilenamesImg(); }
 
     try {
       const resp = await this.requests.get('/perfil');
       this.form.get('nome').setValue(resp.nome);
       this.email = resp.email;
 
-      if (this.userType === 'Aluno') this.form.get('matricula').setValue(resp.matricula);
+      if (this.userType === 'Aluno') { this.form.get('matricula').setValue(resp.matricula); }
 
     } catch (error) {
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
@@ -119,8 +132,8 @@ export class PerfilUsuarioPage implements OnInit {
 
     const data = { nome };
 
-    if (senha.enabled) data['senha'] = senha.value
-    if (this.form.get('matricula')) data['matricula'] = this.form.get('matricula').value;
+    if (senha.enabled) { data['senha'] = senha.value }
+    if (this.form.get('matricula')) { data['matricula'] = this.form.get('matricula').value; }
 
     try {
       const resp = await this.requests.put('/' + this.authProvider.getUserType().toLowerCase(), data);
@@ -129,6 +142,14 @@ export class PerfilUsuarioPage implements OnInit {
         message: resp.sucesso,
         duration: 3000
       });
+
+      const loginAcademico = this.loginAcademico.value;
+      const senhaAcademico = this.senhaAcademico.value;
+      if (loginAcademico && senhaAcademico) {
+        this.sync.setAccount(this.loginAcademico.value, this.senhaAcademico.value);
+      } else {
+        this.sync.removeAccount();
+      }
 
       t.present();
 

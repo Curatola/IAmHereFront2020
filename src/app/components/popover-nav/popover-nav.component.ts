@@ -4,6 +4,7 @@ import { NavParamsService } from 'src/app/service/nav-params.service';
 import { AuthService } from 'src/app/service/auth.service';
 import { RequestService } from 'src/app/service/request.service';
 import { Chamada } from 'src/models/chamada';
+import { SyncronizationService } from 'src/app/service/syncronization.service';
 
 @Component({
   selector: 'app-popover-nav',
@@ -16,7 +17,6 @@ export class PopoverNavComponent implements OnInit {
 
   isLogoff: any;
   isGoPerfil: boolean;
-  //turma: Turma;
   chamada: Chamada;
 
   constructor(
@@ -28,16 +28,14 @@ export class PopoverNavComponent implements OnInit {
     public toast: ToastController,
     private requests: RequestService,
     private alertCtrl: AlertController,
-    //private imgLoader: ImageLoader,
+    private sync: SyncronizationService
     ) {
-      this.isLogoff = navParams.get("is_logoff");
-      this.isGoPerfil = navParams.get("isGoPerfil");
-      //this.turma = navParams.get("turma");
-      //this.chamada = navParams.get("chamada");
+      this.isLogoff = navParams.get('is_logoff');
+      this.isGoPerfil = navParams.get('isGoPerfil');
   }
 
-  async logoff(){
-    let alert = await this.alertCtrl.create({
+  async logoff() {
+    const alert = await this.alertCtrl.create({
       header: 'Confirme!',
       message: 'Deseja mesmo fazer logoff?',
       buttons: [
@@ -56,18 +54,20 @@ export class PopoverNavComponent implements OnInit {
     alert.present();
   }
 
-  download() {
-
+  async sincronizar() {
+    this.sync.makeSync(false);
+    this.popoverController.dismiss();
   }
 
   async commitLogoff() {
-    let loadingDialog = await this.loader.create({ message: 'Fazendo logoff...', spinner: 'crescent' });
+    const loadingDialog = await this.loader.create({ message: 'Fazendo logoff...', spinner: 'crescent' });
     await loadingDialog.present();
-    try{
+    try {
       await this.auth.deslogar();
+      this.sync.removeAccount();
 
       await this.popoverController.dismiss();
-      await this.navCtrl.navigateRoot('/login')
+      await this.navCtrl.navigateRoot('/login');
     } catch (error) {
       await this.popoverController.dismiss();
       await this.requests.requestErrorPageHandler(error, this.toast, this.navCtrl);
@@ -80,46 +80,4 @@ export class PopoverNavComponent implements OnInit {
     this.popoverController.dismiss();
     this.navCtrl.navigateForward('/perfil-usuario');
   }
-
-  /*
-  private b64toBlob (b64Data, contentType='', sliceSize=512){
-    b64Data = b64Data.split(',')[1]
-    const byteCharacters = atob(b64Data);
-    const byteArrays = [];
-     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-       const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-       const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-    }
-     const blob = new Blob(byteArrays, {type: contentType});
-    return blob;
-  }
-
-  async download(){
-    let loadingDialog = this.loader.create({ content: 'Carregando foto...', spinner: 'crescent' });
-    await loadingDialog.present();
-    try{
-      let base64 = await this.imgLoader.getImagePath(AuthProvider.API_URL + "img/turma/" + this.turma.id + "/chamada/" + this.chamada.id);
-      let blob =  this.b64toBlob(base64,"image/jpeg")
-      
-      let elem = document.createElement('img');
-      elem.src = URL.createObjectURL(blob);
-      let imagem = this.imgCtrl.create(elem);
-      imagem.present();
-    }catch(error){
-      this.toast.create({
-        message: "Erro ao carragar a foto",
-        duration: 3000
-      })
-    }finally{
-      await loadingDialog.dismiss();
-    }
-  }
-  */
-
-
 }

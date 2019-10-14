@@ -5,14 +5,18 @@ export class Chamada {
     dateShort: string;
     timeStr: string;
     conteudo: string;
+    isCommited: boolean;
+    isEdited: boolean;
 
-    constructor(id: number, dateHour: number, conteudo: string) {
+    constructor(id: number, dateHour: number, conteudo: string, isCommited: boolean, isEdited: boolean) {
         this.id = id;
         this.dateHour = dateHour * 1000;
         this.dateStr = this.getDateStr();
         this.dateShort = this.getDateShort();
         this.timeStr = this.getTimeStr();
         this.conteudo = conteudo;
+        this.isCommited = isCommited;
+        this.isEdited = isEdited;
     }
 
     getDateStr() {

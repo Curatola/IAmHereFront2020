@@ -1,5 +1,5 @@
 import { AuthService } from './service/auth.service';
-import { Component, OnDestroy, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Platform, ToastController, NavController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -8,6 +8,7 @@ import { RequestService } from './service/request.service';
 import { Router } from '@angular/router';
 import { Deeplinks, DeeplinkMatch } from '@ionic-native/deeplinks/ngx';
 import { NavParamsService } from './service/nav-params.service';
+import { SyncronizationService } from './service/syncronization.service';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,8 @@ export class AppComponent {
     splashScreen: SplashScreen,
     public auth: AuthService,
     router: Router,
-    private alert: AlertController
+    private alert: AlertController,
+    private sync: SyncronizationService,
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -37,29 +39,37 @@ export class AppComponent {
 
       platform.backButton.subscribe(() => {
         if (router.url === '/turmas' || router.url === '/login') {
-          this.showAlertExit();
+          this.showAlertOrPageSync();
         }
       });
 
       const logged: boolean = this.auth.userIsLogged();
 
-      if (logged) router.navigate(['turmas'])
-      else router.navigate(['login'])
+      if (logged) { router.navigate(['turmas']); }
+      else { router.navigate(['login']); }
 
       const routes = {};
       routes['/' + AuthService.API_VERSION + '/confirm_email/:token'] = '/login';
       routes['/reset_senha/:token'] = '/nova-senha';
 
       this.deep.route(routes)
-      .subscribe(
-        match => {
-          this.handle_deeplink(match);
-        },
-        nomatch => {
-          console.log('no match', nomatch);
-        }
-      );
+        .subscribe(
+          match => {
+            this.handle_deeplink(match);
+          },
+          nomatch => {
+            console.log('no match', nomatch);
+          }
+        );
     });
+  }
+
+  async showAlertOrPageSync() {
+    // Se  o usuário não estiver logado ou não for fazer sincronização
+    if (!this.auth.userIsLogged() || (!this.sync.isSync() && !await this.sync.makeSync())) {
+      // Exibe o alerta para sair do app
+      this.showAlertExit();
+    }
   }
 
   async showAlertExit() {
@@ -67,12 +77,12 @@ export class AppComponent {
       header: 'Deseja mesmo sair do app?',
       buttons: [
         {
-          text: 'Sim',
-          handler: () => navigator['app'].exitApp()
-        },
-        {
           text: 'Não',
           role: 'cancel'
+        },
+        {
+          text: 'Sim',
+          handler: () => navigator['app'].exitApp()
         }
       ],
     });
@@ -99,14 +109,15 @@ export class AppComponent {
           { token: match.$args.token },
           false
         );
-        let msg: string = '';
-        if (resp.sucesso) msg = resp.sucesso;
-        else if (resp.warning) msg = resp.warning;
+        let msg = '';
+        if (resp.sucesso) { msg = resp.sucesso; }
+        else if (resp.warning) { msg = resp.warning; }
 
         const t = await this.toast.create({
           message: msg,
           duration: 3000
-        })
+        });
+
         t.present();
       } else if (match.$link.path.split('/')[1] == 'reset_senha') {
         this.navParams.setParams({ token: match.$args.token })

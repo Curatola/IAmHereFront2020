@@ -15,6 +15,8 @@ import { CanDeactivateGuard } from './can-deactivate.guard';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { HttpClientModule } from '@angular/common/http';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { SyncronizationService } from './service/syncronization.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -37,7 +39,9 @@ import { HttpClientModule } from '@angular/common/http';
     FCM,
     LocalNotifications,
     CanDeactivateGuard,
+    SyncronizationService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
   ],
   bootstrap: [AppComponent]
 })

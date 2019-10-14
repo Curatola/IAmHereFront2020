@@ -8,6 +8,7 @@ import { PopoverNavComponent } from '../../components/popover-nav/popover-nav.co
 import { File } from '@ionic-native/file/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { SyncronizationService } from 'src/app/service/syncronization.service';
 
 @Component({
   selector: 'app-turmas',
@@ -32,14 +33,15 @@ export class TurmasPage implements OnInit {
     public file: File,
     private fcm: FCM,
     public localNotifications: LocalNotifications,
-    private changeDet: ChangeDetectorRef
+    private changeDet: ChangeDetectorRef,
+    private sync: SyncronizationService,
   ) {
 
     this.userType = authProvider.getUserType();
 
-    if (this.userType === AuthService.ALUNO && (this.plt.is('cordova'))){
+    if (this.userType === AuthService.ALUNO && (this.plt.is('cordova'))) {
       this.localNotifications.hasPermission().then(hasPerm => {
-        if (!hasPerm) this.localNotifications.requestPermission();
+        if (!hasPerm) { this.localNotifications.requestPermission(); }
       });
 
       this.fcm.getToken().then(token => {
@@ -71,7 +73,11 @@ export class TurmasPage implements OnInit {
     this.load();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    if (this.userType === AuthService.PROFESSOR) {
+      await this.sync.checkIsSync();
+      if (!this.sync.isSync()) { this.sync.makeSync(); }
+    }
   }
 
   goPresencasTurmaPage(turma: Turma) {
@@ -80,7 +86,7 @@ export class TurmasPage implements OnInit {
   }
 
   async lockUnlock(turma: Turma) {
-    const msg = (turma.inscricoes_aberta) ? 'Bloqueando inscrições...' : 'Liberando inscrições...';
+    const msg = (turma.inscricoesAberta) ? 'Bloqueando inscrições...' : 'Liberando inscrições...';
 
     const loadingDialog = await this.loader.create({ message: msg, spinner: 'crescent' });
     await loadingDialog.present();
@@ -88,10 +94,10 @@ export class TurmasPage implements OnInit {
     try {
       const resp = await this.requests.post(
         '/change_inscricoes_aberta/turma/' + turma.id,
-        { inscricoes_aberta: !turma.inscricoes_aberta }
+        { inscricoes_aberta: !turma.inscricoesAberta }
       );
 
-      turma.inscricoes_aberta = !turma.inscricoes_aberta;
+      turma.inscricoesAberta = !turma.inscricoesAberta;
 
       const t = await this.toast.create({
         message: resp.sucesso,
@@ -178,7 +184,7 @@ export class TurmasPage implements OnInit {
 
       this.turmas = new Array();
       resp.forEach(elem => {
-        this.turmas.push(new Turma(elem.id, elem.nome, elem.ano, elem.semestre, elem.inscricoes_aberta));
+        this.turmas.push(new Turma(elem.id, elem.nome, elem.ano, elem.semestre, elem.inscricoes_aberta, elem.cod_academico));
       });
 
     } catch (error) {
@@ -236,14 +242,14 @@ export class TurmasPage implements OnInit {
 
   ordenarTurmas() {
     this.turmas.sort((t1: Turma, t2: Turma) => {
-      if (t1.ano > t2.ano) return -1;
-      else if (t1.ano < t2.ano) return 1;
+      if (t1.ano > t2.ano) { return -1; }
+      else if (t1.ano < t2.ano) { return 1; }
       else {
-        if (t1.semestre > t2.semestre) return -1;
-        else if (t1.semestre < t2.semestre) return 1;
+        if (t1.semestre > t2.semestre) { return -1; }
+        else if (t1.semestre < t2.semestre) { return 1; }
         else {
-          if (t1.nome < t2.nome) return -1;
-          else if (t1.nome > t2.nome) return 1;
+          if (t1.nome < t2.nome) { return -1; }
+          else if (t1.nome > t2.nome) { return 1; }
           return 0;
         }
       }

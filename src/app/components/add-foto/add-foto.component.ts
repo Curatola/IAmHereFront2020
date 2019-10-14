@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CameraService } from 'src/app/service/camera.service';
 import { AlertController } from '@ionic/angular';
+import { Chamada } from 'src/models/chamada';
 
 
 
@@ -10,7 +11,8 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./add-foto.component.scss'],
 })
 export class AddFotoComponent {
-  @Input() uploadFunction: Function;
+  @Output() uploadFunction = new EventEmitter();
+  @Input() chamadas: Array<Chamada>;
   text: string;
   pathsFotos: Array<string>;
   max = 10;
@@ -18,11 +20,54 @@ export class AddFotoComponent {
   constructor(
     public camera: CameraService,
     public alertCtrl: AlertController,
-    ) {
+  ) {
     this.pathsFotos = new Array();
   }
 
+  private hasOtherChamadasToday(): boolean {
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+    return this.chamadas.some((c: Chamada) => {
+      const dateC = new Date(c.dateHour).setHours(0, 0, 0, 0);
+      return dateC === currentDate;
+    });
+  }
+
+  private getChamadaOfToday() {
+    const currentDate = new Date().setHours(0, 0, 0, 0);
+
+    return this.chamadas.find((c: Chamada) => {
+      const dateC = new Date(c.dateHour).setHours(0, 0, 0, 0);
+      return dateC === currentDate;
+    });
+  }
+
+  private async showAlertSubstituirChamada(): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      const alert = await this.alertCtrl.create({
+        header: 'Já existem chamadas hoje!',
+        message: 'Fazer outra chamada irá substituir a anterior! Deseja continuar?',
+        buttons: [
+          {
+            text: 'Não',
+            handler: () => resolve(false)
+          },
+          {
+            text: 'Sim',
+            handler: () => resolve(true)
+          }
+        ]
+      });
+      alert.present();
+    });
+  }
+
   async takePicture() {
+    if (this.hasOtherChamadasToday() && !await this.showAlertSubstituirChamada()) {
+      return;
+    }
+
+    const chamadaApagar = this.getChamadaOfToday();
+
     try {
       const imageData = await this.camera.takePicture();
       this.pathsFotos.push(imageData);
@@ -40,7 +85,7 @@ export class AddFotoComponent {
             {
               text: 'Não',
               handler: async () => {
-                await this.uploadFunction(this.pathsFotos);
+                this.uploadFunction.emit({pathFotos: this.pathsFotos, chamadaApagar});
                 this.pathsFotos = new Array();
               }
             },
@@ -54,16 +99,22 @@ export class AddFotoComponent {
         });
         alert.present();
       } else {
-        await this.uploadFunction(this.pathsFotos);
+        this.uploadFunction.emit({pathFotos: this.pathsFotos, chamadaApagar});
         this.pathsFotos = new Array();
       }
 
     } catch (error) {
       console.log(error);
     }
+
   }
 
   async getFromGallery() {
+    if (this.hasOtherChamadasToday() && !await this.showAlertSubstituirChamada()) {
+      return;
+    }
+
+    const chamadaApagar = this.getChamadaOfToday();
     try {
       const imageData = await this.camera.getFromGallery();
       this.pathsFotos.push(imageData);
@@ -81,7 +132,7 @@ export class AddFotoComponent {
             {
               text: 'Não',
               handler: async () => {
-                await this.uploadFunction(this.pathsFotos);
+                this.uploadFunction.emit({pathFotos: this.pathsFotos, chamadaApagar});
                 this.pathsFotos = new Array();
               }
             },
@@ -95,7 +146,7 @@ export class AddFotoComponent {
         });
         alert.present();
       } else {
-        await this.uploadFunction(this.pathsFotos);
+        this.uploadFunction.emit({pathFotos: this.pathsFotos, chamadaApagar});
         this.pathsFotos = new Array();
       }
 
@@ -103,7 +154,4 @@ export class AddFotoComponent {
       console.log(error);
     }
   }
-
-
-
 }

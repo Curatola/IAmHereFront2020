@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'turmas', loadChildren: './pages/turmas/turmas.module#TurmasPageModule' },
   { path: 'aluno-cadastro', loadChildren: './pages/aluno-cadastro/aluno-cadastro.module#AlunoCadastroPageModule' },
   { path: 'cadastro-rapido', loadChildren: './pages/cadastro-rapido/cadastro-rapido.module#CadastroRapidoPageModule' },
+  { path: 'sincronizador', loadChildren: './pages/sincronizador/sincronizador.module#SincronizadorPageModule' },
 ];
 
 @NgModule({

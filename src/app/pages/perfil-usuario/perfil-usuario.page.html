@@ -80,7 +80,20 @@
         </div>
       </div>
 
+      <div [hidden]="userType !== 'Professor'">
+        <ion-item>
+          <ion-label position="floating">Login do Acadêmico</ion-label>
+          <ion-input #loginAcademico type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Senha do Acadêmico</ion-label>
+          <ion-input #senhaAcademico type="password"></ion-input>
+        </ion-item>
+      </div>
+
       <div id="senhaWrapper">
+        <!--Editar aqui-->
         <ion-item>
           <ion-label position="floating">Senha</ion-label>
           <ion-input #senhaInput type="password" formControlName="senha"></ion-input>
@@ -88,6 +101,7 @@
         <ion-checkbox [(ngModel)]="enableSenha" (ionChange)="change()" [ngModelOptions]="{standalone: true}">
         </ion-checkbox>
       </div>
+
 
       <div>
         <ng-container *ngFor="let validation of msgs.senha">

@@ -85,7 +85,7 @@ export class ConfirmaPage extends ComponentCanDeactivate implements OnInit {
 
       t.present();
 
-      this.chamadas.push(new Chamada(resp.id, this.timestampFoto, this.conteudo));
+      this.chamadas.push(new Chamada(resp.id, this.timestampFoto, this.conteudo, false, false));
       this.chamadas.sort((c1: Chamada, c2: Chamada) => {
         if (c1.dateHour > c2.dateHour) return -1;
         else if (c1.dateHour < c2.dateHour) return 1;

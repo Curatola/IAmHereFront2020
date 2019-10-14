@@ -107,7 +107,7 @@ ion-card-content {
 }
 
 form:not([notfull]) {
-    height: 100%;
+    height: auto;
 
     #wrapper {
         display: flex;
@@ -235,7 +235,7 @@ background: #888;
 }
 
 .scroller {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100%;
 }
 
